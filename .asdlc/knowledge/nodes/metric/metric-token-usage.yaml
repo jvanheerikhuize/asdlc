@@ -1,0 +1,25 @@
+id: metric-token-usage
+type: metric
+title: "Agent token usage — resources consumed per change"
+since: "2026-07-14"
+body: |2
+  Total tokens (input, output, cache read, cache creation) the agent
+  consumed while producing a change, recorded as `agent-usage/v1` evidence
+  in the Change Record and surfaced by `spec/tools/metrics.py` and the
+  dashboard. The measurement window runs from the Change Record's
+  `opened_at` to the statement's production.
+
+  **Self-reported by design**: the agent reads its own harness records
+  (for Claude Code, the session transcript — adapter:
+  `bindings/claude-code/usage.py`; other harnesses supply their own
+  adapter, the statement shape is the vendor-neutral contract). Caveats:
+  unverifiable until evidence signing lands (same honesty boundary as
+  `--dev-unsigned`); window attribution is approximate when work
+  interleaves; absent for changes made before the predicate existed —
+  shown as "—", never backfilled (evidence is append-only and the gate
+  allows one Change Record per PR).
+links:
+  - to: metric-lead-time
+    rel: relates-to
+  - to: decision-d13-knowledge-content-repo-scoped
+    rel: derived-from

@@ -1,0 +1,37 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "648b0857a59ea5bdcfbd18ce3cda6f50dba6244b"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260714-token-metric",
+    "title": "Token usage as a metric: agent-usage/v1 evidence + dashboard",
+    "problem": "Lead and cycle time measure speed but not cost: nothing records what the agent consumed to produce a change. Owner directive: add token usage as a metric.",
+    "acceptance_criteria": [
+      "agent-usage/v1 predicate exists in the spec (0.4.0), optional evidence",
+      "A Claude Code adapter measures real usage from the session transcript for the change window",
+      "metrics.py surfaces tokens in CLI, JSON, and the dashboard (own chart \u2014 different unit, own axis)",
+      "This CR carries its own measured usage evidence"
+    ],
+    "out_of_scope": [
+      "Backfilling older changes (append-only evidence, one CR per PR)",
+      "Cost-in-currency conversion (pricing is vendor data, not evidence)"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-14T20:43:10Z"
+  }
+}

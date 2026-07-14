@@ -112,6 +112,11 @@ them). `docs/` now contains only generated documents.
 https://jvanheerikhuize.github.io/asdlc/ — deployed to GitHub Pages by
 the `metrics` workflow on every main push. See [[metrics-dashboard]].
 
+**Token usage is a metric** (2026-07-14, CR-20260714-token-metric):
+`agent-usage/v1` evidence (spec 0.4.0) self-reported per change from the
+agent harness transcript (`bindings/claude-code/usage.py`), surfaced in
+the CLI, JSON, and dashboard. See [[metric-token-usage]].
+
 ## Clarifying questions — researched, proposed answers
 
 ### Q1. Where must governance be unbypassable?

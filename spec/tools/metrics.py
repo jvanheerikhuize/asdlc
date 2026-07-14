@@ -32,6 +32,14 @@ def fmt(delta):
     return f"{m // 60}h {m % 60:02d}m" if m >= 60 else f"{m}m"
 
 
+def tfmt_tokens(n):
+    if n >= 1_000_000:
+        return f"{n / 1_000_000:.1f}M"
+    if n >= 1_000:
+        return f"{n / 1_000:.0f}k"
+    return str(n)
+
+
 def collect():
     rows = []
     for d in sorted(CHANGES.iterdir()):
@@ -46,12 +54,17 @@ def collect():
             intent_at = datetime.datetime.fromisoformat(
                 json.loads(intent.read_text())["predicate"]["produced_at"])
         m = merged_at(cj)
+        tokens = None
+        usage = d / "evidence" / "usage.json"
+        if usage.exists():
+            tokens = json.loads(usage.read_text())["predicate"]["tokens"]
         rows.append({
             "change": change["id"],
             "opened_at": change["opened_at"],
             "merged_at": m.isoformat() if m else None,
             "lead_time_s": (m - intent_at).total_seconds() if m and intent_at else None,
             "cycle_time_s": (m - opened).total_seconds() if m else None,
+            "tokens": tokens,
         })
     rows.sort(key=lambda r: (r["merged_at"] is None, r["merged_at"] or "", r["change"]))
     return rows
@@ -137,15 +150,70 @@ def render_html(rows):
     cycles = sorted(r["cycle_time_s"] for r in merged if r["cycle_time_s"] is not None)
     med = lambda xs: fmt(datetime.timedelta(seconds=statistics.median(xs))) if xs else "—"
 
+    # ---- agent tokens: different unit, its own plot and axis ----
+    tok_rows = [r for r in rows if r["tokens"]]
+    tokens_section = ""
+    tok_tile = ""
+    if tok_rows:
+        total = sum(r["tokens"]["total"] for r in tok_rows)
+        tok_tile = (f'<div class="tile"><b>{tfmt_tokens(total)}</b>'
+                    f'<span>agent tokens ({len(tok_rows)} recorded)</span></div>')
+        tmax = max(r["tokens"]["total"] for r in tok_rows) * 1.06
+        h2 = top + len(tok_rows) * (bar_h + 10) + 34
+        ax2 = h2 - 26
+
+        def X2(v):
+            return label_w + v / tmax * plot_w
+
+        step2 = next((s for s in (1e3, 2e3, 5e3, 1e4, 2.5e4, 5e4, 1e5, 2.5e5,
+                                  5e5, 1e6, 2e6, 5e6) if tmax / s <= 7), 1e7)
+        svg2 = []
+        t = step2
+        while t <= tmax:
+            svg2.append(f'<line class="grid" x1="{X2(t):.1f}" y1="{top}" x2="{X2(t):.1f}" y2="{ax2}"/>')
+            svg2.append(f'<text class="tick" x="{X2(t):.1f}" y="{ax2 + 16}" '
+                        f'text-anchor="middle">{tfmt_tokens(int(t))}</text>')
+            t += step2
+        svg2.append(f'<line class="zero" x1="{X2(0)}" y1="{top}" x2="{X2(0)}" y2="{ax2}"/>')
+        yy = top
+        hits2 = []
+        for r in tok_rows:
+            name = r["change"].replace("CR-20260714-", "")
+            tk = r["tokens"]
+            svg2.append(f'<text class="label" x="{label_w - 10}" y="{yy + bar_h / 2 + 4}" '
+                        f'text-anchor="end">{name}</text>')
+            svg2.append(f'<path class="s1" d="{bar_path(X2(0), X2(tk["total"]), yy, bar_h)}"/>')
+            hits2.append(
+                f'<rect class="hit" x="0" y="{yy - 5}" width="{width}" height="{bar_h + 10}" '
+                f'data-name="{name}" data-tokens="{tfmt_tokens(tk["total"])} total" '
+                f'data-detail="in {tfmt_tokens(tk["input"])} · out {tfmt_tokens(tk["output"])} · '
+                f'cache read {tfmt_tokens(tk["cache_read"])} · cache write {tfmt_tokens(tk["cache_creation"])}"/>')
+            yy += bar_h + 10
+        svg2 += hits2
+        tokens_section = f"""
+<h2>Agent tokens per change</h2>
+<div class="sub">Self-reported by the agent from its harness transcript
+(<code>agent-usage/v1</code> evidence); recorded from
+<code>CR-20260714-token-metric</code> onward.</div>
+<figure>
+<svg viewBox="0 0 {width} {h2}" width="{width}" height="{h2}" role="img"
+     aria-label="Bar chart of agent tokens per recorded change">
+{chr(10).join(svg2)}
+</svg>
+</figure>
+"""
+
     table = "\n".join(
         f'<tr><td>{r["change"]}</td><td>{(r["merged_at"] or "in flight")[:16]}</td>'
         f'<td class="num">{fmt(datetime.timedelta(seconds=r["lead_time_s"])) if r["lead_time_s"] is not None else "—"}</td>'
-        f'<td class="num">{fmt(datetime.timedelta(seconds=r["cycle_time_s"])) if r["cycle_time_s"] is not None else "—"}</td></tr>'
+        f'<td class="num">{fmt(datetime.timedelta(seconds=r["cycle_time_s"])) if r["cycle_time_s"] is not None else "—"}</td>'
+        f'<td class="num">{tfmt_tokens(r["tokens"]["total"]) if r["tokens"] else "—"}</td></tr>'
         for r in rows)
 
     return HTML_TMPL.format(
         gen=gen, sha=sha, n=len(merged), med_lead=med(leads), med_cycle=med(cycles),
-        width=width, height=height, svg="\n".join(svg), table=table)
+        width=width, height=height, svg="\n".join(svg), table=table,
+        tok_tile=tok_tile, tokens_section=tokens_section)
 
 
 HTML_TMPL = """<!doctype html>
@@ -167,6 +235,7 @@ HTML_TMPL = """<!doctype html>
          background: var(--surface); color: var(--text-1);
          font: 15px/1.5 system-ui, sans-serif; }}
   h1 {{ font-size: 20px; margin: 0 0 4px; }}
+  h2 {{ font-size: 16px; margin: 34px 0 4px; }}
   .sub {{ color: var(--text-2); font-size: 13px; margin-bottom: 24px; }}
   .sub a {{ color: inherit; }}
   .tiles {{ display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }}
@@ -204,6 +273,7 @@ HTML_TMPL = """<!doctype html>
   <div class="tile"><b>{n}</b><span>merged changes</span></div>
   <div class="tile"><b>{med_lead}</b><span>median lead time</span></div>
   <div class="tile"><b>{med_cycle}</b><span>median cycle time</span></div>
+  {tok_tile}
 </div>
 <div class="legend">
   <span><i class="sw" style="background:var(--series-1)"></i>Lead time (intent → merged)</span>
@@ -219,8 +289,9 @@ HTML_TMPL = """<!doctype html>
 <p class="note">Negative values are kept deliberately: the 2026-07-14 records carry
 hand-authored, future-skewed intent timestamps — the first defect these metrics
 caught (see <code>leftover-change-scaffolder</code>).</p>
+{tokens_section}
 <table>
-<thead><tr><th>Change</th><th>Merged</th><th class="num">Lead</th><th class="num">Cycle</th></tr></thead>
+<thead><tr><th>Change</th><th>Merged</th><th class="num">Lead</th><th class="num">Cycle</th><th class="num">Tokens</th></tr></thead>
 <tbody>
 {table}
 </tbody>
@@ -229,9 +300,12 @@ caught (see <code>leftover-change-scaffolder</code>).</p>
 const tip = document.getElementById('tip');
 for (const el of document.querySelectorAll('.hit')) {{
   el.addEventListener('mousemove', e => {{
-    tip.innerHTML = '<b>' + el.dataset.name + '</b>' +
-      '<span class="r">merged ' + el.dataset.merged + '</span><br>' +
-      'lead ' + el.dataset.lead + ' · cycle ' + el.dataset.cycle;
+    tip.innerHTML = el.dataset.tokens
+      ? '<b>' + el.dataset.name + '</b>' + el.dataset.tokens +
+        '<br><span class="r">' + el.dataset.detail + '</span>'
+      : '<b>' + el.dataset.name + '</b>' +
+        '<span class="r">merged ' + el.dataset.merged + '</span><br>' +
+        'lead ' + el.dataset.lead + ' · cycle ' + el.dataset.cycle;
     tip.style.display = 'block';
     tip.style.left = Math.min(e.clientX + 14, innerWidth - 240) + 'px';
     tip.style.top = (e.clientY + 14) + 'px';
@@ -253,13 +327,14 @@ def main():
         print(render_html(rows))
         return
     print("# Change metrics (derived from evidence + git; see metric-* nodes)\n")
-    print("| Change | Merged | Lead time | Cycle time |")
-    print("|---|---|---|---|")
+    print("| Change | Merged | Lead time | Cycle time | Agent tokens |")
+    print("|---|---|---|---|---|")
     for r in rows:
         lead = fmt(datetime.timedelta(seconds=r["lead_time_s"])) if r["lead_time_s"] else "—"
         cycle = fmt(datetime.timedelta(seconds=r["cycle_time_s"])) if r["cycle_time_s"] else "—"
         state = r["merged_at"][:16] if r["merged_at"] else "in flight"
-        print(f"| {r['change']} | {state} | {lead} | {cycle} |")
+        toks = tfmt_tokens(r["tokens"]["total"]) if r["tokens"] else "—"
+        print(f"| {r['change']} | {state} | {lead} | {cycle} | {toks} |")
     leads = [r["lead_time_s"] for r in merged if r["lead_time_s"]]
     cycles = [r["cycle_time_s"] for r in merged if r["cycle_time_s"]]
     if leads:

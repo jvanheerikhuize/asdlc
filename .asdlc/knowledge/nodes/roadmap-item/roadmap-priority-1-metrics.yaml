@@ -16,7 +16,10 @@ body: |2
   main. Second cut (CR-20260714-metrics-dashboard): a self-contained
   dashboard ([[metrics-dashboard]]) deployed to GitHub Pages per main push
   — grouped lead/cycle bars, median tiles, table view, light/dark,
-  validated palette.
+  validated palette. Third cut (CR-20260714-token-metric):
+  [[metric-token-usage]] — `agent-usage/v1` evidence self-reported from
+  the agent harness's transcript, with its own chart, tile, and table
+  column.
 
   Follow-ups, as the evidence grows richer: **approval latency**
   (gate-deny to approval comment — makes rubber-stamping drift visible,

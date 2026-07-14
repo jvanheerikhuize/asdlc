@@ -6,7 +6,8 @@ body: |2
   Four views, all derived from the same evidence on demand:
 
   - **Dashboard**: https://jvanheerikhuize.github.io/asdlc/ — grouped bars
-    (lead vs cycle per change), median tiles, table view; redeployed by the
+    (lead vs cycle per change), agent-token bars, median/total tiles,
+    table view; redeployed by the
     `metrics` workflow on every push to main.
   - **CLI**: `python3 spec/tools/metrics.py` (markdown; `--json`, `--html`).
   - **Job summary** of each `metrics` workflow run.
