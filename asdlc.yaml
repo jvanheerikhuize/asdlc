@@ -1,0 +1,20 @@
+# This repo consumes its own framework (dogfood). Manifest per spec/manifest.schema.json.
+spec_version: 0.1.0
+baseline:
+  risk: low
+  data: none
+  ai_system_tier: none
+role_bindings:
+  intent-owner: ["github:jvanheerikhuize"]
+  implementer: ["github:jvanheerikhuize"]
+  test-engineer: ["github:github-actions"]
+  security-reviewer: ["github:github-actions"]
+  release-approver: ["github:jvanheerikhuize"]
+  risk-officer: ["github:jvanheerikhuize"]
+  transcription-workflow: ["github:github-actions"]
+bindings:
+  provider: github
+  gates:
+    G4:
+      mechanism: required-check
+      config: {}

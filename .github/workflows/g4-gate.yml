@@ -1,0 +1,124 @@
+# The G4 merge gate — GitHub reference binding, v0.1 (dev-unsigned).
+# Detects the PR's Change Record, produces CI control verdicts, transcribes
+# the approval comment, evaluates the gate policy via asdlc-verify, and
+# uploads the evidence bundle as a run artifact (attestation-store stand-in).
+name: g4-gate
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  g4-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Detect Change Record
+        id: cr
+        shell: bash
+        run: |
+          base="${{ github.event.pull_request.base.sha }}"
+          head="${{ github.event.pull_request.head.sha }}"
+          dirs=$(git diff --name-only "$base" "$head" | grep -oE '^\.asdlc/changes/[^/]+' | sort -u || true)
+          count=$(printf '%s' "$dirs" | grep -c . || true)
+          if [ "$count" -eq 0 ]; then
+            echo "mode=ungoverned" >> "$GITHUB_OUTPUT"
+            echo "::notice::Ungoverned change: no Change Record touched. Passing vacuously — known slice-1 gap, closes when classification-driven depth makes small changes cheap (slice 2)."
+          elif [ "$count" -gt 1 ]; then
+            echo "::error::Multiple Change Records touched in one PR; one governed change per PR."
+            exit 1
+          else
+            echo "mode=governed" >> "$GITHUB_OUTPUT"
+            echo "change_dir=$dirs" >> "$GITHUB_OUTPUT"
+            echo "change_id=$(basename "$dirs")" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.cr.outputs.mode == 'governed'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - if: steps.cr.outputs.mode == 'governed'
+        uses: open-policy-agent/setup-opa@v2
+        with:
+          version: latest
+      - if: steps.cr.outputs.mode == 'governed'
+        shell: bash
+        run: |
+          pip install jsonschema referencing pyyaml
+          mkdir -p "${{ steps.cr.outputs.change_dir }}/evidence"
+
+      - name: "QC-01: test suite"
+        if: steps.cr.outputs.mode == 'governed'
+        shell: bash
+        run: |
+          if python3 spec/tools/check.py; then
+            v=pass; s="spec self-check green: schemas, golden bundles, gate policy"
+          else
+            v=fail; s="spec self-check failed; see run log"
+          fi
+          python3 bindings/github/scripts/evidence.py verdict \
+            --control QC-01 --verdict "$v" --summary "$s" --role test-engineer \
+            --change-id "${{ steps.cr.outputs.change_id }}" \
+            --head "${{ github.event.pull_request.head.sha }}" \
+            --details-uri "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --out "${{ steps.cr.outputs.change_dir }}/evidence"
+
+      - name: "SC-01: dependency scan"
+        if: steps.cr.outputs.mode == 'governed'
+        shell: bash
+        run: |
+          curl -sSL -o /tmp/osv-scanner https://github.com/google/osv-scanner/releases/latest/download/osv-scanner_linux_amd64
+          chmod +x /tmp/osv-scanner
+          set +e
+          /tmp/osv-scanner scan source -r . 2>&1 | tee /tmp/osv.out
+          code=${PIPESTATUS[0]}
+          set -e
+          case "$code" in
+            0)   v=pass; s="osv-scanner: no known vulnerabilities" ;;
+            1)   v=fail; s="osv-scanner: vulnerabilities found; see run log" ;;
+            128) v=pass; s="osv-scanner: no scannable package sources in repo" ;;
+            *)   echo "::error::osv-scanner operational error (exit $code) — no verdict produced (fail-safe: gate will deny)"; exit 1 ;;
+          esac
+          python3 bindings/github/scripts/evidence.py verdict \
+            --control SC-01 --verdict "$v" --summary "$s" --role security-reviewer \
+            --change-id "${{ steps.cr.outputs.change_id }}" \
+            --head "${{ github.event.pull_request.head.sha }}" \
+            --details-uri "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --out "${{ steps.cr.outputs.change_dir }}/evidence"
+
+      - name: Transcribe approval comment
+        if: steps.cr.outputs.mode == 'governed'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          python3 bindings/github/scripts/evidence.py approval \
+            --change-id "${{ steps.cr.outputs.change_id }}" \
+            --head "${{ github.event.pull_request.head.sha }}" \
+            --repo "${{ github.repository }}" \
+            --pr "${{ github.event.pull_request.number }}" \
+            --out "${{ steps.cr.outputs.change_dir }}/evidence"
+
+      - name: Evaluate G4
+        if: steps.cr.outputs.mode == 'governed'
+        uses: jvanheerikhuize/asdlc-verify@main
+        with:
+          gate: G4
+          spec-dir: spec
+          change-dir: ${{ steps.cr.outputs.change_dir }}
+          head: ${{ github.event.pull_request.head.sha }}
+          manifest: asdlc.yaml
+          dev-unsigned: "true"
+
+      - name: Upload evidence bundle
+        if: always() && steps.cr.outputs.mode == 'governed'
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-${{ steps.cr.outputs.change_id }}-${{ github.event.pull_request.head.sha }}
+          path: ${{ steps.cr.outputs.change_dir }}
