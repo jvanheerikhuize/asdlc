@@ -1,0 +1,21 @@
+id: convention-leftovers
+type: convention
+title: "The leftovers registry"
+since: "2026-07-14"
+body: |2
+  A **leftover** is small, well-understood debt: something we knowingly
+  shipped as a stand-in and could fix without new design work. Anything that
+  needs design belongs on the roadmap, not here — a debt appears in exactly
+  one of the two places (D9: no duplicated truth).
+
+  Lifecycle:
+
+  - Created as a `leftover` node with `status: active`, linking to the
+    decision or change that accepted the debt.
+  - Fixed in a dedicated governed change (a **leftover sweep**) when the
+    owner asks for one; the sweep sets each fixed node to `status: done`
+    (nodes are kept — the registry is also the record of debts paid).
+  - `LEFTOVERS.md` (generated) is the human view of the registry.
+links:
+  - to: convention-knowledge-first
+    rel: relates-to

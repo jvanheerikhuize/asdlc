@@ -1,10 +1,15 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/jvanheerikhuize/asdlc/spec/knowledge/node.schema.json",
-  "title": "Knowledge node — one addressable unit of persistent knowledge",
+  "title": "Knowledge node \u2014 one addressable unit of persistent knowledge",
   "description": "Lives at .asdlc/knowledge/nodes/<type>/<id>.yaml in the consuming repo. Agents read nodes as context; human documents are generated views over them (spec/tools/scaffold.py).",
   "type": "object",
-  "required": ["id", "type", "title", "body"],
+  "required": [
+    "id",
+    "type",
+    "title",
+    "body"
+  ],
   "properties": {
     "id": {
       "type": "string",
@@ -22,10 +27,15 @@
         "convention",
         "roadmap-item",
         "status",
-        "reference"
+        "reference",
+        "leftover",
+        "metric"
       ]
     },
-    "title": { "type": "string", "minLength": 1 },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
     "body": {
       "type": "string",
       "minLength": 1,
@@ -36,19 +46,39 @@
       "description": "Typed edges to other nodes.",
       "items": {
         "type": "object",
-        "required": ["to", "rel"],
+        "required": [
+          "to",
+          "rel"
+        ],
         "properties": {
-          "to": { "type": "string" },
+          "to": {
+            "type": "string"
+          },
           "rel": {
             "type": "string",
-            "examples": ["depends-on", "mitigates", "supersedes", "derived-from", "relates-to"]
+            "examples": [
+              "depends-on",
+              "mitigates",
+              "supersedes",
+              "derived-from",
+              "relates-to"
+            ]
           }
         },
         "additionalProperties": false
       }
     },
-    "status": { "enum": ["active", "superseded", "done"] },
-    "since": { "type": "string", "format": "date" }
+    "status": {
+      "enum": [
+        "active",
+        "superseded",
+        "done"
+      ]
+    },
+    "since": {
+      "type": "string",
+      "format": "date"
+    }
   },
   "additionalProperties": false
 }

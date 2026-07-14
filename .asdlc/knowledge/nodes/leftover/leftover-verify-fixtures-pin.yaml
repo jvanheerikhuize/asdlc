@@ -1,0 +1,14 @@
+id: leftover-verify-fixtures-pin
+type: leftover
+title: "asdlc-verify: fetch spec conformance fixtures from the pinned tag"
+since: "2026-07-14"
+status: active
+body: |2
+  `asdlc-verify/testdata/spec-0.1.0/` is a hand-copied snapshot of the
+  spec's gate policy and golden bundles. Replace it with a CI checkout of
+  `jvanheerikhuize/asdlc` at the tag named by a pin file, so conformance
+  always tests the spec version the verifier claims to support (both repos
+  are public; cross-checkout works with the default token).
+links:
+  - to: decision-d13-knowledge-content-repo-scoped
+    rel: derived-from

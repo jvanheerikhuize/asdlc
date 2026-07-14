@@ -1,0 +1,13 @@
+id: leftover-readmes-generated
+type: leftover
+title: "Bring spec/README.md and bindings/github/README.md under generation"
+since: "2026-07-14"
+status: active
+body: |2
+  Both are still hand-maintained prose; decompose them into knowledge
+  nodes and doc manifests like everything else. (asdlc-verify's README
+  follows separately via the D13 pinned-spec path once
+  leftover-verify-fixtures-pin establishes it.)
+links:
+  - to: roadmap-priority-0-knowledge-first
+    rel: derived-from
