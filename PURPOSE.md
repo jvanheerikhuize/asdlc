@@ -8,9 +8,11 @@ governed, agent- and vendor-agnostic **Agentic Software Development Lifecycle
 change from stated intent to production and operation, with governance,
 auditability, and DORA / EU AI Act compliance built in rather than bolted on.
 
-The full design brief is [docs/prompt-clean-slate-rebuild.md](docs/prompt-clean-slate-rebuild.md).
-The session state that produced this document is
-[docs/session-continuation-2026-07-14.md](docs/session-continuation-2026-07-14.md).
+The full design brief lives in the knowledge base, verbatim, as the
+`brief-s0`…`brief-s9` reference nodes
+(`.asdlc/knowledge/nodes/reference/`).
+The session-state file that preceded this document was retired once its
+content was fully absorbed here (it remains in git history).
 
 **Ground fact set by the owner:** the framework and all consuming repositories
 live on **GitHub**. Enforcement reference bindings may therefore target GitHub
@@ -98,6 +100,13 @@ published per main-push by the `metrics` workflow (job summary + JSON
 artifact). Definitions: the `metric-*` knowledge nodes; roadmap
 Priority 1. A leftovers registry also exists (`LEFTOVERS.md`, generated)
 for owner-triggered sweep changes.
+
+**Brief absorbed into knowledge** (2026-07-14,
+CR-20260714-brief-to-knowledge): the original design prompt lives
+verbatim as the `brief-s0`…`brief-s9` reference nodes; the loose files
+`docs/prompt-clean-slate-rebuild.md` and
+`docs/session-continuation-2026-07-14.md` are removed (git history keeps
+them). `docs/` now contains only generated documents.
 
 ## Clarifying questions — researched, proposed answers
 

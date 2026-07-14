@@ -7,7 +7,8 @@ Software Development Lifecycle (ASDLC) framework, for a regulated
 (DORA / EU AI Act) context, hosted on GitHub.
 
 Start with [PURPOSE.md](PURPOSE.md) — the state of the work, the researched
-design positions, and the original brief (in [docs/](docs/)).
+design positions, and the original brief (verbatim in the knowledge base
+as the `brief-s*` reference nodes).
 
 All documents in this repo (this file included) are generated from the
 knowledge base in `.asdlc/knowledge/` — edit nodes, then run

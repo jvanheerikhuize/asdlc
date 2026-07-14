@@ -1,0 +1,32 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "2b63cded44492d2a5b6f5d6997ec61571f71ce3f"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260714-brief-to-knowledge",
+    "title": "Absorb the original design brief into knowledge; retire the loose prose files",
+    "problem": "The original prompt and the superseded session-state file were the last prose in docs/ outside the knowledge base \u2014 unaddressable as context and exempt from the drift gate. Owner directive: add the brief to knowledge, then clean up both files.",
+    "acceptance_criteria": [
+      "The brief exists verbatim as brief-s0..brief-s9 reference nodes (one per section, provenance noted)",
+      "Both loose files are deleted; no generated doc links to them",
+      "README and PURPOSE point at the knowledge-base location instead"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-14T20:19:45Z"
+  }
+}

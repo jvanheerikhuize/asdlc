@@ -1,0 +1,16 @@
+id: brief-s7-what-i-want-from
+type: reference
+title: "Brief \u00a77 \u2014 What I want from you"
+body: |2
+  1. *Clarifying questions first* — anything that would change your design.
+  2. *A proposed architecture* for the framework, described so an engineer could
+     start building: the major components, their responsibilities, boundaries, and
+     how they interact.
+  3. *Key decisions and trade-offs* — especially anywhere you **diverge from the
+     prior art in §6**, with your reasoning. Explicitly note what you kept and why.
+  4. *How governance, DORA, and the EU AI Act obligations are satisfied* — mapped
+     to concrete artefacts, controls, gates, and evidence the system produces.
+  5. *The subagent/orchestration model* — how specialised agents are defined,
+     selected, coordinated, and held accountable, over a vendor-neutral interface.
+  6. *Risks, failure modes, and open questions* in your design.
+  7. *An incremental build plan* — a sensible first slice and the order to grow.

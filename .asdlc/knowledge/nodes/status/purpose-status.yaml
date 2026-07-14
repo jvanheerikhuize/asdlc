@@ -82,4 +82,11 @@ body: |2
   artifact). Definitions: the `metric-*` knowledge nodes; roadmap
   Priority 1. A leftovers registry also exists (`LEFTOVERS.md`, generated)
   for owner-triggered sweep changes.
+  
+  **Brief absorbed into knowledge** (2026-07-14,
+  CR-20260714-brief-to-knowledge): the original design prompt lives
+  verbatim as the `brief-s0`…`brief-s9` reference nodes; the loose files
+  `docs/prompt-clean-slate-rebuild.md` and
+  `docs/session-continuation-2026-07-14.md` are removed (git history keeps
+  them). `docs/` now contains only generated documents.
 
