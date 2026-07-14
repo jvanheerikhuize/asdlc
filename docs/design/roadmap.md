@@ -22,8 +22,10 @@ full documents as views — D9 applied to the framework's own words.
 Delivered in the first cut (CR-20260714-knowledge-architecture): node +
 doc-manifest schemas, the scaffolder with `--check` CI gate, and the full
 decomposition of README, PURPOSE, and all six design docs (56 nodes).
-Follow-ups, in later slices: bring `spec/README.md` and
-`bindings/github/README.md` under generation; enrich typed links between
+Follow-ups, in later slices: bring `spec/README.md`,
+`bindings/github/README.md`, and `asdlc-verify`'s README under
+generation — the latter from its own repo-scoped knowledge via a
+pinned spec tag (see D13); enrich typed links between
 nodes; serve nodes over the orchestrator's `knowledge.query` (slice 3);
 join generated evidence-trace reports to the same view layer (slice 4).
 

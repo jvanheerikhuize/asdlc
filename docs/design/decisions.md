@@ -124,3 +124,31 @@ rationale in `docs/` and the machine-readable truth in `spec/` is the intended
 shape. `asdlc-verify` still starts as its own repo when the Go code lands
 (D3's code/content split stands). *Trade-off*: the repo name doesn't say
 "spec"; acceptable — it is the framework's front door.
+
+## D13 — Knowledge content is repo-scoped; the mechanism is spec-owned (2026-07-14)
+
+Raised by the owner after the knowledge-first migration: should the
+knowledge architecture propagate to `asdlc-verify` (and future repos), or
+stay single-sourced here?
+
+Decision, in two halves:
+
+- **The mechanism is single-sourced in the spec repo.** The node and
+  doc-manifest schemas (`spec/knowledge/`) and the scaffolder
+  (`spec/tools/scaffold.py`) are spec content; other repos consume them
+  from a **pinned spec tag**, never copy them. A copied schema or tool is
+  the version-skew failure D3/D9 exist to prevent.
+- **Knowledge *content* is repo-scoped.** Each consuming repo's
+  `.asdlc/knowledge/` describes that repo and nothing else. Framework
+  knowledge (decisions, risks, compliance, roadmap) lives here,
+  permanently, and is **never mirrored** into another repo — two knowledge
+  bases describing the same framework would disagree within a month.
+  Cross-repo references cite a node id or URL instead of restating.
+
+Consequences: `asdlc-verify` gets nothing now; its README is regenerated
+from its own (small) knowledge base only when the fetch-pinned-spec-in-CI
+path is built — the same path its golden fixtures already need (replacing
+the copied `testdata/spec-0.1.0/`), which turns that follow-up into the
+first proof that a consuming repo can use spec tooling from a version pin.
+*Trade-off*: until then, verify's README stays hand-maintained; accepted
+for one small file over premature plumbing.
