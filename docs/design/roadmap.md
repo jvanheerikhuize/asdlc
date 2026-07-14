@@ -33,6 +33,25 @@ join generated evidence-trace reports to the same view layer (slice 4).
 an agent can answer "why does decision D2 exist" by reading one node
 instead of one document.
 
+## Priority 1 — Metrics over the evidence DAG (owner directive, 2026-07-14)
+
+The framework produces a timestamped evidence DAG for every change —
+metrics are **views over that DAG, computed on demand, never separately
+tracked** (the same single-source move as D9). First two, per owner
+directive: [[metric-lead-time]] and [[metric-cycle-time]].
+
+Delivered in the first cut (CR-20260714-metrics): the metric definitions
+as knowledge nodes, `spec/tools/metrics.py` (markdown/JSON, computed from
+evidence + git history), and a `metrics` workflow that publishes the
+report to the run's job summary and a JSON artifact on every push to
+main.
+
+Follow-ups, as the evidence grows richer: **approval latency**
+(gate-deny to approval comment — makes rubber-stamping drift visible,
+feeding R2) and **waiver rate** (feeding R8) once waivers exist
+(slice 2); per-gate durations; lead time extended to the deploy boundary
+at G5; publication into the retention store / dashboards (slice 4).
+
 ## Slice 1 — Walking skeleton (the first thing that is real)
 
 - `asdlc-spec` v0.1: Change Record format, `change-intent/v1`,

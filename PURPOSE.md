@@ -92,6 +92,13 @@ from typed knowledge nodes in `.asdlc/knowledge/` by
 `spec/tools/scaffold.py`; CI fails on drift. Edit nodes, never the
 generated files. See roadmap Priority 0.
 
+**Metrics v1 live** (2026-07-14, CR-20260714-metrics): lead time and
+cycle time derived from evidence + git by `spec/tools/metrics.py`;
+published per main-push by the `metrics` workflow (job summary + JSON
+artifact). Definitions: the `metric-*` knowledge nodes; roadmap
+Priority 1. A leftovers registry also exists (`LEFTOVERS.md`, generated)
+for owner-triggered sweep changes.
+
 ## Clarifying questions — researched, proposed answers
 
 ### Q1. Where must governance be unbypassable?

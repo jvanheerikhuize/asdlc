@@ -1,0 +1,25 @@
+# Publish change metrics (derived from evidence + git) on every push to main:
+# report in the run's job summary, JSON as an artifact. No metrics store —
+# the numbers are recomputed from the truth each time (metric-* nodes).
+name: metrics
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: python3 spec/tools/metrics.py >> "$GITHUB_STEP_SUMMARY"
+      - run: python3 spec/tools/metrics.py --json > metrics.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: metrics-${{ github.sha }}
+          path: metrics.json
