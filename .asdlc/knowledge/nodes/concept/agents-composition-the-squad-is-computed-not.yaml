@@ -1,0 +1,17 @@
+id: agents-composition-the-squad-is-computed-not
+type: concept
+title: "Composition: the squad is computed, not configured"
+body: |2
+  For each Change Record, the squad is derived the same way the control set is:
+  `phase × classification → personas`. A minimal-risk change composes a
+  solo implementer persona; a high-risk AI change composes product, architect,
+  security, risk, test, and AI-fairness personas. Composition is deterministic
+  policy in the spec — auditable, and identical regardless of which vendor's
+  agents fill the seats.
+
+  Responsibility assignment is recorded, not assumed: when a persona is
+  instantiated, the orchestrator records which underlying agent identity
+  (vendor, model, version — from the P0 third-party inventory) filled which
+  seat. Every attestation produced carries both the persona and the concrete
+  agent identity in its predicate. Accountability is therefore two-layer: the
+  *role* that had authority, and the *system* that exercised it.

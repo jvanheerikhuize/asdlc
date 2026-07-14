@@ -1,0 +1,10 @@
+id: roadmap-slice-6-hardening-and-portability-proof
+type: roadmap-item
+title: "Slice 6 \u2014 Hardening and portability proof"
+body: |2
+  - Conformance test suite: golden evidence bundles per gate (doubles as the
+    policy-bug defense, R3).
+  - Second binding (skeletal local-git/other-CI) to prove the platform seam.
+  - Verifier SLSA provenance + digest-pinning policy (verify-the-verifier, R4).
+  - Approval-surface work: exception-oriented summaries (anti-rubber-stamp, R2).
+  - Persona evaluation harness (open question 5) if warranted by dogfood data.

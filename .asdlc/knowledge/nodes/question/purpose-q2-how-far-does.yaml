@@ -1,0 +1,10 @@
+id: purpose-q2-how-far-does
+type: question
+title: "Q2. How far does the lifecycle reach?"
+body: |2
+  **Proposed answer: full span (intent → operation), unevenly resolved.**
+  High-resolution design to merge/release; contract-level resolution for deploy
+  and operate. DORA makes the operate phase non-optional: incident handling
+  carries hard reporting timelines (initial notification ~4h, intermediate 72h,
+  final 30d) and resilience testing must be required and recorded as a gate. A
+  build-time-only framework cannot evidence those obligations.

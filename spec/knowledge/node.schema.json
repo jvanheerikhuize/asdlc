@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jvanheerikhuize/asdlc/spec/knowledge/node.schema.json",
+  "title": "Knowledge node — one addressable unit of persistent knowledge",
+  "description": "Lives at .asdlc/knowledge/nodes/<type>/<id>.yaml in the consuming repo. Agents read nodes as context; human documents are generated views over them (spec/tools/scaffold.py).",
+  "type": "object",
+  "required": ["id", "type", "title", "body"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Unique across the repo's knowledge base; referenced by doc manifests and links."
+    },
+    "type": {
+      "enum": [
+        "concept",
+        "component",
+        "decision",
+        "risk",
+        "question",
+        "obligation",
+        "convention",
+        "roadmap-item",
+        "status",
+        "reference"
+      ]
+    },
+    "title": { "type": "string", "minLength": 1 },
+    "body": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Markdown. May contain its own sub-headings (### and deeper)."
+    },
+    "links": {
+      "type": "array",
+      "description": "Typed edges to other nodes.",
+      "items": {
+        "type": "object",
+        "required": ["to", "rel"],
+        "properties": {
+          "to": { "type": "string" },
+          "rel": {
+            "type": "string",
+            "examples": ["depends-on", "mitigates", "supersedes", "derived-from", "relates-to"]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "status": { "enum": ["active", "superseded", "done"] },
+    "since": { "type": "string", "format": "date" }
+  },
+  "additionalProperties": false
+}

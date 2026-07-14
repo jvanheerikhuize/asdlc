@@ -1,0 +1,7 @@
+id: roadmap-what-is-deliberately-not-scheduled
+type: roadmap-item
+title: "What is deliberately *not* scheduled"
+body: |2
+  Multi-repo change federation, evidence privacy tiers, and regulator-format
+  incident submission (open questions 1, 2, 4) — each needs dogfood evidence
+  before design, and none blocks the spine.

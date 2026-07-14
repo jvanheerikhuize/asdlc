@@ -1,0 +1,11 @@
+id: arch-separation-of-authority
+type: concept
+title: "Separation of authority"
+body: |2
+  Roles (intent-owner, design-authority, security-reviewer, risk-officer,
+  release-approver, incident-manager) are spec-defined. The authority matrix
+  says which role signs what, when. The consuming repo's manifest binds roles to
+  identities (GitHub users/teams in the reference binding). The verifier rejects
+  evidence signed outside the matrix. A solo maintainer binds every role to one
+  identity — and the verifier records a standing separation-of-duty exception as
+  a fact in the evidence, visible to any auditor, rather than hiding it.

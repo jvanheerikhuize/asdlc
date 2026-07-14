@@ -1,3 +1,5 @@
+<!-- GENERATED from .asdlc/knowledge — do not edit directly.
+     Edit the knowledge nodes, then run: python3 spec/tools/scaffold.py -->
 # Architecture (brief §7.2)
 
 ## The central reframe: an evidence-state machine, not a process playbook

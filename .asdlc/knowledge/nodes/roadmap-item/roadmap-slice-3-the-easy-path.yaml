@@ -1,0 +1,14 @@
+id: roadmap-slice-3-the-easy-path
+type: roadmap-item
+title: "Slice 3 \u2014 The easy path"
+body: |2
+  - `asdlc-orchestrator` v0.1 (TypeScript MCP server): `change.*`,
+    `controls.required`, `evidence.record`, `gate.check`, `approval.request`,
+    `playbook.get`; retry counting → HALT.
+  - First personas (implementer, security-engineer, test-engineer) and
+    deterministic squad composition.
+  - Phase playbooks as served guidance.
+
+  *Exit criterion*: an off-the-shelf agent connected only to the MCP server
+  completes a governed change end-to-end to merge, with a weaker-agent run and a
+  no-orchestrator run producing byte-equivalent gate outcomes.

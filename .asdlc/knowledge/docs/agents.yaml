@@ -1,0 +1,9 @@
+output: docs/design/agents.md
+title: "Subagent and orchestration model (brief \u00a77.5)"
+sections:
+  - node: agents-personas-are-content-not-code
+  - node: agents-composition-the-squad-is-computed-not
+  - node: agents-orchestration-over-mcp
+  - node: agents-collaboration-model
+  - node: agents-degraded-modes-by-design
+  - node: agents-memory-and-knowledge

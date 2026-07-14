@@ -1,0 +1,9 @@
+id: risk-r6-evidence-volume-vs-agent
+type: risk
+title: "R6 \u2014 Evidence volume vs. agent context cost."
+body: |2
+  A high-risk change
+  accumulates dozens of attestations; forcing agents to read raw DSSE JSON
+  burns tokens. *Mitigation*: `change.status` returns a compact computed
+  summary (what exists, what the next gate lacks); raw evidence is fetched only
+  when needed. The spec is written for machine consumption first (brief §8).

@@ -1,0 +1,8 @@
+id: decision-d10-mcp-as-the-agent
+type: decision
+title: "D10 \u2014 MCP as the agent-facing interface **(keep, now vendor-neutral)**"
+body: |2
+  Prior art chose MCP when it was an Anthropic protocol; since December 2025 it
+  is Linux-Foundation-governed with all major vendors aboard. What was a
+  pragmatic bet is now the compliant choice — kept, with the July 2026 spec's
+  Tasks primitive as the natural fit for long-running gated phases.

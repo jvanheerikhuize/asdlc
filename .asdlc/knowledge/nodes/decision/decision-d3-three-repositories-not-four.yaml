@@ -1,0 +1,14 @@
+id: decision-d3-three-repositories-not-four
+type: decision
+title: "D3 \u2014 Three repositories, not four **(diverge)**"
+body: |2
+  Prior art: lifecycle / governance / orchestrator / swarm. This design:
+  **spec** (all governance content, personas included) / **verify** (enforcement
+  code) / **orchestrator** (optional ergonomics code).
+
+  *Why*: lifecycle definitions, governance references, and persona definitions
+  are all versioned *content* consumed together — splitting them across three
+  repos created version-skew risk with no isolation benefit. Code is split from
+  content because it releases on a different cadence and the verifier must be
+  independently attestable. *Trade-off*: a fatter spec repo; acceptable because
+  it is all generated-view content with one semver line.

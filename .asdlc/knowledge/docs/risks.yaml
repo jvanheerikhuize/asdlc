@@ -1,0 +1,15 @@
+output: docs/design/risks.md
+title: "Risks, failure modes, open questions (brief \u00a77.6)"
+sections:
+  - heading: "Design-level risks"
+    items:
+      - risk-r1-goodhart-s-law-agents
+      - risk-r2-rubber-stamping-automation-bias
+      - risk-r3-policy-bugs-become-false
+      - risk-r4-the-verifier-is-the
+      - risk-r5-github-coupling-creep
+      - risk-r6-evidence-volume-vs-agent
+      - risk-r7-orchestrator-reality-drift
+      - risk-r8-waiver-misuse
+  - node: risks-failure-modes-operational
+  - node: risks-open-questions

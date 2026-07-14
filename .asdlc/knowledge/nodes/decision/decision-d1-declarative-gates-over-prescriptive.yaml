@@ -1,0 +1,13 @@
+id: decision-d1-declarative-gates-over-prescriptive
+type: decision
+title: "D1 \u2014 Declarative gates over prescriptive playbooks **(diverge)**"
+body: |2
+  Prior art: procedural playbooks + binding contracts per stage. This design:
+  gates are policies over evidence; playbooks are optional guidance.
+
+  *Why*: contracts binding agents to procedure are unenforceable against a
+  non-compliant agent and over-constrain a compliant one. Evidence requirements
+  are enforceable (a required check either passes or doesn't) and leave agents
+  free to work in whatever shape their vendor gave them — which is what
+  agent-agnosticism actually requires. *Trade-off*: less step-by-step hand-holding
+  for weak agents; mitigated by the orchestrator serving playbooks as guidance.

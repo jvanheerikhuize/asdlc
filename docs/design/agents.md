@@ -1,3 +1,5 @@
+<!-- GENERATED from .asdlc/knowledge — do not edit directly.
+     Edit the knowledge nodes, then run: python3 spec/tools/scaffold.py -->
 # Subagent and orchestration model (brief §7.5)
 
 ## Personas are content, not code

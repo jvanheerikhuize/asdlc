@@ -1,0 +1,19 @@
+id: arch-lifecycle-seven-evidence-states
+type: concept
+title: "Lifecycle: seven evidence states"
+body: |2
+  | Phase | Evidence that must exist to leave it (gate) |
+  |---|---|
+  | **P0 Onboard** (once per repo) | classification baseline; third-party/model inventory; role bindings (G0) |
+  | **P1 Intent** | change-intent; per-change classification (risk, data, AI) (G1) |
+  | **P2 Design** | design decisions; threat model / DPIA / AI impact **at the depth the classification activates** (G2) |
+  | **P3 Build** | SLSA build provenance; AI-contribution disclosure (G3) |
+  | **P4 Verify** | control verdicts for the full required-control set; human review approval (G4 = merge boundary) |
+  | **P5 Release** | release approval; rollback plan; deployment record (G5 = deploy boundary) |
+  | **P6 Operate** | monitoring confirmation; incident records if any; post-incident learning (G6 = closure) |
+
+  Classification at P1 is the *depth throttle*: a low-risk, no-data, no-AI change
+  activates a minimal control set and flows through gates almost frictionlessly;
+  a high-risk AI change activates the full battery. Same lifecycle, different
+  weight — governance depth is a computed property, never a judgment call made
+  under delivery pressure.

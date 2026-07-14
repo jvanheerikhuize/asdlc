@@ -1,0 +1,20 @@
+id: purpose-q1-where-must-governance
+type: question
+title: "Q1. Where must governance be unbypassable?"
+body: |2
+  **Proposed answer: platform-enforced gates, with a cooperative runtime in
+  front.** The prior art enforces through an MCP orchestrator that agents
+  *choose* to call — a non-compliant agent routes around it, and an audit trail
+  of voluntary self-reports is weak supervisory evidence. Since the estate lives
+  on GitHub, the unbypassable layer binds to GitHub primitives: repository
+  rulesets and required status checks, the required-reviewer rule (GA Feb 2026),
+  environment protection rules, and org-level artifact-attestation policies.
+  A thin, dumb verifier runs as a required check at the merge/deploy boundary and
+  validates that the evidence bundle exists, is signed, and satisfies policy —
+  regardless of which agent produced it. The orchestrator remains valuable for
+  ergonomics, coordination, and recording, but is never the source of truth.
+
+  The framework itself stays platform-neutral by defining the *verification
+  contract* (what evidence must exist, its schema, how it is checked) and
+  shipping the GitHub binding as the reference implementation; other platforms
+  are adopter-supplied bindings.

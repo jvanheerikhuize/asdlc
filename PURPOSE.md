@@ -1,3 +1,5 @@
+<!-- GENERATED from .asdlc/knowledge — do not edit directly.
+     Edit the knowledge nodes, then run: python3 spec/tools/scaffold.py -->
 # Purpose — Clean-Slate Rebuild of the Agentic SDLC Framework
 
 This repository is the working home for a from-first-principles redesign of a
@@ -13,8 +15,6 @@ The session state that produced this document is
 **Ground fact set by the owner:** the framework and all consuming repositories
 live on **GitHub**. Enforcement reference bindings may therefore target GitHub
 primitives, while the framework's contracts stay platform-neutral.
-
----
 
 ## Where the work stands (2026-07-14, end of session)
 
@@ -86,7 +86,11 @@ Slice 1 remaining: (a) add `g4-gate` to the main ruleset's required checks
 replacing dev-unsigned; (c) tag spec v0.1.0 and pin the verifier's
 fixtures to the tag.
 
----
+**Knowledge-first documentation is live** (2026-07-14,
+CR-20260714-knowledge-architecture): all prose in this repo is generated
+from typed knowledge nodes in `.asdlc/knowledge/` by
+`spec/tools/scaffold.py`; CI fails on drift. Edit nodes, never the
+generated files. See roadmap Priority 0.
 
 ## Clarifying questions — researched, proposed answers
 
@@ -149,8 +153,6 @@ merit (classification-driven conditional controls, bounded-retries-then-HALT,
 machine-readable manifest as single source of truth, typed controls) are kept
 by argument, not by inheritance.
 
----
-
 ## Research findings the design must account for (July 2026)
 
 - **EU AI Act — timelines moved.** The Digital Omnibus (provisionally agreed
@@ -200,8 +202,6 @@ Sources: [GitHub artifact attestations](https://docs.github.com/en/actions/conce
 [MCP — Wikipedia](https://en.wikipedia.org/wiki/Model_Context_Protocol) ·
 [in-toto and SLSA](https://slsa.dev/blog/2023/05/in-toto-and-slsa)
 
----
-
 ## Suggested tech stack (where code is needed)
 
 | Component | Suggestion | Why |
@@ -214,8 +214,6 @@ Sources: [GitHub artifact attestations](https://docs.github.com/en/actions/conce
 | Orchestrator | MCP server in **TypeScript** (official SDK) | Most mature SDK; MCP now LF-governed and vendor-neutral |
 | Knowledge/memory | In-repo JSON(-LD) documents validated by the schemas | Portable, diffable, low agent-context cost |
 | Docs | Generated from the manifest (any static generator) | No hand-maintained duplication |
-
----
 
 ## Deliverables (brief §7) — all delivered
 

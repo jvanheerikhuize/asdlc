@@ -1,0 +1,18 @@
+output: docs/design/decisions.md
+title: "Key decisions and trade-offs (brief \u00a77.3)"
+preamble: |
+  Each decision states the divergence from (or retention of) the prior art in
+  the brief's §6, and the trade-off accepted.
+sections:
+  - node: decision-d1-declarative-gates-over-prescriptive
+  - node: decision-d2-enforcement-at-the-platform
+  - node: decision-d3-three-repositories-not-four
+  - node: decision-d4-evidence-as-in-toto
+  - node: decision-d5-human-decisions-captured-from
+  - node: decision-d6-classification-driven-conditional-depth
+  - node: decision-d7-bounded-retries-halt-with
+  - node: decision-d8-typed-control-taxonomy-keep
+  - node: decision-d9-machine-readable-single-source
+  - node: decision-d10-mcp-as-the-agent
+  - node: decision-d11-full-lifecycle-span-unevenly
+  - node: decision-d12-this-repo-is-asdlc

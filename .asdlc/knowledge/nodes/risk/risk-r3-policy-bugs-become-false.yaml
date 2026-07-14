@@ -1,0 +1,10 @@
+id: risk-r3-policy-bugs-become-false
+type: risk
+title: "R3 \u2014 Policy bugs become false assurance."
+body: |2
+  A wrong Rego policy silently
+  passes changes that should have been stopped — worse than no framework,
+  because it *certifies* the gap. *Mitigation*: policies ship with a conformance
+  test suite (golden evidence bundles that must pass/fail); policy changes in
+  the spec are themselves high-risk governed changes; verifier and spec versions
+  are pinned and attested in every verdict.

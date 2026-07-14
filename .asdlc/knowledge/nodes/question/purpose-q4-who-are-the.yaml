@@ -1,0 +1,11 @@
+id: purpose-q4-who-are-the
+type: question
+title: "Q4. Who are the humans?"
+body: |2
+  **Proposed answer: design standalone and portable, with explicit adapter
+  seams.** Role separation (product / architecture / security / risk approvers)
+  is expressed abstractly in the framework's control definitions and mapped, in
+  the GitHub reference binding, onto CODEOWNERS, required reviewers, and
+  environment approvals. Nothing assumes an incumbent GRC stack, but control
+  definitions carry stable IDs so an enterprise can map them into an existing
+  risk register without tearing anything out.

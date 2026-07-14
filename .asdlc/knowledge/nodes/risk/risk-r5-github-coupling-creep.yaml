@@ -1,0 +1,11 @@
+id: risk-r5-github-coupling-creep
+type: risk
+title: "R5 \u2014 GitHub coupling creep."
+body: |2
+  Convenience will keep tempting gate logic
+  into GitHub-specific config until portability is fiction. *Mitigation*: hard
+  rule — anything that decides pass/fail lives in spec policies evaluated by
+  the portable verifier; platform config may only *invoke* the verifier and
+  enforce human review. The conformance suite doubles as the portability test: a
+  second binding (even a skeletal local-git one) is built early to keep the seam
+  honest.

@@ -1,0 +1,22 @@
+id: arch-the-central-reframe-an-evidence-state
+type: concept
+title: "The central reframe: an evidence-state machine, not a process playbook"
+body: |2
+  The prior art models the lifecycle as a sequence of *activities* (playbooks per
+  stage, contracts binding agents to procedure). This design inverts that: the
+  framework governs **states of evidence**, not sequences of work.
+
+  - The unit of governance is a **Change Record** — one governed change, from
+    intent to operation, identified by a stable ID.
+  - A Change Record accumulates **signed attestations** (in-toto statements in
+    DSSE envelopes) as work happens: intent, classification, design decisions,
+    control verdicts, approvals, deployments, incidents.
+  - A **phase boundary is a gate, and a gate is a policy** (Rego) evaluated over
+    the Change Record's attestation set. The gate does not care *how* the
+    evidence was produced — by one agent, a swarm, or a human — only that it
+    exists, is validly signed by an authorized identity, and satisfies policy.
+
+  This is what makes the framework agent- and vendor-agnostic *by construction*:
+  there is no procedure to comply with, only evidence to produce. Playbooks
+  survive — but demoted to *guidance* served by the orchestrator (the easy path),
+  never enforcement.

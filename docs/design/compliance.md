@@ -1,3 +1,5 @@
+<!-- GENERATED from .asdlc/knowledge — do not edit directly.
+     Edit the knowledge nodes, then run: python3 spec/tools/scaffold.py -->
 # Governance, DORA, and EU AI Act mapping (brief §7.4)
 
 How each obligation is satisfied by concrete framework mechanisms and the

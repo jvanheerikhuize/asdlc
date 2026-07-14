@@ -1,0 +1,9 @@
+id: purpose-q5-greenfield-or-migration
+type: question
+title: "Q5. Greenfield or migration?"
+body: |2
+  **Proposed answer: clean slate, no compatibility obligation** — that is the
+  explicit spirit of the brief. Concepts from the prior art that survive on
+  merit (classification-driven conditional controls, bounded-retries-then-HALT,
+  machine-readable manifest as single source of truth, typed controls) are kept
+  by argument, not by inheritance.

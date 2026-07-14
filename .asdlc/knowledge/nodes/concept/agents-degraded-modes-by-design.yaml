@@ -1,0 +1,11 @@
+id: agents-degraded-modes-by-design
+type: concept
+title: "Degraded modes (by design)"
+body: |2
+  - **No orchestrator**: any agent reads the spec, works, and produces evidence
+    via the verifier CLI. Gates behave identically. The orchestrator adds
+    convenience, retry counting, and squad ergonomics — never validity.
+  - **No agents at all**: humans produce the same evidence through the same
+    gates. The framework governs *changes*, not *agents* — an all-human change
+    is just a squad of size zero. This is also the escape hatch when agents are
+    down or distrusted.

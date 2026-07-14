@@ -1,3 +1,5 @@
+<!-- GENERATED from .asdlc/knowledge — do not edit directly.
+     Edit the knowledge nodes, then run: python3 spec/tools/scaffold.py -->
 # asdlc
 
 Clean-slate redesign of a governed, agent- and vendor-agnostic Agentic
@@ -6,6 +8,10 @@ Software Development Lifecycle (ASDLC) framework, for a regulated
 
 Start with [PURPOSE.md](PURPOSE.md) — the state of the work, the researched
 design positions, and the original brief (in [docs/](docs/)).
+
+All documents in this repo (this file included) are generated from the
+knowledge base in `.asdlc/knowledge/` — edit nodes, then run
+`python3 spec/tools/scaffold.py`.
 
 ## The design (brief §7 deliverables)
 

@@ -1,0 +1,24 @@
+id: agents-personas-are-content-not-code
+type: concept
+title: "Personas are content, not code"
+body: |2
+  A subagent persona is a Markdown file with YAML frontmatter, versioned in the
+  spec repo:
+
+  ```markdown
+  ---
+  id: security-engineer
+  role: security-reviewer          # authority-matrix role it may exercise
+  phases: [design, verify]         # where it is composable
+  activates: classification.risk >= medium || classification.data >= sensitive
+  signs: [control-verdict/v1]      # predicate types it may produce
+  model_requirements: none         # vendor-agnostic by construction
+  ---
+  You are the security engineer of the squad. Your remit is …
+  ```
+
+  Any vendor's agent can load a persona — it is a system-prompt fragment plus
+  declared authority, nothing more. In the GitHub reference binding these files
+  follow the `.github/agents/*.md` convention, so Enterprise push rules can
+  protect their integrity: **persona definitions are themselves governed
+  artefacts** (an agent cannot quietly edit its own authority).

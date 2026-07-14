@@ -1,0 +1,14 @@
+id: purpose-tech-stack
+type: reference
+title: "Suggested tech stack (where code is needed)"
+body: |2
+  | Component | Suggestion | Why |
+  |---|---|---|
+  | Evidence format | in-toto statements in DSSE envelopes, custom predicate family | Industry lingua franca; verifiable with existing tooling |
+  | Signing | Sigstore (GitHub `actions/attest` in the reference binding; cosign elsewhere) | Keyless OIDC signing; native on GitHub |
+  | Schemas / contracts | JSON Schema (2020-12), optionally CUE for authoring | Machine-readable single source of truth; generated human views |
+  | Verifier | **Go** CLI (single static binary), wrapped as a GitHub Action for the reference binding | sigstore-go / in-toto-golang ecosystem; runs identically in any CI |
+  | Policy evaluation | OPA/Rego evaluated by the verifier over evidence bundles | Declarative, testable, decoupled from binding |
+  | Orchestrator | MCP server in **TypeScript** (official SDK) | Most mature SDK; MCP now LF-governed and vendor-neutral |
+  | Knowledge/memory | In-repo JSON(-LD) documents validated by the schemas | Portable, diffable, low agent-context cost |
+  | Docs | Generated from the manifest (any static generator) | No hand-maintained duplication |

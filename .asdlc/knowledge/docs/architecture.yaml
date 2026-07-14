@@ -1,0 +1,10 @@
+output: docs/design/architecture.md
+title: "Architecture (brief \u00a77.2)"
+sections:
+  - node: arch-the-central-reframe-an-evidence-state
+  - node: arch-components-three-repositories-down-from-four
+  - node: arch-lifecycle-seven-evidence-states
+  - node: arch-where-enforcement-actually-bites-github-reference
+  - node: arch-evidence-model
+  - node: arch-fail-safe-control-flow
+  - node: arch-separation-of-authority

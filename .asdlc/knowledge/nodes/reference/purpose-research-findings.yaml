@@ -1,0 +1,50 @@
+id: purpose-research-findings
+type: reference
+title: "Research findings the design must account for (July 2026)"
+body: |2
+  - **EU AI Act — timelines moved.** The Digital Omnibus (provisionally agreed
+    7 May 2026; Parliament 16 June; Council final approval 29 June 2026) defers
+    Annex III high-risk obligations from 2 Aug 2026 to **2 Dec 2027**, and
+    Annex I product-regulated systems to 2 Aug 2028. Still active: chatbot
+    transparency obligations from Aug 2026; AI-generated-content labelling
+    deferred only to 2 Dec 2026. Design consequence: transparency/labelling
+    controls are near-term; high-risk conformity machinery has runway but should
+    be designed in now.
+  - **DORA — in force since 17 Jan 2025.** Tamper-proof audit trails with ≥5-year
+    retention; formal change management with documented approval; incident
+    reporting at 4h/72h/30d; resilience and security testing as recorded gates;
+    external models/agents/tools treated as ICT third parties (inventory, SBOM,
+    monitoring).
+  - **MCP is now genuinely vendor-neutral.** Anthropic donated MCP to the Linux
+    Foundation's Agentic AI Foundation in Dec 2025 (backed by AWS, Google,
+    Microsoft, OpenAI, Bloomberg, Cloudflare). Next spec finalises 28 July 2026
+    (stateless core, Extensions, Tasks, authorization hardening). MCP is a safe
+    choice as the framework's agent-facing interface without violating
+    vendor-agnosticism.
+  - **GitHub now ships the enforcement primitives natively.** Artifact
+    attestations (Sigstore/in-toto) with org-level attestation policies and a
+    Kubernetes admission controller; rulesets with required checks and the
+    required-reviewer rule (GA Feb 2026); Enterprise AI Controls + agent control
+    plane (GA Feb 2026), including push rules protecting `.github/agents/*.md`;
+    GitHub Agentic Workflows (public preview June 2026) — markdown-defined,
+    agent-agnostic (Copilot/Claude/Gemini/Codex), sandboxed, with gated "safe
+    outputs". The reference binding should compose these rather than rebuild them.
+  - **SLSA / in-toto is the evidence lingua franca.** Provenance as in-toto
+    statements in DSSE envelopes, signed by the build platform; policy layers
+    (layouts, admission controllers, deploy gates) verify programmatically.
+    The framework's evidence schema should be an in-toto predicate family, not a
+    bespoke format.
+
+  Sources: [GitHub artifact attestations](https://docs.github.com/en/actions/concepts/security/artifact-attestations) ·
+  [GitHub Enterprise Cloud attestations](https://docs.github.com/en/enterprise-cloud@latest/actions/concepts/security/artifact-attestations) ·
+  [Required-reviewer rule GA](https://github.blog/changelog/2026-02-17-required-reviewer-rule-is-now-generally-available/) ·
+  [Enterprise AI Controls GA](https://github.blog/changelog/2026-02-26-enterprise-ai-controls-agent-control-plane-now-generally-available/) ·
+  [Agentic Workflows public preview](https://github.blog/changelog/2026-06-11-github-agentic-workflows-is-now-in-public-preview/) ·
+  [EU AI Act implementation timeline](https://artificialintelligenceact.eu/implementation-timeline/) ·
+  [Gibson Dunn on the Omnibus deferrals](https://www.gibsondunn.com/eu-ai-act-omnibus-agreement-postponed-high-risk-deadlines-and-other-key-changes/) ·
+  [Latham & Watkins AI Act update](https://www.lw.com/en/insights/ai-act-update-eu-resolves-to-change-rules-and-extend-deadlines) ·
+  [JFrog on DORA for software delivery](https://jfrog.com/blog/navigating-dora-compliance-software-development-requirements-for-financial-services-companies/) ·
+  [DORA audit-trail requirements](https://dorapp.eu/blog/dora-audit-trail-requirements-essential-guidelines/) ·
+  [MCP 2026-07-28 spec release candidate](https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/) ·
+  [MCP — Wikipedia](https://en.wikipedia.org/wiki/Model_Context_Protocol) ·
+  [in-toto and SLSA](https://slsa.dev/blog/2023/05/in-toto-and-slsa)

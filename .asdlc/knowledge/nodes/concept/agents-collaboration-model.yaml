@@ -1,0 +1,12 @@
+id: agents-collaboration-model
+type: concept
+title: "Collaboration model"
+body: |2
+  Deliberately simple: **shared evidence, not shared conversation.** Personas
+  collaborate by reading the Change Record's accumulated evidence and the
+  knowledge graph, and by producing their own attestations. There is no
+  framework-level inter-agent chat protocol — vendors differ wildly there, and
+  the evidence DAG is the interoperable medium. A security persona "responds" to
+  a design by attesting a verdict that references the design-decision
+  attestation. This keeps multi-vendor squads possible (Claude architect, Codex
+  implementer, local-model scribe) with zero protocol coupling beyond MCP.

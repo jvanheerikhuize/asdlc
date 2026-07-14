@@ -1,0 +1,13 @@
+id: decision-d4-evidence-as-in-toto
+type: decision
+title: "D4 \u2014 Evidence as in-toto attestations, not bespoke records **(diverge)**"
+body: |2
+  Prior art: manifest-driven documents and records in framework-specific shapes.
+  This design: every record is an in-toto statement in a DSSE envelope, signed
+  via Sigstore, in a custom predicate family.
+
+  *Why*: tamper-evidence, signer identity, and artifact binding come free from
+  an ecosystem regulators and platforms already understand (SLSA, GitHub
+  attestations, admission controllers), instead of being reimplemented and then
+  defended in an audit. *Trade-off*: DSSE/Sigstore tooling is a real dependency;
+  accepted since it is open, multi-vendor, and Linux-Foundation-governed.

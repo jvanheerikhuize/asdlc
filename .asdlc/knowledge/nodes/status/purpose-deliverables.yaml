@@ -1,0 +1,13 @@
+id: purpose-deliverables
+type: status
+title: "Deliverables (brief \u00a77) \u2014 all delivered"
+body: |2
+  | § | Deliverable | Location |
+  |---|---|---|
+  | 7.1 | Clarifying questions + answers | this file, above |
+  | 7.2 | Proposed architecture | [docs/design/architecture.md](docs/design/architecture.md) |
+  | 7.3 | Key decisions and trade-offs vs prior art | [docs/design/decisions.md](docs/design/decisions.md) |
+  | 7.4 | DORA / EU AI Act mapping | [docs/design/compliance.md](docs/design/compliance.md) |
+  | 7.5 | Subagent and orchestration model | [docs/design/agents.md](docs/design/agents.md) |
+  | 7.6 | Risks, failure modes, open questions | [docs/design/risks.md](docs/design/risks.md) |
+  | 7.7 | Incremental build plan | [docs/design/roadmap.md](docs/design/roadmap.md) |

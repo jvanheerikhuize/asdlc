@@ -1,0 +1,23 @@
+id: risks-open-questions
+type: question
+title: "Open questions"
+body: |2
+  1. **Multi-repo changes.** A feature spanning three consuming repos needs a
+     cross-repo Change Record or a federation convention — current design
+     handles single-repo changes cleanly; the ID scheme reserves space for a
+     parent-change reference, but the coordination gate is undesigned.
+  2. **Evidence privacy tiers.** Some evidence (threat models, incident
+     details) is sensitive; who may read the DAG, and should the retention
+     store support field-level encryption? Currently: repo-visibility inherited,
+     which is coarse.
+  3. **Cost model.** Every gate run costs CI minutes and agent tokens; the
+     classification throttle bounds it, but no measured baseline exists yet —
+     the dogfood phase (roadmap slice 1) must produce one.
+  4. **Incident-report *submission*.** The framework guarantees the incident
+     record's existence, completeness, and clock; actually filing with a
+     competent authority in their format is adopter territory. Is a reference
+     exporter (e.g. to the ESAs' harmonised template) worth shipping?
+  5. **Persona quality drift.** Personas are governed content, but nothing yet
+     measures whether a persona's verdicts remain *good* as models change
+     underneath it — an evaluation harness per persona is plausibly slice-6
+     work.

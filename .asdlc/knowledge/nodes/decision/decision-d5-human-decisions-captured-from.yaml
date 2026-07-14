@@ -1,0 +1,13 @@
+id: decision-d5-human-decisions-captured-from
+type: decision
+title: "D5 \u2014 Human decisions captured from platform events **(new)**"
+body: |2
+  Approvals are enforced by the platform (PR review, environment approval) and
+  transcribed into signed `approval/v1` attestations by a trusted workflow —
+  rather than asking humans to sign attestations directly.
+
+  *Why*: humans will not run cosign; they will click "Approve" where they
+  already work. Enforcement must live where the human actually acts, and the
+  durable record must be derivable from it. *Trade-off*: the transcription
+  workflow becomes trusted infrastructure; it is small, spec-owned, and its own
+  builds are attested.
