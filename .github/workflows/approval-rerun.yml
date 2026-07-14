@@ -1,0 +1,33 @@
+# When a release-approver comments '/asdlc approve <sha>' on a PR, re-run the
+# g4-gate workflow for that PR so the approval gets transcribed and the gate
+# re-evaluated. Authorization is checked by the gate itself (evidence.py
+# validates the commenter against the manifest's release-approver bindings);
+# this workflow only pokes the re-run.
+name: approval-rerun
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  actions: write
+  pull-requests: read
+
+jobs:
+  rerun:
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/asdlc approve')
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          pr=${{ github.event.issue.number }}
+          head=$(gh api "repos/${{ github.repository }}/pulls/$pr" -q .head.sha)
+          run_id=$(gh api "repos/${{ github.repository }}/actions/runs?event=pull_request&head_sha=$head" \
+                   -q '[.workflow_runs[] | select(.name=="g4-gate")][0].id')
+          if [ -z "$run_id" ] || [ "$run_id" = "null" ]; then
+            echo "::warning::no g4-gate run found for head $head"
+            exit 0
+          fi
+          gh run rerun "$run_id" --repo "${{ github.repository }}" || \
+            gh run rerun "$run_id" --repo "${{ github.repository }}" --failed
