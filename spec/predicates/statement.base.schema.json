@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/statement.base.schema.json",
+  "title": "ASDLC evidence statement (in-toto Statement v1 envelope)",
+  "type": "object",
+  "required": ["_type", "subject", "predicateType", "predicate"],
+  "properties": {
+    "_type": { "const": "https://in-toto.io/Statement/v1" },
+    "subject": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["digest"],
+        "properties": {
+          "name": { "type": "string" },
+          "digest": {
+            "type": "object",
+            "description": "At least one of gitCommit (evidence about a commit) or sha256 (evidence about an artifact).",
+            "properties": {
+              "gitCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+              "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+            },
+            "minProperties": 1,
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "predicateType": { "type": "string", "format": "uri" },
+    "predicate": { "type": "object" }
+  },
+  "$defs": {
+    "changeId": {
+      "type": "string",
+      "pattern": "^CR-[0-9]{8}-[a-z0-9][a-z0-9-]*$",
+      "description": "Change Record ID, e.g. CR-20260714-evidence-spine"
+    },
+    "producedBy": {
+      "type": "object",
+      "description": "Who produced this evidence: the authority-matrix role exercised, and the concrete actor behind it (two-layer accountability).",
+      "required": ["role", "kind", "identity"],
+      "properties": {
+        "role": {
+          "type": "string",
+          "description": "Authority-matrix role exercised (e.g. intent-owner, security-reviewer). Verifier checks it against the manifest's role bindings."
+        },
+        "kind": { "enum": ["human", "agent", "ci"] },
+        "identity": {
+          "type": "string",
+          "description": "Platform identity, e.g. github:login, or a Sigstore certificate identity for CI."
+        },
+        "agent": {
+          "type": "object",
+          "description": "Required when kind=agent; ties the actor to the P0 third-party inventory.",
+          "required": ["vendor", "model"],
+          "properties": {
+            "vendor": { "type": "string" },
+            "model": { "type": "string" },
+            "version": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "refs": {
+      "type": "array",
+      "description": "Parent attestations this one builds on — the edges of the traceability DAG.",
+      "items": {
+        "type": "object",
+        "required": ["predicateType", "sha256"],
+        "properties": {
+          "predicateType": { "type": "string", "format": "uri" },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "description": "Content digest of the referenced statement (canonical JSON)."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "producedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 UTC timestamp."
+    }
+  }
+}

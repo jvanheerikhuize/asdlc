@@ -1,0 +1,41 @@
+# ASDLC control catalogue — slice 1 (minimal: one QC, one SC)
+#
+# A control is: a stable ID, the evidence predicate it requires, an
+# activation condition over the change's classification, the gate where it is
+# checked, which roles may sign its verdict, and which role may waive it.
+#
+# Activation conditions are structured (machine-checkable), not a string DSL:
+#   always: true                 — unconditional
+#   risk_at_least: medium        — classification.risk >= medium
+#   data_at_least: personal      — classification.data >= personal
+#   ai_system_tier_at_least: limited
+# Multiple keys in one condition are ANDed; a list of conditions is ORed.
+version: 0.1.0
+controls:
+  - id: QC-01
+    type: QC
+    name: Automated test suite passes
+    description: >
+      The change's test suite ran against the head commit and passed.
+      Depth of the suite is the consuming repo's concern; existence and
+      outcome of the run are the framework's.
+    gate: G4
+    activation:
+      always: true
+    evidence: control-verdict/v1
+    verdict_roles: [test-engineer, implementer]
+    waiver_role: risk-officer
+
+  - id: SC-01
+    type: SC
+    name: Dependency vulnerability scan is clean
+    description: >
+      Dependencies of the head commit were scanned; no findings at or above
+      the severity threshold remain unresolved. Independent-signer rule
+      applies: the implementer of the change may not sign this verdict.
+    gate: G4
+    activation:
+      always: true
+    evidence: control-verdict/v1
+    verdict_roles: [security-reviewer]
+    waiver_role: risk-officer

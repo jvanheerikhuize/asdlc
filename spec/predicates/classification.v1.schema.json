@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/classification.v1.schema.json",
+  "title": "classification/v1 — the depth throttle: risk × data × AI, classified once at intent",
+  "allOf": [{ "$ref": "statement.base.schema.json" }],
+  "properties": {
+    "predicateType": {
+      "const": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/classification/v1"
+    },
+    "predicate": {
+      "type": "object",
+      "required": ["change_id", "risk", "data", "ai_usage", "ai_system_tier", "rationale", "produced_by", "produced_at"],
+      "properties": {
+        "change_id": { "$ref": "statement.base.schema.json#/$defs/changeId" },
+        "risk": {
+          "enum": ["low", "medium", "high"],
+          "description": "Operational/ICT risk of the change (DORA lens)."
+        },
+        "data": {
+          "enum": ["none", "internal", "personal", "sensitive"],
+          "description": "Most sensitive data class the change touches."
+        },
+        "ai_usage": {
+          "enum": ["none", "assisted", "generated"],
+          "description": "AI involvement in producing this change (transparency/labelling lens)."
+        },
+        "ai_system_tier": {
+          "enum": ["none", "minimal", "limited", "high-risk", "prohibited"],
+          "description": "EU AI Act tier of AI capability the change introduces into the product. 'prohibited' fails G1 outright."
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Why these levels — the classification is a reviewable judgment, and its signer is accountable for it."
+        },
+        "produced_by": { "$ref": "statement.base.schema.json#/$defs/producedBy" },
+        "produced_at": { "$ref": "statement.base.schema.json#/$defs/producedAt" },
+        "refs": { "$ref": "statement.base.schema.json#/$defs/refs" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

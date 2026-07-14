@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jvanheerikhuize/asdlc/spec/change-record.schema.json",
+  "title": "Change Record — the unit of governance",
+  "description": "Lives at .asdlc/changes/<id>/change.json in the consuming repo. Deliberately thin: state is derived from evidence, never stored here.",
+  "type": "object",
+  "required": ["id", "title", "opened_at", "opened_by", "spec_version"],
+  "properties": {
+    "id": { "$ref": "predicates/statement.base.schema.json#/$defs/changeId" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "opened_at": { "$ref": "predicates/statement.base.schema.json#/$defs/producedAt" },
+    "opened_by": { "type": "string", "description": "Identity that opened the record, e.g. github:login." },
+    "spec_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "The asdlc spec version this change is governed under, pinned at open time."
+    },
+    "parent_change_id": {
+      "$ref": "predicates/statement.base.schema.json#/$defs/changeId",
+      "description": "Reserved: federation hook for multi-repo changes (open question 1)."
+    }
+  },
+  "additionalProperties": false
+}

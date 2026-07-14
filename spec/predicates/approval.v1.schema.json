@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/approval.v1.schema.json",
+  "title": "approval/v1 — a platform-enforced human decision, transcribed to durable evidence",
+  "description": "Produced by the trusted transcription workflow from a platform event (PR review, environment approval) — never authored directly by the approver or an agent.",
+  "allOf": [{ "$ref": "statement.base.schema.json" }],
+  "properties": {
+    "predicateType": {
+      "const": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/approval/v1"
+    },
+    "predicate": {
+      "type": "object",
+      "required": ["change_id", "approval_type", "approver", "platform_event", "produced_by", "produced_at"],
+      "properties": {
+        "change_id": { "$ref": "statement.base.schema.json#/$defs/changeId" },
+        "approval_type": {
+          "enum": ["review", "release"],
+          "description": "review satisfies G4; release satisfies G5 (slice 4)."
+        },
+        "approver": {
+          "type": "object",
+          "required": ["role", "identity"],
+          "properties": {
+            "role": { "type": "string" },
+            "identity": { "type": "string", "description": "e.g. github:login of the human who approved." }
+          },
+          "additionalProperties": false
+        },
+        "platform_event": {
+          "type": "object",
+          "description": "The enforcing platform event this approval was transcribed from.",
+          "required": ["provider", "kind", "url"],
+          "properties": {
+            "provider": { "type": "string", "examples": ["github"] },
+            "kind": { "type": "string", "examples": ["pull_request_review", "deployment_review"] },
+            "url": { "type": "string", "format": "uri" },
+            "event_id": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "produced_by": {
+          "$ref": "statement.base.schema.json#/$defs/producedBy",
+          "description": "The transcription workflow's CI identity (kind=ci), not the approver."
+        },
+        "produced_at": { "$ref": "statement.base.schema.json#/$defs/producedAt" },
+        "refs": { "$ref": "statement.base.schema.json#/$defs/refs" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

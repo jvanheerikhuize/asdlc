@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/control-verdict.v1.schema.json",
+  "title": "control-verdict/v1 — the outcome of one control against one commit/artifact",
+  "allOf": [{ "$ref": "statement.base.schema.json" }],
+  "properties": {
+    "predicateType": {
+      "const": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/control-verdict/v1"
+    },
+    "predicate": {
+      "type": "object",
+      "required": ["change_id", "control_id", "verdict", "summary", "produced_by", "produced_at"],
+      "properties": {
+        "change_id": { "$ref": "statement.base.schema.json#/$defs/changeId" },
+        "control_id": {
+          "type": "string",
+          "pattern": "^(QC|SC|RC|AC|DC|GC)-[0-9]{2}$",
+          "description": "Stable control ID from the catalogue."
+        },
+        "verdict": {
+          "enum": ["pass", "fail"],
+          "description": "Binary by design. A verdict is superseded only by a new verdict on a new commit or an authorized waiver (slice 2) — never edited."
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Human-readable one-liner of what was checked and found."
+        },
+        "details_uri": {
+          "type": "string",
+          "format": "uri",
+          "description": "Link to full results (CI run, scan report)."
+        },
+        "produced_by": { "$ref": "statement.base.schema.json#/$defs/producedBy" },
+        "produced_at": { "$ref": "statement.base.schema.json#/$defs/producedAt" },
+        "refs": { "$ref": "statement.base.schema.json#/$defs/refs" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

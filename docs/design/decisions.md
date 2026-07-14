@@ -112,3 +112,13 @@ puts hard obligations (incident clocks, resilience testing, rollback evidence)
 precisely there. *Trade-off*: contract-level resolution means adopters do more
 binding work post-merge; better an honest thin contract than a pretended deep
 implementation.
+
+## D12 — This repo *is* `asdlc-spec` (decided at slice 1 start, 2026-07-14)
+
+The open question from PURPOSE.md, resolved: the spec repo is not created
+separately — `asdlc` becomes it. The design docs already here are exactly the
+human views the spec carries, and a governance-content repo with the design
+rationale in `docs/` and the machine-readable truth in `spec/` is the intended
+shape. `asdlc-verify` still starts as its own repo when the Go code lands
+(D3's code/content split stands). *Trade-off*: the repo name doesn't say
+"spec"; acceptable — it is the framework's front door.

@@ -32,15 +32,25 @@ primitives, while the framework's contracts stay platform-neutral.
    (GitHub redirects the old name). Currently **private**; flip with
    `gh repo edit jvanheerikhuize/asdlc --visibility public` when ready.
 
-**Next step: build slice 1 of [docs/design/roadmap.md](docs/design/roadmap.md)**
-— the walking skeleton: `asdlc-spec` v0.1 (Change Record + four predicates +
-minimal control catalogue + the G4 merge-gate policy), `asdlc-verify` v0.1
-(Go CLI + GitHub Action), and the reference binding dogfooded on the
-framework's own repos. Exit criterion: a PR without valid evidence cannot
-merge into the framework's own repos. Open first: does slice 1 live in this
-repo or do `asdlc-spec` / `asdlc-verify` start as separate repos immediately
-(the architecture prescribes three repos; starting separate avoids a later
-split, starting here is less ceremony — undecided).
+**Current step: slice 1 of [docs/design/roadmap.md](docs/design/roadmap.md)
+— in progress.** The repo-layout question is decided (D12 in decisions.md):
+this repo *is* the spec repo. Done so far (2026-07-14):
+
+- **`spec/` v0.1 exists**: Change Record + manifest schemas, the four slice-1
+  predicate schemas over a shared in-toto statement base, the minimal control
+  catalogue (QC-01, SC-01), the G4 merge-gate policy
+  (`spec/gates/g4-merge.rego`), and four golden evidence bundles
+  (`spec/examples/golden/`) pinning G4's behavior (1 pass, 3 fail).
+- **Self-check runs**: `python3 spec/tools/check.py` validates schemas +
+  golden bundles everywhere and evaluates the Rego policy when `opa` is on
+  PATH; `.github/workflows/spec-check.yml` runs both layers in CI (no opa/go
+  on the local machine — CI is where the policy is actually exercised).
+
+Slice 1 remaining: (a) confirm spec-check is green in CI, then make it a
+required check via a branch ruleset (first dogfood gate); (b) create
+`asdlc-verify` (Go CLI: signature verification, role resolution, policy
+evaluation, GitHub Action wrapper); (c) the approval-transcription workflow;
+(d) open the first real Change Record and run it through G4.
 
 ---
 

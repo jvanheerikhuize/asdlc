@@ -1,0 +1,27 @@
+# The framework's first dogfood step: the spec checks itself on every push
+# and PR. Becomes a required check (branch ruleset) once green — from then on,
+# a change that breaks the spec's own consistency cannot merge.
+name: spec-check
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  spec-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: open-policy-agent/setup-opa@v2
+        with:
+          version: latest
+      - run: pip install jsonschema referencing
+      - run: opa check --v1-compatible spec/gates/
+      - run: opa test --v1-compatible spec/gates/ || true  # no unit tests yet; golden bundles below are the tests
+      - run: python3 spec/tools/check.py
