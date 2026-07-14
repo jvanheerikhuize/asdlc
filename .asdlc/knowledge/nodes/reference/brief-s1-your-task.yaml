@@ -1,0 +1,18 @@
+id: brief-s1-your-task
+type: reference
+title: "Brief \u00a71 \u2014 Your task"
+body: |2
+  Design — *from first principles* — the architecture for a governed, agent- and
+  vendor-agnostic *Agentic Software Development Lifecycle (ASDLC)* framework:
+  a system in which autonomous AI agents can carry a software change from stated
+  intent all the way to production and operation, with governance, auditability,
+  and regulatory compliance built in rather than bolted on.
+
+  A working version of this framework already exists (summarised in §6). **Do not
+  treat it as authoritative.** The whole point of this exercise is to see what a
+  model would design today, unanchored. Challenge every assumption. If you would
+  structure it completely differently, do so — and justify it. If parts of the
+  prior art are genuinely sound, say why you'd keep them.
+
+  Before proposing a design, *ask me any clarifying questions* that would
+  materially change your approach. Then produce the deliverables in §7.

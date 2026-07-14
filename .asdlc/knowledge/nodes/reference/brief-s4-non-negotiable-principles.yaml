@@ -1,0 +1,23 @@
+id: brief-s4-non-negotiable-principles
+type: reference
+title: "Brief \u00a74 \u2014 Non-negotiable principles"
+body: |2
+  Treat these as requirements the design must satisfy; you may realise them however
+  you see fit:
+
+  - *Agent/vendor agnosticism.* No dependency on a specific model, agent
+    product, or CI vendor. Portable by construction.
+  - *Human oversight by design.* Irreversible or high-risk decisions require an
+    explicit human gate. Agents never silently route themselves backwards across a
+    phase boundary or downgrade a stop to a warning.
+  - *Fail-safe control flow.* Bounded retries, then a terminal, escalated stop
+    ("HALT") that finalises records and hands to a human. Defects route back only
+    to the phase authorised to fix them, by human decision.
+  - *Classification-driven depth.* Classify risk, data sensitivity, and AI usage
+    once, early; let those classifications automatically trigger the right depth of
+    downstream controls (e.g. sensitive-data handling, AI fairness/oversight).
+  - *Records always written.* Continuous provenance, an append-only audit trail,
+    and an end-to-end traceability spine that reconstructs which controls fired,
+    their verdicts, and the lineage of every artefact.
+  - *Separation of authority.* Clear boundaries on which actor/phase may write
+    what; earlier outputs are read-only to later phases.

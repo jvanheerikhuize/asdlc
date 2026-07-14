@@ -1,0 +1,46 @@
+id: brief-s5-regulatory-context-dora-and
+type: reference
+title: "Brief \u00a75 \u2014 Regulatory context \u2014 DORA and the EU AI Act"
+body: |2
+  The solution operates inside a *regulated financial-services / ICT context* and
+  must be designed so that compliance is a first-class, built-in property, not a
+  later audit exercise. Two regimes apply:
+
+  *Digital Operational Resilience Act (DORA, Regulation (EU) 2022/2554).*
+  Design for operational resilience, and make the following demonstrable with
+  evidence the framework produces automatically:
+  - *ICT risk management* integrated into every phase (identify, protect,
+    detect, respond, recover).
+  - *Change and release governance* with rollback/recovery paths and evidence.
+  - *Incident handling & reporting* — detect, classify, record, and route
+    operational/ICT incidents; support post-incident learning.
+  - *Digital operational resilience testing* — the framework should require and
+    record appropriate testing (including security testing) as a gate.
+  - *ICT third-party risk* — treat external models, agents, tools, and
+    dependencies as ICT third parties: inventory them, assess and monitor their
+    risk, and record it (e.g. SBOM, supply-chain and dependency controls).
+  - *Traceability & auditability* sufficient for a supervisory review.
+
+  *EU Artificial Intelligence Act (Regulation (EU) 2024/1689).*
+  The framework is itself an AI system that deploys autonomous agents, and it is
+  used to build software that may contain AI. Address both. Assume that some uses
+  fall in the *high-risk* category and design to meet, and evidence:
+  - *Risk-management system* across the AI lifecycle; a documented, risk-based
+    *AI classification* (prohibited / high-risk / limited / minimal) driving
+    obligations.
+  - *Data & data governance* for any AI features (quality, relevance, bias
+    examination).
+  - *Technical documentation & record-keeping / logging* — automatic, tamper-
+    evident logs of agent actions and decisions sufficient for conformity and
+    traceability.
+  - *Transparency* — clear disclosure of AI involvement and of AI-generated or
+    AI-assisted outputs.
+  - *Human oversight* — effective, meaningful human control at defined points.
+  - *Accuracy, robustness, and cybersecurity* — tested and evidenced.
+  - *Bias & fairness* evaluation where AI capability crosses a governed
+    threshold.
+
+  Where DORA and the AI Act overlap (logging, risk management, resilience,
+  third-party/model risk, human oversight), converge them into a single coherent
+  evidence and control model rather than duplicating effort. Call out any tension
+  between them and how you resolve it.

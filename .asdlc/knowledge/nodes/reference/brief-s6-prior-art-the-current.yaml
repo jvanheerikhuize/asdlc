@@ -1,0 +1,28 @@
+id: brief-s6-prior-art-the-current
+type: reference
+title: "Brief \u00a76 \u2014 Prior art \u2014 the current implementation (context only; do not be bound by it)"
+body: |2
+  The framework exists today as *four repositories. This is *one prior solution,
+  provided so you understand the problem space — not a template to reproduce:
+
+  1. *Lifecycle* — a six-stage governed SDLC (intent → system design → coding →
+     testing/documentation → deployment* → observability*, with a pre-lifecycle
+     onboarding step; reserved). Each stage has a procedural *playbook, a binding
+     contract, and a flow diagram. Controls are typed:
+     QC quality · SC security · RC risk · AC AI · DC data (conditional) ·
+     GC governance (continuous). A single machine-readable manifest is the entry
+     point and single source of truth; documents are generated from it.
+  2. *Governance* — a separate reference library of canonical artefact templates
+     (+ JSON schemas) and typed control definitions, plus onboarding baselines and
+     a knowledge-graph schema, consumed by the lifecycle at runtime.
+  3. *Orchestrator* — the runtime that drives agents through the lifecycle,
+     exposed as a *Model Context Protocol (MCP) server* (start/approve stages,
+     query the squad, ask members, record observations, etc.).
+  4. *Swarm / squad* — definitions of subagent *personalities and expertise*
+     (the specialised roles the orchestrator composes for each stage).
+
+  Cross-cutting ideas in the current design: classification-driven conditional
+  controls; a continuous governance track (provenance, audit trail, end-to-end
+  trace); bounded retries then HALT; an in-repo knowledge graph; and strict
+  vendor/agent agnosticism. You may keep, reshape, merge, split, or discard any of
+  this — including the four-repo split itself.

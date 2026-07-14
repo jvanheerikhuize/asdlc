@@ -1,0 +1,12 @@
+id: brief-s0-provenance
+type: reference
+title: "The design brief \u2014 provenance and how to use it"
+body: |2
+  The original clean-slate rebuild prompt, verbatim (moved here from
+  `docs/prompt-clean-slate-rebuild.md`; original title: "Prompt — Clean-Slate Rebuild of the Agentic SDLC Framework").
+
+  > *How to use this prompt:* Paste it into any capable AI model or agent. It is
+  > deliberately vendor-neutral and free of tool-, model-, or product-specific
+  > assumptions. It states a purpose and a set of goals; it does *not* hand you a
+  > solution to copy. Where a current implementation is mentioned, it is prior art
+  > for context only — you are explicitly invited to diverge from it.

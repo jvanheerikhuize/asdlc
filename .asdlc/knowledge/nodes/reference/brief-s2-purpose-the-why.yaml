@@ -1,0 +1,14 @@
+id: brief-s2-purpose-the-why
+type: reference
+title: "Brief \u00a72 \u2014 Purpose (the \"why\")"
+body: |2
+  I want any capable agent — single-agent or multi-agent, from any vendor — to be
+  able to execute a software feature end-to-end under governance that a regulated
+  enterprise can trust and audit. The framework must make the governed path the
+  easy path: correctness, security, risk, and AI-specific controls should be
+  intrinsic to the workflow, not optional add-ons. Humans stay in control at the
+  decisions that matter; everything an agent does is recorded and reconstructable.
+
+  The framework must be *agnostic*: nothing may depend on a specific agent
+  product, foundation model, orchestration library, or CI/CD vendor. Concrete tool
+  bindings belong to each consuming repository, never to the framework itself.

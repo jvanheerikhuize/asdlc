@@ -1,0 +1,26 @@
+id: brief-s3-capabilities-the-system-must
+type: reference
+title: "Brief \u00a73 \u2014 Capabilities the system must provide"
+body: |2
+  Describe how you would deliver these — do not assume the current structure.
+
+  1. *A governed lifecycle.* A defined progression from intent → design →
+     implementation → verification → deployment → operation (or whatever set of
+     phases you judge correct), with explicit entry/exit criteria, gated quality/
+     security/risk/AI checks, and clear hand-offs between phases.
+  2. *A reusable governance/reference layer.* Canonical, machine-readable
+     definitions of the artefacts to produce, the schemas they must satisfy, and
+     the typed controls to enforce — decoupled from any single project so many
+     repositories can consume the same governance.
+  3. *Orchestration.* A way to drive agents through the lifecycle, coordinate
+     work, enforce gates, capture approvals, and expose this to agents through a
+     standard, interoperable interface (e.g. a tool/skill/service protocol).
+  4. *A subagent "swarm".* A model for specialised subagents with distinct
+     personalities, roles, and expertise (e.g. product, architecture, security,
+     testing, operations), how they are selected and composed, how they
+     collaborate, and how responsibility/authority is assigned and recorded.
+  5. *Persistent memory & knowledge.* Repository-scoped baselines and a
+     knowledge graph (or your preferred representation) that agents read for
+     context and update as they learn.
+  6. *Auditable evidence.* Every scan, assessment, decision, and hand-off leaves
+     a durable, traceable record — a verdict without a record does not exist.

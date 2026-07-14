@@ -1,0 +1,12 @@
+id: brief-s8-constraints-out-of-scope
+type: reference
+title: "Brief \u00a78 \u2014 Constraints & out of scope"
+body: |2
+  - Remain *agent-, model-, and vendor-agnostic* throughout. Do not hardcode a
+    specific product, model, orchestration library, or CI system.
+  - Prefer *machine-readable single sources of truth* with generated,
+    human-readable views over hand-maintained duplication.
+  - Optimise for *auditability and low agent-context cost* (the framework is read
+    by LLM agents; token footprint and clear structure matter).
+  - You are designing the *framework*, not any one consuming project; concrete
+    tool bindings live in the consuming repositories.
