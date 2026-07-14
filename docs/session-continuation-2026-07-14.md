@@ -1,5 +1,9 @@
 # ASDLC Clean-Slate Rebuild — Session State (2026-07-14)
 
+> **Superseded — historical record only.** Current state lives in
+> [../PURPOSE.md](../PURPOSE.md); the design this file anticipated has been
+> delivered in [design/](design/). Kept for provenance of the Q&A.
+
 Continuation file for the design exercise in `Prompt Clean Slate Rebuild.md`.
 State: prompt analysed; clarifying questions researched and **answered below
 (user asked the model to propose answers, grounded in web research)**. Next

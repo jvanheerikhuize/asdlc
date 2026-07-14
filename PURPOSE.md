@@ -16,12 +16,31 @@ primitives, while the framework's contracts stay platform-neutral.
 
 ---
 
-## Where the work stands (2026-07-14)
+## Where the work stands (2026-07-14, end of session)
 
 1. Brief read and analysed; prior-art repos are not on this machine — design
    proceeds from the brief's §6 summary, as intended.
-2. Five clarifying questions raised, then researched; proposed answers below.
-3. Next deliverable: the proposed architecture (§7.2–7.7 of the brief).
+2. Five clarifying questions raised, researched, and answered below; the
+   owner accepted the proposed answers.
+3. **All design deliverables (§7.2–7.7) are done** — see
+   [docs/design/](docs/design/): `architecture.md`, `decisions.md`,
+   `compliance.md`, `agents.md`, `risks.md`, `roadmap.md`. The README indexes
+   them. Central reframe: an evidence-state machine — gates are policies over
+   signed attestations, platform-enforced; the orchestrator is optional
+   ergonomics; three repos (spec / verify / orchestrator) instead of four.
+4. This repo was created as `asdlc-rebuild`, then renamed to `asdlc`
+   (GitHub redirects the old name). Currently **private**; flip with
+   `gh repo edit jvanheerikhuize/asdlc --visibility public` when ready.
+
+**Next step: build slice 1 of [docs/design/roadmap.md](docs/design/roadmap.md)**
+— the walking skeleton: `asdlc-spec` v0.1 (Change Record + four predicates +
+minimal control catalogue + the G4 merge-gate policy), `asdlc-verify` v0.1
+(Go CLI + GitHub Action), and the reference binding dogfooded on the
+framework's own repos. Exit criterion: a PR without valid evidence cannot
+merge into the framework's own repos. Open first: does slice 1 live in this
+repo or do `asdlc-spec` / `asdlc-verify` start as separate repos immediately
+(the architecture prescribes three repos; starting separate avoids a later
+split, starting here is less ceremony — undecided).
 
 ---
 
@@ -154,11 +173,14 @@ Sources: [GitHub artifact attestations](https://docs.github.com/en/actions/conce
 
 ---
 
-## Remaining deliverables (brief §7)
+## Deliverables (brief §7) — all delivered
 
-2. Proposed architecture — components, responsibilities, boundaries.
-3. Key decisions and trade-offs, especially divergence from the prior art.
-4. Governance / DORA / EU AI Act mapping to artefacts, controls, gates, evidence.
-5. Subagent and orchestration model over a vendor-neutral interface.
-6. Risks, failure modes, open questions.
-7. Incremental build plan.
+| § | Deliverable | Location |
+|---|---|---|
+| 7.1 | Clarifying questions + answers | this file, above |
+| 7.2 | Proposed architecture | [docs/design/architecture.md](docs/design/architecture.md) |
+| 7.3 | Key decisions and trade-offs vs prior art | [docs/design/decisions.md](docs/design/decisions.md) |
+| 7.4 | DORA / EU AI Act mapping | [docs/design/compliance.md](docs/design/compliance.md) |
+| 7.5 | Subagent and orchestration model | [docs/design/agents.md](docs/design/agents.md) |
+| 7.6 | Risks, failure modes, open questions | [docs/design/risks.md](docs/design/risks.md) |
+| 7.7 | Incremental build plan | [docs/design/roadmap.md](docs/design/roadmap.md) |
