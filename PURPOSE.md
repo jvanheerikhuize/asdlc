@@ -50,12 +50,27 @@ this repo *is* the spec repo. Done so far (2026-07-14):
 passes and all four golden bundles evaluate to exactly their expected
 allow/deny outcomes — the G4 policy is exercised, not just authored.
 
-Slice 1 remaining: (a) make spec-check a required check via a branch ruleset
-(first dogfood gate — NOTE: this forces PR flow on main, owner should
-knowingly enable it); (b) create
-`asdlc-verify` (Go CLI: signature verification, role resolution, policy
-evaluation, GitHub Action wrapper); (c) the approval-transcription workflow;
-(d) open the first real Change Record and run it through G4.
+**`asdlc-verify` exists and is green** (2026-07-14):
+https://github.com/jvanheerikhuize/asdlc-verify — Go CLI with `gate`
+(policy evaluation over a prepared input or a Change Record directory) and
+`doctor` (manifest preflight, recorded SoD exception). Its CI compiles,
+vets, tests, and reproduces all four spec golden-bundle outcomes
+(conformance test). v0.1 honesty: only `--dev-unsigned` evidence mode —
+DSSE/Sigstore verification is the next verifier milestone; the policy input
+shape is final so the gate contract won't change. `testdata/spec-0.1.0/` is
+a pinned fixture copy, to be replaced by a tag fetch once spec releases are
+tagged.
+
+**Blocked on owner decision — repo visibility.** Branch rulesets (the
+required-check dogfood gate) are unavailable on private repos without
+GitHub Pro: GitHub returned "Upgrade to GitHub Pro or make this repository
+public" when creating the ruleset. Options: make `asdlc` (and ideally
+`asdlc-verify`) public, upgrade the account, or defer enforcement.
+
+Slice 1 remaining: (a) enable the ruleset once visibility/Pro is resolved
+— NOTE: it forces PR flow on main; (b) DSSE/Sigstore verification in the
+verifier + its GitHub Action wrapper; (c) the approval-transcription
+workflow; (d) open the first real Change Record and run it through G4.
 
 ---
 
