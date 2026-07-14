@@ -13,7 +13,10 @@ body: |2
   as knowledge nodes, `spec/tools/metrics.py` (markdown/JSON, computed from
   evidence + git history), and a `metrics` workflow that publishes the
   report to the run's job summary and a JSON artifact on every push to
-  main.
+  main. Second cut (CR-20260714-metrics-dashboard): a self-contained
+  dashboard ([[metrics-dashboard]]) deployed to GitHub Pages per main push
+  — grouped lead/cycle bars, median tiles, table view, light/dark,
+  validated palette.
 
   Follow-ups, as the evidence grows richer: **approval latency**
   (gate-deny to approval comment — makes rubber-stamping drift visible,

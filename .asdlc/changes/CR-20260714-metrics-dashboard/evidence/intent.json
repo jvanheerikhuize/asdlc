@@ -1,0 +1,32 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "132e5f4428f62e871ab9851303cfc30942389f44"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260714-metrics-dashboard",
+    "title": "Metrics dashboard: visualize lead/cycle time on GitHub Pages",
+    "problem": "Metrics exist as a CLI table and job summary \u2014 findable only by people who know where to look. Owner directive: visualize them in a human- and GitHub-understandable way.",
+    "acceptance_criteria": [
+      "metrics.py --html renders a self-contained dashboard (grouped lead/cycle bars, median tiles, table view, light+dark, validated palette)",
+      "The metrics workflow deploys it to GitHub Pages on every push to main",
+      "The dashboard URL is discoverable from the README and a reference node"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-14T20:30:32Z"
+  }
+}

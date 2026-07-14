@@ -1,6 +1,7 @@
 # Publish change metrics (derived from evidence + git) on every push to main:
-# report in the run's job summary, JSON as an artifact. No metrics store —
-# the numbers are recomputed from the truth each time (metric-* nodes).
+# report in the run's job summary, JSON as an artifact, and the dashboard to
+# GitHub Pages. No metrics store — the numbers are recomputed from the truth
+# each time (metric-* nodes).
 name: metrics
 on:
   push:
@@ -18,8 +19,27 @@ jobs:
         with:
           fetch-depth: 0
       - run: python3 spec/tools/metrics.py >> "$GITHUB_STEP_SUMMARY"
-      - run: python3 spec/tools/metrics.py --json > metrics.json
+      - run: |
+          mkdir -p _site
+          python3 spec/tools/metrics.py --json > _site/metrics.json
+          python3 spec/tools/metrics.py --html > _site/index.html
       - uses: actions/upload-artifact@v4
         with:
           name: metrics-${{ github.sha }}
-          path: metrics.json
+          path: _site/metrics.json
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: metrics
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
