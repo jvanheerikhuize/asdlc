@@ -1,0 +1,11 @@
+id: risk-r4-the-verifier-is-the
+type: risk
+title: "R4 \u2014 The verifier is the supply-chain crown jewel."
+body: |2
+  Compromise the
+  verifier (or the approval-transcription workflow) and every gate lies.
+  *Mitigation*: both are small and boring by design; built with SLSA provenance
+  and attested; the reference binding pins them by digest, not tag; org-level
+  attestation policies verify the verifier itself before it runs. Verifying the
+  verifier bottoms out in the platform's trust root — stated honestly rather
+  than hidden.

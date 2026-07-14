@@ -1,0 +1,78 @@
+id: purpose-status
+type: status
+title: "Where the work stands (2026-07-14, end of session)"
+body: |2
+  1. Brief read and analysed; prior-art repos are not on this machine — design
+     proceeds from the brief's §6 summary, as intended.
+  2. Five clarifying questions raised, researched, and answered below; the
+     owner accepted the proposed answers.
+  3. **All design deliverables (§7.2–7.7) are done** — see
+     [docs/design/](docs/design/): `architecture.md`, `decisions.md`,
+     `compliance.md`, `agents.md`, `risks.md`, `roadmap.md`. The README indexes
+     them. Central reframe: an evidence-state machine — gates are policies over
+     signed attestations, platform-enforced; the orchestrator is optional
+     ergonomics; three repos (spec / verify / orchestrator) instead of four.
+  4. This repo was created as `asdlc-rebuild`, then renamed to `asdlc`
+     (GitHub redirects the old name). Currently **private**; flip with
+     `gh repo edit jvanheerikhuize/asdlc --visibility public` when ready.
+
+  **Current step: slice 1 of [docs/design/roadmap.md](docs/design/roadmap.md)
+  — in progress.** The repo-layout question is decided (D12 in decisions.md):
+  this repo *is* the spec repo. Done so far (2026-07-14):
+
+  - **`spec/` v0.1 exists**: Change Record + manifest schemas, the four slice-1
+    predicate schemas over a shared in-toto statement base, the minimal control
+    catalogue (QC-01, SC-01), the G4 merge-gate policy
+    (`spec/gates/g4-merge.rego`), and four golden evidence bundles
+    (`spec/examples/golden/`) pinning G4's behavior (1 pass, 3 fail).
+  - **Self-check runs**: `python3 spec/tools/check.py` validates schemas +
+    golden bundles everywhere and evaluates the Rego policy when `opa` is on
+    PATH; `.github/workflows/spec-check.yml` runs both layers in CI (no opa/go
+    on the local machine — CI is where the policy is actually exercised).
+
+  **spec-check is green in CI** (run 29354999276, 2026-07-14): `opa check`
+  passes and all four golden bundles evaluate to exactly their expected
+  allow/deny outcomes — the G4 policy is exercised, not just authored.
+
+  **`asdlc-verify` exists and is green** (2026-07-14):
+  https://github.com/jvanheerikhuize/asdlc-verify — Go CLI with `gate`
+  (policy evaluation over a prepared input or a Change Record directory) and
+  `doctor` (manifest preflight, recorded SoD exception). Its CI compiles,
+  vets, tests, and reproduces all four spec golden-bundle outcomes
+  (conformance test). v0.1 honesty: only `--dev-unsigned` evidence mode —
+  DSSE/Sigstore verification is the next verifier milestone; the policy input
+  shape is final so the gate contract won't change. `testdata/spec-0.1.0/` is
+  a pinned fixture copy, to be replaced by a tag fetch once spec releases are
+  tagged.
+
+  **Both repos are public and gate-protected** (owner decision, 2026-07-14).
+  Active branch rulesets on `main` of both repos (no bypass, PR flow forced):
+  `asdlc` requires the `spec-check` check (ruleset 18946796); `asdlc-verify`
+  requires `ci` (ruleset 18946806). From this point every change to the
+  framework flows through its own gates — direct pushes to main are blocked,
+  including for the owner.
+
+  **The GitHub binding is live** (2026-07-14, PRs asdlc-verify#1 + asdlc#2):
+  the verifier ships as a composite Action; the `g4-gate` workflow detects a
+  PR's Change Record, produces QC-01/SC-01 verdicts, transcribes
+  `/asdlc approve <head-sha>` comments from bound release-approvers into
+  `approval/v1`, evaluates G4 via the verifier (dev-unsigned), and uploads
+  the evidence bundle as a run artifact. Conventions and their successors:
+  `bindings/github/README.md`. Owner authorized agent-merge of green PRs in
+  both repos (solo-maintainer SoD reality, recorded).
+
+  **This very text was merged as the first governed change**
+  (`CR-20260714-dogfood-proof`, PR #3): gate denied pre-approval, passed
+  after the approval comment, evidence bundle archived on the run.
+
+  Slice 1 remaining: (a) add `g4-gate` to the main ruleset's required checks
+  (the exit-criterion flip); (b) DSSE/Sigstore verification in the verifier,
+  replacing dev-unsigned; (c) tag spec v0.1.0 and pin the verifier's
+  fixtures to the tag.
+  
+  **Knowledge-first documentation is live** (2026-07-14,
+  CR-20260714-knowledge-architecture): all prose in this repo is generated
+  from typed knowledge nodes in `.asdlc/knowledge/` by
+  `spec/tools/scaffold.py`; CI fails on drift. Edit nodes, never the
+  generated files. See roadmap Priority 0.
+

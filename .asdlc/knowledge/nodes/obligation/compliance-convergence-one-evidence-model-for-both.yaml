@@ -1,0 +1,14 @@
+id: compliance-convergence-one-evidence-model-for-both
+type: obligation
+title: "Convergence \u2014 one evidence model for both regimes"
+body: |2
+  The regimes overlap on logging, risk management, human oversight, resilience,
+  and third-party/model risk. The framework deliberately converges them:
+
+  - **One evidence spine** serves both — a DORA auditor and an AI Act conformity
+    assessor read the same DAG through different generated views.
+  - **One classification step** (risk × data × AI) feeds both control families;
+    no duplicate assessments.
+  - **One third-party inventory** covers DORA ICT third parties and AI Act
+    upstream-model obligations (external models are both).
+  - **One human-oversight mechanism** (gated approvals) satisfies both.

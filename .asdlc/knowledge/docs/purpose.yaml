@@ -1,0 +1,33 @@
+output: PURPOSE.md
+title: "Purpose \u2014 Clean-Slate Rebuild of the Agentic SDLC Framework"
+preamble: |
+  This repository is the working home for a from-first-principles redesign of a
+  governed, agent- and vendor-agnostic **Agentic Software Development Lifecycle
+  (ASDLC)** framework: a system in which autonomous AI agents carry a software
+  change from stated intent to production and operation, with governance,
+  auditability, and DORA / EU AI Act compliance built in rather than bolted on.
+
+  The full design brief is [docs/prompt-clean-slate-rebuild.md](docs/prompt-clean-slate-rebuild.md).
+  The session state that produced this document is
+  [docs/session-continuation-2026-07-14.md](docs/session-continuation-2026-07-14.md).
+
+  **Ground fact set by the owner:** the framework and all consuming repositories
+  live on **GitHub**. Enforcement reference bindings may therefore target GitHub
+  primitives, while the framework's contracts stay platform-neutral.
+sections:
+  - node: purpose-status
+  - literal: |
+      ## Clarifying questions — researched, proposed answers
+  - node: purpose-q1-where-must-governance
+    level: 3
+  - node: purpose-q2-how-far-does
+    level: 3
+  - node: purpose-q3-where-does-audit
+    level: 3
+  - node: purpose-q4-who-are-the
+    level: 3
+  - node: purpose-q5-greenfield-or-migration
+    level: 3
+  - node: purpose-research-findings
+  - node: purpose-tech-stack
+  - node: purpose-deliverables

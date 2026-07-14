@@ -1,0 +1,37 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "e9855dd0151e271d7d187dea5bb1a50e97b85b79"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260714-knowledge-architecture",
+    "title": "Knowledge-first documentation: prose becomes generated views over .asdlc/knowledge",
+    "problem": "The docs folder holds prose written for agent context, but prose is not addressable: an agent must read whole documents to recall one decision, and hand-maintained docs can drift from what the framework actually does. Owner directive: re-architect the prose as persistent knowledge and generate every human doc from it.",
+    "acceptance_criteria": [
+      "All README/PURPOSE/design-doc content lives as typed nodes under .asdlc/knowledge with schemas in spec/knowledge",
+      "spec/tools/scaffold.py regenerates every generated doc byte-identically from the knowledge (--check passes)",
+      "CI (spec-check) fails when a generated doc is edited directly",
+      "The roadmap carries this as Priority 0 with its remaining follow-ups"
+    ],
+    "out_of_scope": [
+      "spec/README.md and bindings/github/README.md generation (named follow-up)",
+      "Typed link enrichment between nodes and the orchestrator knowledge.query tool (slices 3+)"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-14T20:06:00Z"
+  }
+}

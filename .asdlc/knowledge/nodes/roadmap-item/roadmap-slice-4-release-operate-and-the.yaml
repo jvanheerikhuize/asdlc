@@ -1,0 +1,12 @@
+id: roadmap-slice-4-release-operate-and-the
+type: roadmap-item
+title: "Slice 4 \u2014 Release, operate, and the DORA spine"
+body: |2
+  - G5 (environment protection + rollback evidence + `deployment/v1`) and G6
+    (`incident/v1` with the 4h/72h/30d clock fields, `learning/v1`).
+  - **Retention exporter** (scheduled workflow → adopter-bound append-only
+    store; release-assets default, object-lock reference).
+  - Generated human trace report (the supervisory view over the DAG).
+
+  *Exit criterion*: a simulated incident produces a complete, exportable,
+  clock-stamped record; deleting the repo does not delete the evidence.

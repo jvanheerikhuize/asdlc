@@ -1,0 +1,7 @@
+output: .asdlc/knowledge/README.md
+title: "Persistent knowledge base"
+preamble: |
+  The repo's memory: everything the prose used to say, as typed, addressable
+  knowledge. Generated documents are views; this directory is the truth.
+sections:
+  - node: convention-knowledge-first

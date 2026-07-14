@@ -1,0 +1,21 @@
+id: agents-orchestration-over-mcp
+type: concept
+title: "Orchestration over MCP"
+body: |2
+  The orchestrator is an MCP server (TypeScript, official SDK; MCP is
+  Linux-Foundation-governed since Dec 2025, so this stays vendor-neutral).
+  Core tools:
+
+  | Tool | Purpose |
+  |---|---|
+  | `change.open / change.status` | create a Change Record; read its evidence state and what the next gate still requires |
+  | `controls.required` | the computed control set for this change (from classification) |
+  | `evidence.record` | produce and sign an attestation via the verifier's flow |
+  | `gate.check` | dry-run the gate policy locally (the real gate is the platform check) |
+  | `squad.compose / squad.consult` | instantiate the computed squad; ask a persona for its assessment |
+  | `approval.request` | route a human approval to the platform surface (PR review / environment) |
+  | `knowledge.query / knowledge.propose` | read the repo's knowledge graph; propose an update (lands as a reviewed PR) |
+  | `playbook.get` | phase guidance — the easy path, never the enforced path |
+
+  Long-running phases map onto the MCP Tasks primitive (July 2026 spec):
+  a phase is a task the agent can resume, and a HALT is a terminal task state.

@@ -1,0 +1,10 @@
+id: risk-r8-waiver-misuse
+type: risk
+title: "R8 \u2014 Waiver misuse."
+body: |2
+  Waivers are the designed escape valve and therefore
+  the designed loophole. *Mitigation*: waivers are signed, role-checked,
+  per-control, per-change (never blanket), carry mandatory rationale, and are
+  first-class reportable evidence — a waiver-rate dashboard is a supervisory
+  artefact, and heavy waiver use is *visible* pressure on management, which is
+  where that problem belongs.

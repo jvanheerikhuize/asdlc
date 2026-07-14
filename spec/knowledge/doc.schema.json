@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jvanheerikhuize/asdlc/spec/knowledge/doc.schema.json",
+  "title": "Document manifest — how one human-readable doc is composed from knowledge nodes",
+  "description": "Lives at .asdlc/knowledge/docs/<name>.yaml. spec/tools/scaffold.py renders each manifest to its output path; --check fails CI on drift.",
+  "type": "object",
+  "required": ["output", "title", "sections"],
+  "properties": {
+    "output": { "type": "string", "description": "Repo-relative path of the generated file." },
+    "title": { "type": "string", "description": "The document's H1." },
+    "preamble": { "type": "string", "description": "Markdown between the H1 and the first section." },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "oneOf": [
+          {
+            "required": ["node"],
+            "properties": {
+              "node": { "type": "string" },
+              "level": { "type": "integer", "minimum": 2, "maximum": 4, "default": 2 }
+            },
+            "additionalProperties": false
+          },
+          {
+            "required": ["heading", "items"],
+            "properties": {
+              "heading": { "type": "string" },
+              "level": { "type": "integer", "minimum": 2, "maximum": 4, "default": 2 },
+              "intro": { "type": "string" },
+              "items": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string" },
+                "description": "Node ids rendered as bold-title paragraphs under the heading."
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "required": ["literal"],
+            "properties": { "literal": { "type": "string" } },
+            "additionalProperties": false
+          }
+        ]
+      }
+    }
+  },
+  "additionalProperties": false
+}

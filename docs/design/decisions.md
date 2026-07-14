@@ -1,3 +1,5 @@
+<!-- GENERATED from .asdlc/knowledge — do not edit directly.
+     Edit the knowledge nodes, then run: python3 spec/tools/scaffold.py -->
 # Key decisions and trade-offs (brief §7.3)
 
 Each decision states the divergence from (or retention of) the prior art in

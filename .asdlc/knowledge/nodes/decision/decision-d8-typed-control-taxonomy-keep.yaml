@@ -1,0 +1,8 @@
+id: decision-d8-typed-control-taxonomy-keep
+type: decision
+title: "D8 \u2014 Typed control taxonomy **(keep)**"
+body: |2
+  QC/SC/RC/AC/DC/GC is retained on merit: the types map cleanly onto distinct
+  regulatory regimes (SC/RC→DORA, AC/DC→AI Act, GC→both), distinct authority
+  roles, and distinct activation logic. Stable control IDs are kept so
+  enterprises can map controls into an existing risk register (adapter seam).

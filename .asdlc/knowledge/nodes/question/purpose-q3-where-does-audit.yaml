@@ -1,0 +1,14 @@
+id: purpose-q3-where-does-audit
+type: question
+title: "Q3. Where does audit evidence live?"
+body: |2
+  **Proposed answer: platform-native attestations plus an adopter-bound
+  retention export.** Evidence is produced as signed in-toto attestations (DSSE
+  envelopes, Sigstore signing) attached to commits/artifacts — on GitHub this is
+  the artifact-attestation store (private repos use GitHub's private Sigstore
+  instance; no public transparency log; Enterprise keeps attestations in an
+  internal private database). That is strong for integrity and lineage, but DORA
+  expects tamper-proof audit data retained ≥5 years — repos get deleted and the
+  platform store is not a WORM guarantee. So the framework defines an **evidence
+  export interface**: bundles are mirrored to an append-only retention store the
+  adopter binds (object-lock storage, private Rekor, or a GRC system).

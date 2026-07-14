@@ -1,0 +1,25 @@
+id: arch-evidence-model
+type: concept
+title: "Evidence model"
+body: |2
+  Predicate family (in-toto statement types, subjects are commit SHAs or
+  artifact digests):
+
+  `change-intent/v1 · classification/v1 · design-decision/v1 ·
+  control-verdict/v1 · approval/v1 · waiver/v1 · halt/v1 · deployment/v1 ·
+  incident/v1 · learning/v1`
+
+  - **CI-produced evidence** is signed keylessly via the platform's OIDC
+    identity (GitHub Actions → Sigstore).
+  - **Human decisions** are captured where the platform enforces them (PR
+    review, environment approval) and *transcribed* into `approval/v1`
+    attestations by a trusted required workflow — the platform event is the
+    enforcement, the attestation is the durable, portable record.
+  - **Traceability spine**: every attestation carries the Change Record ID and
+    references its parent attestations, forming a DAG from which the complete
+    history — which controls fired, their verdicts, who approved what, artefact
+    lineage — is mechanically reconstructable.
+  - **Retention**: evidence lives in the platform attestation store *and* is
+    exported on a schedule to an adopter-bound append-only store (object-lock
+    storage, private Rekor, or a GRC system) to satisfy supervisory retention
+    (≥5 years) independent of repository lifetime.

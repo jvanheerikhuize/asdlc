@@ -1,0 +1,13 @@
+output: docs/design/compliance.md
+title: "Governance, DORA, and EU AI Act mapping (brief \u00a77.4)"
+preamble: |
+  How each obligation is satisfied by concrete framework mechanisms and the
+  evidence they produce. Dates reflect the Digital Omnibus (adopted June 2026):
+  Annex III high-risk obligations apply 2 Dec 2027; transparency obligations
+  from Aug 2026; AI-content labelling from 2 Dec 2026. DORA has applied since
+  17 Jan 2025 and is therefore the *near-term* driver.
+sections:
+  - node: compliance-dora-regulation-eu-2022-2554
+  - node: compliance-eu-ai-act-regulation-eu-2024
+  - node: compliance-convergence-one-evidence-model-for-both
+  - node: compliance-tensions-and-how-they-are-resolved

@@ -1,0 +1,58 @@
+id: arch-components-three-repositories-down-from-four
+type: component
+title: "Components (three repositories, down from four)"
+body: |2
+  ### 1. `asdlc-spec` — the governance content (the single source of truth)
+
+  Machine-readable, semver-versioned definitions; human documents are generated,
+  never hand-maintained. Contains:
+
+  - **Lifecycle definition** — phases, gates, and the policy for each gate.
+  - **Artefact schemas** — JSON Schema (2020-12) for every artefact type.
+  - **Control catalogue** — typed controls (QC quality · SC security · RC risk ·
+    AC AI · DC data · GC governance), each with a stable ID (`SC-03`), the
+    evidence predicate it requires, an **activation condition** (an expression
+    over the classifications), the gate where it is checked, and the role
+    authorized to waive it.
+  - **Evidence predicate family** — the in-toto predicate types (see below).
+  - **Authority matrix** — which role may sign which predicate type at which
+    phase; the machine-readable form of "separation of authority".
+  - **Persona definitions** — subagent roles as Markdown + YAML frontmatter
+    (aligned with the `.github/agents/*.md` convention; see `agents.md`).
+  - **Knowledge-graph schema** and onboarding baseline templates.
+
+  Consuming repositories pin a spec version; governance upgrades are explicit,
+  reviewable diffs.
+
+  ### 2. `asdlc-verify` — the enforcement point
+
+  A Go CLI (single static binary) that, given a Change Record's evidence bundle
+  and a pinned spec version:
+
+  1. validates every attestation's signature and signer identity (Sigstore),
+  2. checks signer identity against the authority matrix and role bindings,
+  3. computes the **required-control set** from the classification attestations
+     (deterministically — same inputs, same controls),
+  4. evaluates the gate's Rego policy over the evidence,
+  5. emits a verdict — itself an attestation.
+
+  Shipped wrapped as a GitHub Action for the reference binding, but runnable
+  identically in any CI. This is the *only* component that must be trusted, so it
+  is small, dumb, and attests its own builds (SLSA provenance; see `risks.md`).
+
+  ### 3. `asdlc-orchestrator` — the ergonomics layer (optional)
+
+  A TypeScript MCP server that makes the governed path the easy path: drives
+  agents through phases, composes squads from personas, serves playbook guidance,
+  counts retries, records evidence via the verifier's signing flow, and requests
+  human approvals. **Optional by design**: a bare agent with the CLI and the spec
+  can complete a fully governed change. The orchestrator can never open a gate.
+
+  ### The consuming repository
+
+  Carries exactly one framework file and one directory:
+
+  - **`asdlc.yaml`** — the manifest: pinned spec version, repo-level
+    classification baseline, role→identity bindings, binding configuration
+    (which gates map to which platform primitives), retention-export target.
+  - **`.asdlc/`** — Change Records, evidence bundles, knowledge graph.

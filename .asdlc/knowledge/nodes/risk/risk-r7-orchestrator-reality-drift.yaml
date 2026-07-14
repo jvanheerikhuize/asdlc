@@ -1,0 +1,9 @@
+id: risk-r7-orchestrator-reality-drift
+type: risk
+title: "R7 \u2014 Orchestrator/reality drift."
+body: |2
+  The cooperative layer's view of the
+  change can diverge from the actual evidence (crashed sessions, parallel
+  agents). *Mitigation*: the orchestrator holds no authoritative state — every
+  answer it gives is derived from the evidence bundle on read. Statelessness is
+  the design principle; the MCP Tasks state is convenience cache only.

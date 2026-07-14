@@ -1,0 +1,19 @@
+id: roadmap-slice-1-walking-skeleton-the-first
+type: roadmap-item
+title: "Slice 1 \u2014 Walking skeleton (the first thing that is real)"
+body: |2
+  - `asdlc-spec` v0.1: Change Record format, `change-intent/v1`,
+    `classification/v1`, `control-verdict/v1`, `approval/v1` predicates; a
+    minimal control catalogue (one QC, one SC); **one gate: G4 (merge)** as a
+    Rego policy.
+  - `asdlc-verify` v0.1: validate signatures + evaluate G4 + emit verdict;
+    GitHub Action wrapper; `doctor` preflight.
+  - Reference binding on these repos: required status check + required
+    reviewer; approval-transcription workflow.
+  - **Dogfood**: every change to spec/verify/orchestrator flows through its own
+    G4 from this point on. The framework governs its own construction —
+    the first audit trail produced is its own.
+
+  *Exit criterion*: a PR without valid evidence cannot merge into the
+  framework's own repos, and the evidence DAG for a merged change is
+  reconstructable with one CLI command.

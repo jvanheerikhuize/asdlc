@@ -1,0 +1,9 @@
+id: roadmap-slice-5-onboarding-and-memory
+type: roadmap-item
+title: "Slice 5 \u2014 Onboarding and memory"
+body: |2
+  - P0 onboarding: classification baseline, third-party/model inventory
+    (SBOM-linked), role bindings; G0 checks.
+  - Knowledge graph schema + `knowledge.query/propose`; `learning/v1` feeds it.
+  - AC/DC control activation (AI-contribution disclosure at P3 lands here —
+    content-labelling duties bite Dec 2026, ahead of the high-risk battery).

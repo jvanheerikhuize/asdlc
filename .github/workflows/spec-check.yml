@@ -21,7 +21,8 @@ jobs:
       - uses: open-policy-agent/setup-opa@v2
         with:
           version: latest
-      - run: pip install jsonschema referencing
+      - run: pip install jsonschema referencing pyyaml
       - run: opa check --v1-compatible spec/gates/
       - run: opa test --v1-compatible spec/gates/ || true  # no unit tests yet; golden bundles below are the tests
       - run: python3 spec/tools/check.py
+      - run: python3 spec/tools/scaffold.py --check

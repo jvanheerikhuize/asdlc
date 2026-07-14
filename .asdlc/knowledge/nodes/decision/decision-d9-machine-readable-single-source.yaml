@@ -1,0 +1,7 @@
+id: decision-d9-machine-readable-single-source
+type: decision
+title: "D9 \u2014 Machine-readable single source of truth **(keep)**"
+body: |2
+  The prior art's strongest idea. Retained and extended: the spec is the SSoT
+  for *all* governance content, human documents are generated, and consuming
+  repos interact with exactly one manifest file (`asdlc.yaml`).

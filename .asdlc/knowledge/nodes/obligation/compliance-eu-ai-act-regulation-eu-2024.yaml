@@ -1,0 +1,25 @@
+id: compliance-eu-ai-act-regulation-eu-2024
+type: obligation
+title: "EU AI Act (Regulation (EU) 2024/1689, as amended)"
+body: |2
+  The framework is addressed **twice**, as the brief requires:
+
+  ### (a) The framework itself is an AI system deploying autonomous agents
+
+  | Obligation | Mechanism | Evidence |
+  |---|---|---|
+  | Risk-management system across the AI lifecycle | The lifecycle *is* the risk-management system: classification at P1, conditional controls, gated progression, HALT | the evidence DAG per change |
+  | Record-keeping / logging (tamper-evident) | Every agent action that matters produces a signed attestation; orchestrator session logs are linked as evidence | attestation DAG, session-log references |
+  | Transparency of AI involvement | `AI-contribution disclosure` is mandatory P3 evidence: which artefacts were AI-generated/-assisted, by which agent identity | disclosure attestation (also serves content-labelling duties from Dec 2026) |
+  | Human oversight | Gates G4/G5 require platform-enforced human approval; the approver sees a generated evidence summary, not a raw diff dump (anti-rubber-stamp, see risks) | `approval/v1` naming the human identity |
+  | Accuracy, robustness, cybersecurity | QC + SC control verdicts as gate conditions | `control-verdict/v1` |
+
+  ### (b) Software built *with* the framework may contain AI
+
+  | Obligation | Mechanism | Evidence |
+  |---|---|---|
+  | Documented AI classification driving obligations | P1 AI classification (prohibited / high-risk / limited / minimal) is a required, signed artefact; "prohibited" fails G1 outright; "high-risk" activates the full AC/DC battery | `classification/v1` |
+  | Data & data governance (quality, bias examination) | DC controls activate when the data classification crosses the threshold: data-provenance, quality, and bias-examination verdicts required | DC `control-verdict/v1` |
+  | Technical documentation & conformity records | Generated from the evidence DAG — the documentation *is* a view over the records, so it cannot drift from reality | generated conformity dossier |
+  | Bias & fairness above the governed threshold | AC controls (fairness evaluation) in the required set for high-risk AI changes | AC `control-verdict/v1` |
+  | Human oversight in the built system | An AC control requiring the design evidence (P2) to specify oversight points when AI capability crosses the threshold | design-decision + AC verdict |

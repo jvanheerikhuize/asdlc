@@ -1,3 +1,5 @@
+<!-- GENERATED from .asdlc/knowledge — do not edit directly.
+     Edit the knowledge nodes, then run: python3 spec/tools/scaffold.py -->
 # Incremental build plan (brief §7.7)
 
 Ordering principle: land the **enforcement spine first** (it is what makes
@@ -5,6 +7,29 @@ everything else true), dogfood immediately on these repos themselves, and
 sequence regulation-serving mechanisms DORA-first (in force since Jan 2025)
 while reserving the AI Act's shapes from day one (Annex III obligations apply
 Dec 2027).
+
+## Priority 0 — Knowledge-first documentation (owner directive, 2026-07-14)
+
+All prose in this repo is maintained as typed knowledge nodes under
+`.asdlc/knowledge/` (schemas: `spec/knowledge/`); every human-readable
+document — README, PURPOSE, the design docs — is **generated** from them by
+`spec/tools/scaffold.py`, and `spec-check` fails CI when a generated doc
+drifts from its knowledge. Rationale: the docs folder was prose-as-context
+for agents; nodes make each decision, risk, obligation, and status fact
+individually addressable (low context cost, brief §8), while humans keep
+full documents as views — D9 applied to the framework's own words.
+
+Delivered in the first cut (CR-20260714-knowledge-architecture): node +
+doc-manifest schemas, the scaffolder with `--check` CI gate, and the full
+decomposition of README, PURPOSE, and all six design docs (56 nodes).
+Follow-ups, in later slices: bring `spec/README.md` and
+`bindings/github/README.md` under generation; enrich typed links between
+nodes; serve nodes over the orchestrator's `knowledge.query` (slice 3);
+join generated evidence-trace reports to the same view layer (slice 4).
+
+*Exit criterion*: editing any generated `.md` directly is caught by CI, and
+an agent can answer "why does decision D2 exist" by reading one node
+instead of one document.
 
 ## Slice 1 — Walking skeleton (the first thing that is real)
 

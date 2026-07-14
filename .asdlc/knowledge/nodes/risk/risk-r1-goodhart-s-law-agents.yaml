@@ -1,0 +1,12 @@
+id: risk-r1-goodhart-s-law-agents
+type: risk
+title: "R1 \u2014 Goodhart's law: agents optimize for passing gates, not for quality."
+body: |2
+  The gate checks that evidence exists and satisfies policy; an agent can
+  produce technically-valid, substantively-hollow evidence (a threat model that
+  lists nothing, tests that assert nothing). *Mitigation*: controls whose
+  verdicts are produced by *independent* personas (the authority matrix forbids
+  the implementer signing its own security verdict); spot-check controls that
+  sample evidence quality; and the human approval surface highlights thin
+  evidence. *Residual*: real — this is the field's open problem, and the design
+  treats independent-signer separation as the main structural defense.

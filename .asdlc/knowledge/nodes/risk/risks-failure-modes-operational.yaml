@@ -1,0 +1,13 @@
+id: risks-failure-modes-operational
+type: risk
+title: "Failure modes (operational)"
+body: |2
+  - **Platform outage / attestation store unavailable** → gates fail closed;
+    changes queue. Accepted: availability is traded for integrity at the gate.
+  - **Signing identity misconfiguration** → verifier rejects valid work;
+    detectable via a `doctor` command in the CLI (preflight the manifest).
+  - **Retention export target unreachable** → export retries with alerting;
+    evidence is not lost (still in platform store) but the compliance clock on
+    retention lag is recorded.
+  - **Agent produces attestations outside a Change Record** → orphan evidence
+    is ignored by gates and flagged by the verifier as an anomaly record.

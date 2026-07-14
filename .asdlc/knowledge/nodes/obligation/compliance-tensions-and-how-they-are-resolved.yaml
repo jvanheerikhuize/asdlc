@@ -1,0 +1,24 @@
+id: compliance-tensions-and-how-they-are-resolved
+type: obligation
+title: "Tensions, and how they are resolved"
+body: |2
+  1. **Retention vs. platform-tied storage.** DORA wants ≥5-year tamper-proof
+     retention; GitHub's private attestation store is not a WORM guarantee and
+     dies with the repo. Resolved by the mandatory retention-export interface —
+     the one piece of infrastructure the framework refuses to make optional.
+  2. **AI Act transparency vs. financial-sector confidentiality.** Disclosure
+     attestations are structured so the *fact and extent* of AI involvement is
+     separable from the *content* of the change — transparency reports can be
+     generated without leaking the codebase.
+  3. **Meaningful human oversight vs. automation bias.** A gate that shows a
+     human 40 green checkmarks produces rubber-stamping, which fails the AI
+     Act's "effective" oversight test in spirit. Resolved in the approval
+     surface: approvers see the classification, the *exceptions* (waivers, SoD
+     exceptions, retry history), and a generated summary of what is unusual —
+     friction is spent where attention matters.
+  4. **AI Act timeline slip vs. DORA now.** Post-Omnibus, high-risk AI
+     machinery has runway to Dec 2027, but DORA has applied since Jan 2025. The
+     build order (see roadmap) therefore lands DORA-serving mechanisms (change
+     governance, audit trail, incident records) before the full AC/DC battery —
+     while the predicate family reserves the AI Act's shapes from day one so
+     nothing is retrofitted.

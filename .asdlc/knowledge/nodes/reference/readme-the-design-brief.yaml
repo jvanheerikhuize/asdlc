@@ -1,0 +1,17 @@
+id: readme-the-design-brief
+type: reference
+title: "The design (brief \u00a77 deliverables)"
+body: |2
+  | Doc | Contents |
+  |---|---|
+  | [architecture.md](docs/design/architecture.md) | The evidence-state machine, the three components, lifecycle, gates, evidence model, authority |
+  | [decisions.md](docs/design/decisions.md) | Eleven key decisions with trade-offs — what diverges from the prior art and what is kept, and why |
+  | [compliance.md](docs/design/compliance.md) | DORA and EU AI Act obligations mapped to mechanisms and evidence; converged model; tensions resolved |
+  | [agents.md](docs/design/agents.md) | Personas as governed content, computed squads, MCP orchestration, degraded modes |
+  | [risks.md](docs/design/risks.md) | Design risks, operational failure modes, open questions |
+  | [roadmap.md](docs/design/roadmap.md) | Six build slices, dogfood-first, DORA-first sequencing |
+
+  The one-sentence design: **a change is a Change Record that accumulates signed
+  attestations, a gate is a policy over those attestations enforced at the
+  platform boundary, and everything else — orchestrator, personas, playbooks —
+  is the easy path, never the source of truth.**

@@ -1,0 +1,12 @@
+id: arch-fail-safe-control-flow
+type: concept
+title: "Fail-safe control flow"
+body: |2
+  - Retries are counted by the orchestrator (cooperative); exhaustion produces a
+    `halt/v1` attestation.
+  - A HALT **hard-closes the gate**. The verifier enforces monotonicity: a
+    failed control verdict or HALT can only be superseded by (a) a new verdict
+    on a *new commit*, or (b) a signed `waiver/v1` from the role the authority
+    matrix authorizes — never overwritten, never downgraded, never silently
+    routed around. Defect routing backwards across a phase boundary is a human
+    decision recorded as an attestation.

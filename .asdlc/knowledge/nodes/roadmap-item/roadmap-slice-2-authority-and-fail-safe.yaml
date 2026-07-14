@@ -1,0 +1,12 @@
+id: roadmap-slice-2-authority-and-fail-safe
+type: roadmap-item
+title: "Slice 2 \u2014 Authority and fail-safe semantics"
+body: |2
+  - Authority matrix + role bindings in `asdlc.yaml`; signer-identity checks.
+  - `waiver/v1`, `halt/v1`; monotonic-verdict enforcement (no downgrade).
+  - Solo-maintainer SoD-exception recording.
+  - Classification-driven control-set computation (the depth throttle) with the
+    fuller control catalogue (QC/SC/RC/GC; AC/DC schemas defined but inactive).
+
+  *Exit criterion*: a HALTed change is provably un-mergeable except via new
+  work or an authorized, recorded waiver.

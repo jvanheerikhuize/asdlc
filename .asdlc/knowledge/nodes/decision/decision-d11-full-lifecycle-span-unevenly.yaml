@@ -1,0 +1,11 @@
+id: decision-d11-full-lifecycle-span-unevenly
+type: decision
+title: "D11 \u2014 Full lifecycle span, unevenly resolved **(diverge)**"
+body: |2
+  Prior art reserved deployment and observability. This design specifies them as
+  first-class contracts (deployment/incident/learning predicates, G5/G6 gates)
+  with thin reference bindings, because DORA — in force since January 2025 —
+  puts hard obligations (incident clocks, resilience testing, rollback evidence)
+  precisely there. *Trade-off*: contract-level resolution means adopters do more
+  binding work post-merge; better an honest thin contract than a pretended deep
+  implementation.

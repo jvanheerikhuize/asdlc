@@ -1,0 +1,13 @@
+id: compliance-dora-regulation-eu-2022-2554
+type: obligation
+title: "DORA (Regulation (EU) 2022/2554)"
+body: |2
+  | Obligation | Mechanism | Evidence produced |
+  |---|---|---|
+  | ICT risk management in every phase | RC controls activated by the P1 risk classification; risk-officer role in the authority matrix | `classification/v1`, RC `control-verdict/v1` per gate |
+  | Change & release governance, rollback | G4 merge gate (required check + required reviewer); G5 release gate (environment protection); rollback plan is required G5 evidence | `approval/v1`, `deployment/v1` with rollback reference, full gate verdicts |
+  | Incident handling & reporting (4h/72h/30d) | `incident/v1` records opened in P6 with severity classification; the record schema carries the regulatory clock timestamps; reporting itself is an adopter binding (their competent authority, their format) — the framework guarantees the record exists, is timestamped, and is complete | `incident/v1`, `learning/v1` |
+  | Resilience & security testing as a gate | SC controls in the required-control set; G4 cannot pass without their verdicts; test depth scales with classification | SC `control-verdict/v1` |
+  | ICT third-party risk (incl. models/agents) | P0 onboarding inventory treats every external model, agent product, and dependency as an ICT third party; SBOM required as build evidence; inventory drift checked at G4 | inventory baseline, SBOM attestation, RC verdicts |
+  | Tamper-proof audit trail, ≥5-year retention | DSSE-signed attestations in the platform store **plus** the scheduled retention export to an adopter-bound append-only store | the evidence DAG itself + export receipts |
+  | Supervisory traceability | The Change Record DAG mechanically reconstructs which controls fired, verdicts, approvers, and artefact lineage | the DAG; a generated human-readable trace report |

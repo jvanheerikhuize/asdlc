@@ -1,0 +1,12 @@
+id: decision-d6-classification-driven-conditional-depth
+type: decision
+title: "D6 \u2014 Classification-driven conditional depth **(keep, from prior art)**"
+body: |2
+  Classify risk, data sensitivity, and AI usage once at intent; the verifier
+  *computes* the required-control set from it. Kept because it is the correct
+  answer to the central adoption problem — uniform heavyweight governance gets
+  bypassed, uniform lightweight governance fails audits. Hardened here: the
+  computation is deterministic policy, so control scoping is never a judgment
+  call made under delivery pressure, and a misclassification is itself a
+  recorded, reviewable artefact (the classification attestation names its
+  signer).

@@ -1,0 +1,11 @@
+id: agents-memory-and-knowledge
+type: concept
+title: "Memory and knowledge"
+body: |2
+  The knowledge graph lives in the consuming repo (`.asdlc/knowledge/`,
+  schema-validated YAML nodes and edges): architectural facts, past incident
+  learnings, decision rationales. Agents read it for context (files, low token
+  cost) and *propose* updates that land as reviewed PRs — so even the
+  framework's memory has provenance. P6 `learning/v1` evidence feeds it: the
+  post-incident loop DORA asks for is the same loop that makes the next squad
+  smarter.

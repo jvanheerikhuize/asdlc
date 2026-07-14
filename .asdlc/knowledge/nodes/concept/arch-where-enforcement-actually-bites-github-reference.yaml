@@ -1,0 +1,18 @@
+id: arch-where-enforcement-actually-bites-github-reference
+type: concept
+title: "Where enforcement actually bites (GitHub reference binding)"
+body: |2
+  | Gate | Unbypassable primitive |
+  |---|---|
+  | G4 (merge) | required status check (verifier) + required-reviewer ruleset rule |
+  | G5 (deploy) | environment protection rules: required reviewers + verifier check |
+  | Evidence integrity | artifact attestations, org-level attestation policies |
+  | Persona/spec integrity | push rules protecting `.asdlc/` policy paths and `.github/agents/*.md` |
+  | G1–G3 | verifier checks at G4 that earlier-phase evidence exists and predates later evidence (phase ordering is enforced *retrospectively but unbypassably* at the first platform boundary) |
+
+  G1–G3 deserve honesty: nothing physically stops an agent writing code before
+  declaring intent. What the platform *does* stop is any of that work landing —
+  G4 requires the full evidence chain in correct causal order (attestation
+  timestamps and subject digests), so skipping early gates produces work that
+  cannot merge. Enforcement is placed where the platform is strong instead of
+  pretending the framework can police an agent's local working tree.

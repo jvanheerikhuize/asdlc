@@ -1,0 +1,10 @@
+id: risk-r2-rubber-stamping-automation-bias
+type: risk
+title: "R2 \u2014 Rubber-stamping / automation bias at human gates."
+body: |2
+  If approvals
+  degrade to clicking through green checks, both DORA change governance and AI
+  Act "effective oversight" fail in substance while passing in form.
+  *Mitigation*: the approval surface is exception-oriented (see compliance.md
+  §tension 3); approval latency and waiver rates are themselves recorded and
+  reportable, so drift toward rubber-stamping is visible in evidence.

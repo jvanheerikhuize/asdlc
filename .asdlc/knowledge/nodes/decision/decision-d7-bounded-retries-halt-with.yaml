@@ -1,0 +1,7 @@
+id: decision-d7-bounded-retries-halt-with
+type: decision
+title: "D7 \u2014 Bounded retries \u2192 HALT with monotonic verdicts **(keep, hardened)**"
+body: |2
+  Kept from prior art. Hardened: HALT and verdicts are attestations, and the
+  verifier enforces that they are superseded only by new work or an authorized
+  waiver — the no-silent-downgrade rule is machine-checked rather than asserted.

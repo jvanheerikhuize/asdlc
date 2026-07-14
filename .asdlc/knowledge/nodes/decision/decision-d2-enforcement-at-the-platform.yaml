@@ -1,0 +1,15 @@
+id: decision-d2-enforcement-at-the-platform
+type: decision
+title: "D2 \u2014 Enforcement at the platform boundary, orchestrator demoted **(diverge)**"
+body: |2
+  Prior art: the MCP orchestrator is the runtime that drives and gates the
+  lifecycle. This design: GitHub rulesets / required checks / environment
+  protection are the gates; the orchestrator is optional ergonomics.
+
+  *Why*: an audit trail assembled from voluntary self-reports through a service
+  an agent can bypass is weak supervisory evidence. A required check cannot be
+  bypassed by any agent, from any vendor, however misaligned. *Trade-off*: the
+  reference binding is GitHub-coupled. Contained by keeping every contract
+  (schemas, policies, predicate types) platform-neutral and the verifier a
+  portable CLI — a GitLab binding is configuration plus a thin wrapper, not a
+  redesign.
