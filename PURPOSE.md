@@ -61,16 +61,16 @@ shape is final so the gate contract won't change. `testdata/spec-0.1.0/` is
 a pinned fixture copy, to be replaced by a tag fetch once spec releases are
 tagged.
 
-**Blocked on owner decision — repo visibility.** Branch rulesets (the
-required-check dogfood gate) are unavailable on private repos without
-GitHub Pro: GitHub returned "Upgrade to GitHub Pro or make this repository
-public" when creating the ruleset. Options: make `asdlc` (and ideally
-`asdlc-verify`) public, upgrade the account, or defer enforcement.
+**Both repos are public and gate-protected** (owner decision, 2026-07-14).
+Active branch rulesets on `main` of both repos (no bypass, PR flow forced):
+`asdlc` requires the `spec-check` check (ruleset 18946796); `asdlc-verify`
+requires `ci` (ruleset 18946806). From this point every change to the
+framework flows through its own gates — direct pushes to main are blocked,
+including for the owner.
 
-Slice 1 remaining: (a) enable the ruleset once visibility/Pro is resolved
-— NOTE: it forces PR flow on main; (b) DSSE/Sigstore verification in the
-verifier + its GitHub Action wrapper; (c) the approval-transcription
-workflow; (d) open the first real Change Record and run it through G4.
+Slice 1 remaining: (a) DSSE/Sigstore verification in the verifier + its
+GitHub Action wrapper; (b) the approval-transcription workflow; (c) open
+the first real Change Record and run it through G4 end-to-end.
 
 ---
 
