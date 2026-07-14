@@ -1,0 +1,37 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "648b0857a59ea5bdcfbd18ce3cda6f50dba6244b"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-usage/v1",
+  "predicate": {
+    "change_id": "CR-20260714-token-metric",
+    "source": "claude-code session transcript",
+    "window": {
+      "from": "2026-07-14T20:40:20Z",
+      "to": "2026-07-14T20:43:10Z"
+    },
+    "tokens": {
+      "input": 27,
+      "output": 17343,
+      "cache_read": 4761976,
+      "cache_creation": 28735,
+      "total": 4808081
+    },
+    "produced_by": {
+      "role": "implementer",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-14T20:43:10Z"
+  }
+}

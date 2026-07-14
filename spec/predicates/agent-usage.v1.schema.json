@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-usage.v1.schema.json",
+  "title": "agent-usage/v1 — resources an agent consumed producing a change",
+  "description": "Self-reported by the agent from its harness's own records (e.g. a session transcript), for the window between the Change Record opening and this statement's production. Optional evidence: no gate requires it, but once present it feeds the token-usage metric. Self-reported means unverifiable until evidence signing lands — the same honesty boundary as --dev-unsigned.",
+  "allOf": [{ "$ref": "statement.base.schema.json" }],
+  "properties": {
+    "predicateType": {
+      "const": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-usage/v1"
+    },
+    "predicate": {
+      "type": "object",
+      "required": ["change_id", "source", "window", "tokens", "produced_by", "produced_at"],
+      "properties": {
+        "change_id": { "$ref": "statement.base.schema.json#/$defs/changeId" },
+        "source": {
+          "type": "string",
+          "description": "Where the numbers come from, e.g. 'claude-code session transcript'."
+        },
+        "window": {
+          "type": "object",
+          "required": ["from", "to"],
+          "properties": {
+            "from": { "$ref": "statement.base.schema.json#/$defs/producedAt" },
+            "to": { "$ref": "statement.base.schema.json#/$defs/producedAt" }
+          },
+          "additionalProperties": false
+        },
+        "tokens": {
+          "type": "object",
+          "required": ["input", "output", "cache_read", "cache_creation", "total"],
+          "properties": {
+            "input": { "type": "integer", "minimum": 0 },
+            "output": { "type": "integer", "minimum": 0 },
+            "cache_read": { "type": "integer", "minimum": 0 },
+            "cache_creation": { "type": "integer", "minimum": 0 },
+            "total": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        "produced_by": { "$ref": "statement.base.schema.json#/$defs/producedBy" },
+        "produced_at": { "$ref": "statement.base.schema.json#/$defs/producedAt" },
+        "refs": { "$ref": "statement.base.schema.json#/$defs/refs" }
+      },
+      "additionalProperties": false
+    }
+  }
+}
