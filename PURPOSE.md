@@ -46,8 +46,13 @@ this repo *is* the spec repo. Done so far (2026-07-14):
   PATH; `.github/workflows/spec-check.yml` runs both layers in CI (no opa/go
   on the local machine — CI is where the policy is actually exercised).
 
-Slice 1 remaining: (a) confirm spec-check is green in CI, then make it a
-required check via a branch ruleset (first dogfood gate); (b) create
+**spec-check is green in CI** (run 29354999276, 2026-07-14): `opa check`
+passes and all four golden bundles evaluate to exactly their expected
+allow/deny outcomes — the G4 policy is exercised, not just authored.
+
+Slice 1 remaining: (a) make spec-check a required check via a branch ruleset
+(first dogfood gate — NOTE: this forces PR flow on main, owner should
+knowingly enable it); (b) create
 `asdlc-verify` (Go CLI: signature verification, role resolution, policy
 evaluation, GitHub Action wrapper); (c) the approval-transcription workflow;
 (d) open the first real Change Record and run it through G4.
