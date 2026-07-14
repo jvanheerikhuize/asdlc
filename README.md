@@ -12,6 +12,8 @@ design positions, and the original brief (in [docs/](docs/)).
 All documents in this repo (this file included) are generated from the
 knowledge base in `.asdlc/knowledge/` — edit nodes, then run
 `python3 spec/tools/scaffold.py`.
+Small known debts are tracked in [LEFTOVERS.md](LEFTOVERS.md) (generated,
+like everything else).
 
 ## The design (brief §7 deliverables)
 

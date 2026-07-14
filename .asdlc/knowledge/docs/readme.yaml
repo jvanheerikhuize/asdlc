@@ -11,5 +11,7 @@ preamble: |
   All documents in this repo (this file included) are generated from the
   knowledge base in `.asdlc/knowledge/` — edit nodes, then run
   `python3 spec/tools/scaffold.py`.
+  Small known debts are tracked in [LEFTOVERS.md](LEFTOVERS.md) (generated,
+  like everything else).
 sections:
   - node: readme-the-design-brief

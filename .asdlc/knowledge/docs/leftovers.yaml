@@ -1,0 +1,15 @@
+output: LEFTOVERS.md
+title: "Leftovers — small known debts"
+preamble: |
+  Generated view of the `leftover` knowledge nodes (see
+  [the convention](.asdlc/knowledge/nodes/convention/convention-leftovers.yaml)):
+  small, well-understood stand-ins awaiting a **leftover sweep** — a dedicated
+  governed change that fixes them and marks them done. Design-sized work
+  lives on the roadmap instead, never in both places.
+sections:
+  - heading: "Active"
+    items:
+      - leftover-verify-fixtures-pin
+      - leftover-verify-gosum
+      - leftover-readmes-generated
+      - leftover-actions-node20

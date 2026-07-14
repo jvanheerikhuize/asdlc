@@ -1,0 +1,33 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "12cb3acc6f936d0169d2592057ae58344ee8018f"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260714-leftovers-registry",
+    "title": "Leftovers registry: typed debt nodes + generated LEFTOVERS.md",
+    "problem": "Known small debts (dev-mode stand-ins, copied fixtures, hand-maintained READMEs) are scattered across status notes and README caveats; the owner wants to occasionally run a single 'fix all leftovers' sweep, which needs one authoritative registry.",
+    "acceptance_criteria": [
+      "leftover (and metric) node types exist in the spec schema",
+      "convention-leftovers defines what qualifies and the sweep lifecycle",
+      "All four currently-known small debts are registered as active leftover nodes",
+      "LEFTOVERS.md is generated and linked from the README"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-14T20:51:00Z"
+  }
+}
