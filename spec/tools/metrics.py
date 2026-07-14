@@ -53,6 +53,7 @@ def collect():
             "lead_time_s": (m - intent_at).total_seconds() if m and intent_at else None,
             "cycle_time_s": (m - opened).total_seconds() if m else None,
         })
+    rows.sort(key=lambda r: (r["merged_at"] is None, r["merged_at"] or "", r["change"]))
     return rows
 
 
