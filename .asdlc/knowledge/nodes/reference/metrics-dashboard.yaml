@@ -1,0 +1,18 @@
+id: metrics-dashboard
+type: reference
+title: "Where to see the metrics"
+since: "2026-07-14"
+body: |2
+  Four views, all derived from the same evidence on demand:
+
+  - **Dashboard**: https://jvanheerikhuize.github.io/asdlc/ — grouped bars
+    (lead vs cycle per change), median tiles, table view; redeployed by the
+    `metrics` workflow on every push to main.
+  - **CLI**: `python3 spec/tools/metrics.py` (markdown; `--json`, `--html`).
+  - **Job summary** of each `metrics` workflow run.
+  - **JSON artifact** on each run, for downstream tooling.
+links:
+  - to: metric-lead-time
+    rel: relates-to
+  - to: metric-cycle-time
+    rel: relates-to

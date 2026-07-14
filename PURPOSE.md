@@ -108,6 +108,10 @@ verbatim as the `brief-s0`…`brief-s9` reference nodes; the loose files
 `docs/session-continuation-2026-07-14.md` are removed (git history keeps
 them). `docs/` now contains only generated documents.
 
+**Metrics dashboard live** (2026-07-14, CR-20260714-metrics-dashboard):
+https://jvanheerikhuize.github.io/asdlc/ — deployed to GitHub Pages by
+the `metrics` workflow on every main push. See [[metrics-dashboard]].
+
 ## Clarifying questions — researched, proposed answers
 
 ### Q1. Where must governance be unbypassable?

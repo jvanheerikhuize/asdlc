@@ -13,6 +13,7 @@ preamble: |
   knowledge base in `.asdlc/knowledge/` — edit nodes, then run
   `python3 spec/tools/scaffold.py`.
   Small known debts are tracked in [LEFTOVERS.md](LEFTOVERS.md) (generated,
-  like everything else).
+  like everything else). Live change metrics:
+  [jvanheerikhuize.github.io/asdlc](https://jvanheerikhuize.github.io/asdlc/).
 sections:
   - node: readme-the-design-brief

@@ -14,7 +14,8 @@ All documents in this repo (this file included) are generated from the
 knowledge base in `.asdlc/knowledge/` — edit nodes, then run
 `python3 spec/tools/scaffold.py`.
 Small known debts are tracked in [LEFTOVERS.md](LEFTOVERS.md) (generated,
-like everything else).
+like everything else). Live change metrics:
+[jvanheerikhuize.github.io/asdlc](https://jvanheerikhuize.github.io/asdlc/).
 
 ## The design (brief §7 deliverables)
 
