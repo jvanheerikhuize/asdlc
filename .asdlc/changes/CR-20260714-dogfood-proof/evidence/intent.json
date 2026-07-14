@@ -1,0 +1,27 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [{ "name": "change", "digest": { "gitCommit": "d01139c996ab49a17c97eb938c6124ed83916bd0" } }],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260714-dogfood-proof",
+    "title": "First governed change: prove the G4 loop end-to-end",
+    "problem": "The G4 gate, evidence predicates, and GitHub binding all exist but no real change has ever flowed through them; until one does, the walking skeleton's exit criterion (a PR without valid evidence cannot merge, and the evidence trail is reconstructable) is unproven.",
+    "acceptance_criteria": [
+      "This PR's g4-gate check denies while any required evidence is missing (observed before approval)",
+      "After '/asdlc approve <head-sha>' by a bound release-approver, the gate re-evaluates and passes",
+      "The merged change's evidence bundle (intent, classification, verdicts, approval) is retrievable from the run artifact",
+      "PURPOSE.md records the loop as proven"
+    ],
+    "out_of_scope": [
+      "Signature verification (dev-unsigned mode is the documented v0.1 stand-in)",
+      "Making g4-gate a required check (immediately follows this proof)"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": { "vendor": "Anthropic", "model": "claude-fable-5" }
+    },
+    "produced_at": "2026-07-14T19:31:00Z"
+  }
+}
