@@ -16,3 +16,4 @@ sections:
   - node: decision-d10-mcp-as-the-agent
   - node: decision-d11-full-lifecycle-span-unevenly
   - node: decision-d12-this-repo-is-asdlc
+  - node: decision-d13-knowledge-content-repo-scoped

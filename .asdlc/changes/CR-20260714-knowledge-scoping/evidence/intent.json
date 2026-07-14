@@ -1,0 +1,31 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "ece5cf3b61ff2aec9741ce22b8ebb0b93515fad9"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260714-knowledge-scoping",
+    "title": "D13: knowledge content is repo-scoped; mechanism is spec-owned",
+    "problem": "After the knowledge-first migration the owner asked whether the knowledge architecture should be populated into asdlc-verify or kept single-sourced; the answer and its reasoning existed only in a conversation, which the knowledge base exists to prevent.",
+    "acceptance_criteria": [
+      "Decision D13 exists as a linked knowledge node and renders in docs/design/decisions.md",
+      "Priority-0 follow-ups name asdlc-verify README generation via a pinned spec tag"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-14T20:36:00Z"
+  }
+}
