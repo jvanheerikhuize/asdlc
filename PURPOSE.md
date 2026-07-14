@@ -68,9 +68,23 @@ requires `ci` (ruleset 18946806). From this point every change to the
 framework flows through its own gates — direct pushes to main are blocked,
 including for the owner.
 
-Slice 1 remaining: (a) DSSE/Sigstore verification in the verifier + its
-GitHub Action wrapper; (b) the approval-transcription workflow; (c) open
-the first real Change Record and run it through G4 end-to-end.
+**The GitHub binding is live** (2026-07-14, PRs asdlc-verify#1 + asdlc#2):
+the verifier ships as a composite Action; the `g4-gate` workflow detects a
+PR's Change Record, produces QC-01/SC-01 verdicts, transcribes
+`/asdlc approve <head-sha>` comments from bound release-approvers into
+`approval/v1`, evaluates G4 via the verifier (dev-unsigned), and uploads
+the evidence bundle as a run artifact. Conventions and their successors:
+`bindings/github/README.md`. Owner authorized agent-merge of green PRs in
+both repos (solo-maintainer SoD reality, recorded).
+
+**This very text was merged as the first governed change**
+(`CR-20260714-dogfood-proof`, PR #3): gate denied pre-approval, passed
+after the approval comment, evidence bundle archived on the run.
+
+Slice 1 remaining: (a) add `g4-gate` to the main ruleset's required checks
+(the exit-criterion flip); (b) DSSE/Sigstore verification in the verifier,
+replacing dev-unsigned; (c) tag spec v0.1.0 and pin the verifier's
+fixtures to the tag.
 
 ---
 
