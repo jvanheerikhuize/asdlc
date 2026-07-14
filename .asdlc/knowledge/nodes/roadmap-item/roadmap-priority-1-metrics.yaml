@@ -1,0 +1,31 @@
+id: roadmap-priority-1-metrics
+type: roadmap-item
+title: "Priority 1 — Metrics over the evidence DAG (owner directive, 2026-07-14)"
+since: "2026-07-14"
+status: active
+body: |2
+  The framework produces a timestamped evidence DAG for every change —
+  metrics are **views over that DAG, computed on demand, never separately
+  tracked** (the same single-source move as D9). First two, per owner
+  directive: [[metric-lead-time]] and [[metric-cycle-time]].
+
+  Delivered in the first cut (CR-20260714-metrics): the metric definitions
+  as knowledge nodes, `spec/tools/metrics.py` (markdown/JSON, computed from
+  evidence + git history), and a `metrics` workflow that publishes the
+  report to the run's job summary and a JSON artifact on every push to
+  main.
+
+  Follow-ups, as the evidence grows richer: **approval latency**
+  (gate-deny to approval comment — makes rubber-stamping drift visible,
+  feeding R2) and **waiver rate** (feeding R8) once waivers exist
+  (slice 2); per-gate durations; lead time extended to the deploy boundary
+  at G5; publication into the retention store / dashboards (slice 4).
+links:
+  - to: metric-lead-time
+    rel: relates-to
+  - to: metric-cycle-time
+    rel: relates-to
+  - to: risk-r2-rubber-stamping-automation-bias
+    rel: mitigates
+  - to: risk-r8-waiver-misuse
+    rel: mitigates

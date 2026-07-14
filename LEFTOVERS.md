@@ -10,6 +10,15 @@ lives on the roadmap instead, never in both places.
 
 ## Active
 
+**Scaffold Change Records with clock timestamps, not authored ones**
+The first metrics run exposed negative lead times: early Change Records
+carried hand-authored, future-guessed timestamps, so the merge landed
+"before" the intent. Evidence timestamps must come from a clock. Add a
+small `spec/tools/new-change.py` that scaffolds change.json + intent +
+classification with real `produced_at` values (and prompts for the
+human-authored fields). Past evidence stays as-is — immutable, and the
+negative numbers are the honest record of the defect.
+
 **asdlc-verify: fetch spec conformance fixtures from the pinned tag**
 `asdlc-verify/testdata/spec-0.1.0/` is a hand-copied snapshot of the
 spec's gate policy and golden bundles. Replace it with a CI checkout of

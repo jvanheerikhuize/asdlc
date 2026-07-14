@@ -1,0 +1,15 @@
+id: metric-cycle-time
+type: metric
+title: "Cycle time — work started to merged"
+since: "2026-07-14"
+body: |2
+  Time from the Change Record being opened (`change.json` `opened_at`, the
+  declared start of work) to the change landing on `main`. Measures how
+  long a governed change is actually in flight; the gap between lead time
+  and cycle time is how long intent waited before work began.
+
+  Computed alongside [[metric-lead-time]] by `spec/tools/metrics.py`, with
+  the same derived-never-stored principle and v1 caveats.
+links:
+  - to: metric-lead-time
+    rel: relates-to

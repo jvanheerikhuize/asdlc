@@ -1,0 +1,37 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "480a45bc1f6cb0d5ea31be072abf1a988600d6fc"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260714-metrics",
+    "title": "Metrics over the evidence DAG: lead time and cycle time (Priority 1)",
+    "problem": "The framework records everything but measures nothing: no way to see how long governed changes take from intent to merge, so the 'governed path as easy path' claim is unquantified. Owner directive: add metrics, first lead time and cycle time, prioritized.",
+    "acceptance_criteria": [
+      "metric-lead-time and metric-cycle-time exist as knowledge nodes with precise definitions",
+      "spec/tools/metrics.py computes both from evidence + git history on demand (markdown and JSON)",
+      "The metrics workflow publishes the report on every push to main",
+      "Roadmap carries this as Priority 1 with named follow-ups (approval latency, waiver rate)"
+    ],
+    "out_of_scope": [
+      "Approval-latency and waiver-rate metrics (need slice-2 evidence)",
+      "Dashboards / retention-store publication (slice 4)"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-14T20:12:25Z"
+  }
+}

@@ -1,0 +1,22 @@
+id: metric-lead-time
+type: metric
+title: "Lead time — recorded intent to merged"
+since: "2026-07-14"
+body: |2
+  Time from the change's recorded intent (`change-intent/v1`
+  `produced_at`) to the change landing on `main` (the commit that adds its
+  Change Record to the default branch). Measures request-to-delivery of a
+  governed change at the merge boundary; extends to the deploy boundary
+  when G5 exists (slice 4).
+
+  **Derived, never stored** (D9 applied to numbers): computed on demand by
+  `spec/tools/metrics.py` from the evidence bundle plus git history — there
+  is no metrics database to drift from reality. v1 caveats: the merge
+  timestamp is the commit that added `change.json` on the current branch
+  (matches the squash-merge flow); in-flight changes are excluded; the
+  2026-07-14 records carry hand-authored, future-skewed intent timestamps,
+  so their lead times are negative — kept as the honest record that
+  motivated [[leftover-change-scaffolder]].
+links:
+  - to: decision-d9-machine-readable-single-source
+    rel: derived-from
