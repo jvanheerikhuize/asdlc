@@ -9,8 +9,10 @@ preamble: |
 sections:
   - heading: "Active"
     items:
-      - leftover-change-scaffolder
       - leftover-verify-fixtures-pin
       - leftover-verify-gosum
-      - leftover-readmes-generated
       - leftover-actions-node20
+  - heading: "Resolved"
+    items:
+      - leftover-change-scaffolder
+      - leftover-readmes-generated

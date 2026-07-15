@@ -1,3 +1,5 @@
+<!-- GENERATED from .asdlc/knowledge — do not edit directly.
+     Edit the knowledge nodes, then run: python3 spec/tools/scaffold.py -->
 # asdlc spec v0.1 (slice 1 — walking skeleton)
 
 The machine-readable single source of truth. Human documents are views over

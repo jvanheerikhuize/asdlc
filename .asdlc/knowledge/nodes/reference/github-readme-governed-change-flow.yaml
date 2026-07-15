@@ -1,0 +1,16 @@
+id: github-readme-governed-change-flow
+type: reference
+title: "The governed-change flow (solo-maintainer reality)"
+body: |2
+  1. Author `change.json`, `evidence/intent.json`, `evidence/classification.json`
+     under `.asdlc/changes/<CR-id>/` on your branch, plus the actual change.
+  2. Open the PR. `g4-gate` runs: produces QC-01/SC-01 verdicts, finds no
+     approval → **denies** with reasons on the check.
+  3. Comment `/asdlc approve <head-sha>`. `approval-rerun` re-runs the gate,
+     which transcribes the approval and re-evaluates → green if all evidence
+     holds.
+  4. Merge. The evidence bundle for the run is attached as an artifact.
+
+  The same account authoring and approving is the standing separation-of-duty
+  exception the manifest records; the framework's job is to make that fact
+  visible, not to pretend otherwise.

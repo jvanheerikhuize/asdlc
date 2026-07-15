@@ -1,0 +1,17 @@
+output: bindings/github/README.md
+title: "GitHub reference binding — v0.1 conventions"
+preamble: |
+  How the spec's contracts map onto GitHub primitives in this first, honest
+  iteration. Every convention below is a stand-in with a named successor;
+  none changes the policy contract when replaced.
+
+  | Contract | v0.1 binding | Real thing (later slice) |
+  |---|---|---|
+  | G4 enforcement | `g4-gate` workflow; added to the main ruleset's required checks once proven | same, kept |
+  | Evidence signing | `--dev-unsigned`: statements are plain JSON, identity trusted from the statement's own claim, roles resolved via `asdlc.yaml` | DSSE + Sigstore verification in asdlc-verify |
+  | Evidence storage | authored statements (intent, classification) live in-branch under `.asdlc/changes/<id>/evidence/`; CI-produced statements (verdicts, approval) are produced in-workspace and uploaded as a run artifact | platform attestation store + retention exporter (slice 4) |
+  | Human review approval | `/asdlc approve <head-sha-prefix>` PR comment by an identity bound to `release-approver`; transcribed to `approval/v1`. Sha-bound: new commits void the approval | PR-review transcription (needs a second identity: GitHub forbids approving your own PR) plus environment approvals for G5 |
+  | Approval re-check | `approval-rerun` workflow re-runs `g4-gate` when an approve comment lands | evidence-store webhook |
+  | Ungoverned changes | PRs touching no Change Record pass the gate vacuously (visible notice in the run) | closed in slice 2, when classification-driven depth makes small changes cheap enough to always require a CR |
+sections:
+  - node: github-readme-governed-change-flow
