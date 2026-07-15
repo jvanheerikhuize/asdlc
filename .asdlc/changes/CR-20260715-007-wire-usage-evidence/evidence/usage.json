@@ -1,0 +1,37 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "75facba6c673fe8e158debb2b00f04d585857910"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-usage/v1",
+  "predicate": {
+    "change_id": "CR-20260715-007-wire-usage-evidence",
+    "source": "claude-code session transcript",
+    "window": {
+      "from": "2026-07-15T19:56:35Z",
+      "to": "2026-07-15T19:57:34Z"
+    },
+    "tokens": {
+      "input": 36,
+      "output": 4216,
+      "cache_read": 1153616,
+      "cache_creation": 8878,
+      "total": 1166746
+    },
+    "produced_by": {
+      "role": "implementer",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-sonnet-5"
+      }
+    },
+    "produced_at": "2026-07-15T19:57:34Z"
+  }
+}

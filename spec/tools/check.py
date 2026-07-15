@@ -12,7 +12,9 @@ import subprocess
 import sys
 
 SPEC = pathlib.Path(__file__).resolve().parent.parent
+ROOT = SPEC.parent
 GOLDEN = SPEC / "examples" / "golden"
+CHANGES = ROOT / ".asdlc" / "changes"
 failures = []
 
 
@@ -88,7 +90,34 @@ def policy_checks():
             check(deny == [], f"{bundle_dir.name}: no deny reasons on a passing bundle {deny or ''}")
 
 
+def usage_evidence_reminders():
+    """Non-blocking: flag committed changes that still lack usage evidence
+    (roadmap-priority-2-metrics-integrity exit criterion). Never adds to
+    failures — usage evidence is self-reported by design and its absence
+    is a dashboard n/a, not a gate failure. See metric-token-usage.yaml."""
+    if not CHANGES.is_dir():
+        return
+    flagged = []
+    for change_dir in sorted(CHANGES.iterdir()):
+        intent_path = change_dir / "evidence" / "intent.json"
+        if not intent_path.exists():
+            continue
+        intent = json.load(open(intent_path))
+        if intent["subject"][0]["digest"]["gitCommit"] == "0" * 40:
+            continue  # not yet committed — too early for usage evidence
+        if intent["predicate"]["produced_by"]["kind"] == "ci":
+            continue  # no local transcript to summarize
+        if not (change_dir / "evidence" / "usage.json").exists():
+            flagged.append(change_dir.name)
+    if flagged:
+        print(f"\nnote: {len(flagged)} committed change(s) have no evidence/usage.json "
+              "(non-blocking; run bindings/claude-code/usage.py to record it):")
+        for name in flagged:
+            print(f"  - {name}")
+
+
 schema_checks()
 policy_checks()
+usage_evidence_reminders()
 print(f"\n{'PASS' if not failures else 'FAIL'}: {len(failures)} failure(s)")
 sys.exit(1 if failures else 0)
