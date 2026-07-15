@@ -1,0 +1,27 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "cdc3d73a10e91219ea5ea100d4e1d195a34b98d9"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/classification/v1",
+  "predicate": {
+    "change_id": "CR-20260715-003-finish-leftover-sweep-verify-fixtures-pin",
+    "risk": "low",
+    "data": "none",
+    "ai_usage": "generated",
+    "ai_system_tier": "none",
+    "rationale": "First implementation of the D13 pinned-spec-tag-fetch mechanism; closes out the leftover sweep with all three items resolved.",
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "human",
+      "identity": "github:jvanheerikhuize"
+    },
+    "produced_at": "2026-07-15T17:44:15Z",
+    "refs": []
+  }
+}

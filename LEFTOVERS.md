@@ -8,15 +8,6 @@ small, well-understood stand-ins awaiting a **leftover sweep** — a dedicated
 governed change that fixes them and marks them done. Design-sized work
 lives on the roadmap instead, never in both places.
 
-## Active
-
-**asdlc-verify: fetch spec conformance fixtures from the pinned tag**
-`asdlc-verify/testdata/spec-0.1.0/` is a hand-copied snapshot of the
-spec's gate policy and golden bundles. Replace it with a CI checkout of
-`jvanheerikhuize/asdlc` at the tag named by a pin file, so conformance
-always tests the spec version the verifier claims to support (both repos
-are public; cross-checkout works with the default token).
-
 ## Resolved
 
 **Scaffold Change Records with clock timestamps, not authored ones**
@@ -72,3 +63,18 @@ still need the same bump — outside this change's reach.
 Done: `asdlc-verify`'s `ci.yml` and composite `action.yml` now use
 `actions/checkout@v7` and `actions/setup-go@v6` (asdlc-verify#2),
 closing the gap left by the earlier partial fix.
+
+**asdlc-verify: fetch spec conformance fixtures from the pinned tag**
+`asdlc-verify/testdata/spec-0.1.0/` is a hand-copied snapshot of the
+spec's gate policy and golden bundles. Replace it with a CI checkout of
+`jvanheerikhuize/asdlc` at the tag named by a pin file, so conformance
+always tests the spec version the verifier claims to support (both repos
+are public; cross-checkout works with the default token).
+
+Done: `asdlc-verify` now has `spec.pin` (currently `spec-v0.4.0`) and
+`scripts/fetch-fixtures.sh`, which clones `jvanheerikhuize/asdlc` at the
+pinned tag and copies its gate policy and golden bundles into the
+gitignored `testdata/spec-pinned/`. CI runs the fetch script before
+`go test`; the hand-copied `testdata/spec-0.1.0/` is removed. Fixtures at
+the pinned tag are byte-identical to the ones they replace, so this is a
+mechanism change with no behavior change. asdlc-verify#3.
