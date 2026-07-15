@@ -9,7 +9,13 @@ body: |2
   and cycle time is how long intent waited before work began.
 
   Computed alongside [[metric-lead-time]] by `spec/tools/metrics.py`, with
-  the same derived-never-stored principle and v1 caveats.
+  the same derived-never-stored principle and v1 caveats: `opened_at` is
+  hand-authored for the same 2026-07-14 rows as lead time, so cycle time
+  goes negative for the same reason. The chart plots the raw negative bar
+  as the honest record; the table and markdown summary show "n/a" for
+  those rows and the median-cycle tile excludes them — see
+  [[metric-lead-time]]'s chart-vs-summary note, which applies identically
+  here.
 links:
   - to: metric-lead-time
     rel: relates-to

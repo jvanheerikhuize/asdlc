@@ -1,0 +1,27 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "4a7c8f6f9c0b4cb8d50cbc5fa59fbaec8f7e2b2f"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/classification/v1",
+  "predicate": {
+    "change_id": "CR-20260715-006-work-scoped-token-metric-and-na-display",
+    "risk": "low",
+    "data": "none",
+    "ai_usage": "generated",
+    "ai_system_tier": "minimal",
+    "rationale": "Metrics integrity work per roadmap-priority-2-metrics-integrity; keeps the dashboard honest by not conflating cache-read volume with work done, and by not hiding known-bad data behind misleading raw values.",
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "human",
+      "identity": "github:jvanheerikhuize"
+    },
+    "produced_at": "2026-07-15T19:36:06Z",
+    "refs": []
+  }
+}

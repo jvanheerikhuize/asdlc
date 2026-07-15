@@ -58,13 +58,31 @@ def collect():
         tokens = None
         usage = d / "evidence" / "usage.json"
         if usage.exists():
-            tokens = json.loads(usage.read_text())["predicate"]["tokens"]
+            tokens = dict(json.loads(usage.read_text())["predicate"]["tokens"])
+            # Work-scoped figure (finding 2, roadmap-priority-2-metrics-integrity):
+            # cache_read scales with turns x accumulated session context, not
+            # with work done for this change, so it's excluded from the
+            # headline total. Derived here, not stored — the raw breakdown
+            # (including cache_read) stays in the evidence for transparency.
+            tokens["work_tokens"] = (
+                tokens.get("input", 0) + tokens.get("output", 0) + tokens.get("cache_creation", 0))
+        lead_time_s = (m - intent_at).total_seconds() if m and intent_at else None
         rows.append({
             "change": change["id"],
             "opened_at": change["opened_at"],
             "merged_at": m.isoformat() if m else None,
-            "lead_time_s": (m - intent_at).total_seconds() if m and intent_at else None,
+            "lead_time_s": lead_time_s,
+            # A negative lead time is arithmetically impossible for a real
+            # merge-after-intent measurement; the 2026-07-14 rows hit this
+            # from hand-authored, future-skewed intent timestamps (see
+            # metric-lead-time.yaml). Flag rather than hide: the chart still
+            # plots the raw value as the honest record of that bug, but
+            # summary figures (table, markdown) render it as n/a.
+            "lead_time_inaccurate": lead_time_s is not None and lead_time_s < 0,
             "cycle_time_s": (m - opened).total_seconds() if m else None,
+            # Same future-skewed-timestamp bug as lead time, since opened_at
+            # is hand-authored for the same 2026-07-14 rows.
+            "cycle_time_inaccurate": m is not None and (m - opened).total_seconds() < 0,
             "tokens": tokens,
         })
     rows.sort(key=lambda r: (r["merged_at"] is None, r["merged_at"] or "", r["change"]))
@@ -157,19 +175,19 @@ def render_html(rows):
         y += grp_h + gap_grp
     svg += tip_rows  # hit targets on top
 
-    leads = sorted(r["lead_time_s"] for r in merged if r["lead_time_s"] is not None)
-    cycles = sorted(r["cycle_time_s"] for r in merged if r["cycle_time_s"] is not None)
-    med = lambda xs: fmt(datetime.timedelta(seconds=statistics.median(xs))) if xs else "—"
+    leads = sorted(r["lead_time_s"] for r in merged if not r["lead_time_inaccurate"] and r["lead_time_s"] is not None)
+    cycles = sorted(r["cycle_time_s"] for r in merged if not r["cycle_time_inaccurate"] and r["cycle_time_s"] is not None)
+    med = lambda xs: fmt(datetime.timedelta(seconds=statistics.median(xs))) if xs else "n/a"
 
     # ---- agent tokens: different unit, its own plot and axis ----
     tok_rows = [r for r in rows if r["tokens"]]
     tokens_section = ""
     tok_tile = ""
     if tok_rows:
-        total = sum(r["tokens"]["total"] for r in tok_rows)
+        total = sum(r["tokens"]["work_tokens"] for r in tok_rows)
         tok_tile = (f'<div class="tile"><b>{tfmt_tokens(total)}</b>'
-                    f'<span>agent tokens ({len(tok_rows)} recorded)</span></div>')
-        tmax = max(r["tokens"]["total"] for r in tok_rows) * 1.06
+                    f'<span>agent tokens, work-scoped ({len(tok_rows)} recorded)</span></div>')
+        tmax = max(r["tokens"]["work_tokens"] for r in tok_rows) * 1.06
         h2 = top + len(tok_rows) * (bar_h + 10) + 34
         ax2 = h2 - 26
 
@@ -193,19 +211,26 @@ def render_html(rows):
             tk = r["tokens"]
             svg2.append(f'<text class="label" x="{label_w - 10}" y="{yy + bar_h / 2 + 4}" '
                         f'text-anchor="end">{name}</text>')
-            svg2.append(f'<path class="s1" d="{bar_path(X2(0), X2(tk["total"]), yy, bar_h)}"/>')
+            svg2.append(f'<path class="s1" d="{bar_path(X2(0), X2(tk["work_tokens"]), yy, bar_h)}"/>')
             hits2.append(
                 f'<rect class="hit" x="0" y="{yy - 5}" width="{width}" height="{bar_h + 10}" '
-                f'data-name="{name}" data-tokens="{tfmt_tokens(tk["total"])} total" '
+                f'data-name="{name}" data-tokens="{tfmt_tokens(tk["work_tokens"])} work-scoped" '
                 f'data-detail="in {tfmt_tokens(tk["input"])} · out {tfmt_tokens(tk["output"])} · '
-                f'cache read {tfmt_tokens(tk["cache_read"])} · cache write {tfmt_tokens(tk["cache_creation"])}"/>')
+                f'cache write {tfmt_tokens(tk["cache_creation"])} · '
+                f'cache read {tfmt_tokens(tk["cache_read"])} (excluded, scales with context not work) · '
+                f'gross total {tfmt_tokens(tk["total"])}"/>')
             yy += bar_h + 10
         svg2 += hits2
+        tok_na = len(rows) - len(tok_rows)
+        na_note = (f' {tok_na} of {len(rows)} changes have no recorded usage evidence (n/a, '
+                   f'not shown below).') if tok_na else ""
         tokens_section = f"""
 <h2>Agent tokens per change</h2>
 <div class="sub">Self-reported by the agent from its harness transcript
 (<code>agent-usage/v1</code> evidence); recorded from
-<code>CR-20260714-token-metric</code> onward.</div>
+<code>CR-20260714-token-metric</code> onward. Work-scoped: excludes
+cache-read tokens, which scale with turns &times; accumulated session
+context rather than work done for the change.{na_note}</div>
 <figure>
 <svg viewBox="0 0 {width} {h2}" width="{width}" height="{h2}" role="img"
      aria-label="Bar chart of agent tokens per recorded change">
@@ -214,12 +239,26 @@ def render_html(rows):
 </figure>
 """
 
+    def lead_cell(r):
+        if r["lead_time_s"] is None:
+            return "n/a"
+        if r["lead_time_inaccurate"]:
+            return '<span title="hand-authored, future-skewed intent timestamp — see the note below">n/a</span>'
+        return fmt(datetime.timedelta(seconds=r["lead_time_s"]))
+
+    def cycle_cell(r):
+        if r["cycle_time_s"] is None:
+            return "n/a"
+        if r["cycle_time_inaccurate"]:
+            return '<span title="hand-authored, future-skewed opened_at timestamp — see the note below">n/a</span>'
+        return fmt(datetime.timedelta(seconds=r["cycle_time_s"]))
+
     table = "\n".join(
-        f'<tr><td class="num">{r["order"] or "—"}</td>'
+        f'<tr><td class="num">{r["order"] or "n/a"}</td>'
         f'<td>{r["change"]}</td><td>{(r["merged_at"] or "in flight")[:16]}</td>'
-        f'<td class="num">{fmt(datetime.timedelta(seconds=r["lead_time_s"])) if r["lead_time_s"] is not None else "—"}</td>'
-        f'<td class="num">{fmt(datetime.timedelta(seconds=r["cycle_time_s"])) if r["cycle_time_s"] is not None else "—"}</td>'
-        f'<td class="num">{tfmt_tokens(r["tokens"]["total"]) if r["tokens"] else "—"}</td></tr>'
+        f'<td class="num">{lead_cell(r)}</td>'
+        f'<td class="num">{cycle_cell(r)}</td>'
+        f'<td class="num">{tfmt_tokens(r["tokens"]["work_tokens"]) if r["tokens"] else "n/a"}</td></tr>'
         for r in rows)
 
     return HTML_TMPL.format(
@@ -298,9 +337,11 @@ HTML_TMPL = """<!doctype html>
 </svg>
 <div id="tip"></div>
 </figure>
-<p class="note">Negative values are kept deliberately: the 2026-07-14 records carry
-hand-authored, future-skewed intent timestamps — the first defect these metrics
-caught (see <code>leftover-change-scaffolder</code>).</p>
+<p class="note">The chart keeps negative bars deliberately: the 2026-07-14 records carry
+hand-authored, future-skewed intent/opened timestamps — the first defect these
+metrics caught (see <code>leftover-change-scaffolder</code>) — and the chart is the
+honest historical record. The table below shows <b>n/a</b> for those same rows'
+lead and cycle time, since a negative duration isn't a meaningful summary answer.</p>
 {tokens_section}
 <table>
 <thead><tr><th class="num">#</th><th>Change</th><th>Merged</th><th class="num">Lead</th><th class="num">Cycle</th><th class="num">Tokens</th></tr></thead>
@@ -342,13 +383,23 @@ def main():
     print("| # | Change | Merged | Lead time | Cycle time | Agent tokens |")
     print("|---|---|---|---|---|---|")
     for r in rows:
-        lead = fmt(datetime.timedelta(seconds=r["lead_time_s"])) if r["lead_time_s"] else "—"
-        cycle = fmt(datetime.timedelta(seconds=r["cycle_time_s"])) if r["cycle_time_s"] else "—"
+        if r["lead_time_s"] is None:
+            lead = "n/a"
+        elif r["lead_time_inaccurate"]:
+            lead = "n/a (negative — see metric-lead-time caveat)"
+        else:
+            lead = fmt(datetime.timedelta(seconds=r["lead_time_s"]))
+        if r["cycle_time_s"] is None:
+            cycle = "n/a"
+        elif r["cycle_time_inaccurate"]:
+            cycle = "n/a (negative — see metric-lead-time caveat)"
+        else:
+            cycle = fmt(datetime.timedelta(seconds=r["cycle_time_s"]))
         state = r["merged_at"][:16] if r["merged_at"] else "in flight"
-        toks = tfmt_tokens(r["tokens"]["total"]) if r["tokens"] else "—"
-        print(f"| {r['order'] or '—'} | {r['change']} | {state} | {lead} | {cycle} | {toks} |")
-    leads = [r["lead_time_s"] for r in merged if r["lead_time_s"]]
-    cycles = [r["cycle_time_s"] for r in merged if r["cycle_time_s"]]
+        toks = tfmt_tokens(r["tokens"]["work_tokens"]) if r["tokens"] else "n/a"
+        print(f"| {r['order'] or 'n/a'} | {r['change']} | {state} | {lead} | {cycle} | {toks} |")
+    leads = [r["lead_time_s"] for r in merged if not r["lead_time_inaccurate"] and r["lead_time_s"]]
+    cycles = [r["cycle_time_s"] for r in merged if not r["cycle_time_inaccurate"] and r["cycle_time_s"]]
     if leads:
         print(f"\n**{len(merged)} merged** · median lead "
               f"{fmt(datetime.timedelta(seconds=statistics.median(leads)))} · "
