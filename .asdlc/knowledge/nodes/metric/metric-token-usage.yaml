@@ -38,3 +38,7 @@ links:
     rel: relates-to
   - to: decision-d13-knowledge-content-repo-scoped
     rel: derived-from
+  - to: roadmap-priority-3-token-granularity
+    rel: relates-to
+  - to: reference-agent-token-optimization
+    rel: relates-to
