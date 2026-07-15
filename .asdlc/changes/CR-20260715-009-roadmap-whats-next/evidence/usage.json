@@ -1,0 +1,37 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "9e875e9bbffb464efebbd67273275536a3562cdf"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-usage/v1",
+  "predicate": {
+    "change_id": "CR-20260715-009-roadmap-whats-next",
+    "source": "claude-code session transcript",
+    "window": {
+      "from": "2026-07-15T20:30:31Z",
+      "to": "2026-07-15T20:30:52Z"
+    },
+    "tokens": {
+      "input": 8,
+      "output": 2787,
+      "cache_read": 222262,
+      "cache_creation": 2813,
+      "total": 227870
+    },
+    "produced_by": {
+      "role": "implementer",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-15T20:30:52Z"
+  }
+}
