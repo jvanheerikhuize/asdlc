@@ -99,3 +99,13 @@ body: |2
   agent harness transcript (`bindings/claude-code/usage.py`), surfaced in
   the CLI, JSON, and dashboard. See [[metric-token-usage]].
 
+  **Change numbering + context purge** (2026-07-14,
+  CR-20260714-009-change-numbering): Change Record ids carry a 3-digit
+  per-date sequence from spec 0.5.0 (`CR-<yyyymmdd>-<seq>-<slug>`, D14);
+  the eight earlier records are grandfathered, and the dashboard/CLI now
+  number every merged change in merge order so same-day records are
+  orderable either way. The same dashboard read prompted D15: agent
+  context is purged after every change (enforced in the operator's
+  harness via forced auto-compaction; the token metric watches whether
+  it bends the cycle-time curve).
+

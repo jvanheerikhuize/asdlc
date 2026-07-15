@@ -1,0 +1,39 @@
+id: decision-d15-agent-context-purged-between
+type: decision
+title: "D15 — Agent context is purged between changes (2026-07-14)"
+since: "2026-07-14"
+body: |2
+  The first real read of the metrics dashboard showed lead and cycle time
+  climbing across the day's successive changes: the agent session carried
+  the accumulated context of every earlier change into the next one
+  (visible in [[metric-token-usage]] — 4.8M tokens on the day's last
+  change). This is [[risk-r6-evidence-volume-vs-agent]] observed in
+  practice, on the framework's own repo.
+
+  Decision, owner-directed: **one change ≈ one context.** Agent context
+  is purged after every completed change instead of accumulating across
+  a session.
+
+  Enforcement lives in the operator's harness (Claude Code, 2026-07-14):
+  forced auto-compaction at a 100k-token window with precomputed
+  summaries, plus an end-of-turn reminder to compact or clear. The
+  framework's part is observability, not enforcement: the token metric
+  and the dashboard are what made the accumulation visible, and what
+  will show whether the purge policy bends the curve.
+
+  *Trade-off*: a purge discards session context that the next change
+  might have reused; recovering it costs re-reading knowledge nodes.
+  Accepted — that is exactly what the persistent knowledge base is for
+  (D9, knowledge-first): context worth keeping belongs in nodes, not in
+  a session transcript.
+links:
+  - to: metric-token-usage
+    rel: derived-from
+  - to: metric-cycle-time
+    rel: relates-to
+  - to: risk-r6-evidence-volume-vs-agent
+    rel: mitigates
+  - to: agents-memory-and-knowledge
+    rel: relates-to
+  - to: decision-d9-machine-readable-single-source
+    rel: relates-to

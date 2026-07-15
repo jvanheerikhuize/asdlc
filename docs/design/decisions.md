@@ -152,3 +152,55 @@ the copied `testdata/spec-0.1.0/`), which turns that follow-up into the
 first proof that a consuming repo can use spec tooling from a version pin.
 *Trade-off*: until then, verify's README stays hand-maintained; accepted
 for one small file over premature plumbing.
+
+## D14 — Change Record IDs carry a per-date sequence (2026-07-14)
+
+Raised by the owner after one day produced eight Change Records: the id
+scheme `CR-<yyyymmdd>-<slug>` gives no way to tell, from the id alone,
+which record on a given date came first.
+
+Decision: from spec 0.5.0 the id is **`CR-<yyyymmdd>-<seq>-<slug>`** —
+a 3-digit, zero-padded, per-date sequence minted at open time
+(`CR-20260714-009-change-numbering` is the first). The future change
+scaffolder ([[leftover-change-scaffolder]]) mints the next number by
+listing `.asdlc/changes/` for the date; until it exists, whoever opens
+the record does the same by hand.
+
+The eight pre-0.5.0 records are **grandfathered, never renamed**:
+their ids are embedded in immutable evidence statements (D4 — renaming
+would falsify the record), in merge-commit messages, and in PR titles.
+Their order is still visible: the metrics dashboard numbers every
+merged change in merge order (derived from git, never stored — same
+philosophy as the metrics themselves).
+
+*Trade-off*: two ordering numbers coexist — the minted per-date seq
+(stable at open time) and the dashboard's merge-order number (derived,
+can differ when changes merge out of open order). Accepted: the seq
+answers "which was opened first", the dashboard answers "which landed
+first", and both questions are real.
+
+## D15 — Agent context is purged between changes (2026-07-14)
+
+The first real read of the metrics dashboard showed lead and cycle time
+climbing across the day's successive changes: the agent session carried
+the accumulated context of every earlier change into the next one
+(visible in [[metric-token-usage]] — 4.8M tokens on the day's last
+change). This is [[risk-r6-evidence-volume-vs-agent]] observed in
+practice, on the framework's own repo.
+
+Decision, owner-directed: **one change ≈ one context.** Agent context
+is purged after every completed change instead of accumulating across
+a session.
+
+Enforcement lives in the operator's harness (Claude Code, 2026-07-14):
+forced auto-compaction at a 100k-token window with precomputed
+summaries, plus an end-of-turn reminder to compact or clear. The
+framework's part is observability, not enforcement: the token metric
+and the dashboard are what made the accumulation visible, and what
+will show whether the purge policy bends the curve.
+
+*Trade-off*: a purge discards session context that the next change
+might have reused; recovering it costs re-reading knowledge nodes.
+Accepted — that is exactly what the persistent knowledge base is for
+(D9, knowledge-first): context worth keeping belongs in nodes, not in
+a session transcript.

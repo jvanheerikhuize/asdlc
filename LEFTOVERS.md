@@ -16,7 +16,9 @@ carried hand-authored, future-guessed timestamps, so the merge landed
 "before" the intent. Evidence timestamps must come from a clock. Add a
 small `spec/tools/new-change.py` that scaffolds change.json + intent +
 classification with real `produced_at` values (and prompts for the
-human-authored fields). Past evidence stays as-is — immutable, and the
+human-authored fields). It must also mint the id's 3-digit per-date
+sequence (D14, spec 0.5.0) by listing `.asdlc/changes/` for the date.
+Past evidence stays as-is — immutable, and the
 negative numbers are the honest record of the defect.
 
 **asdlc-verify: fetch spec conformance fixtures from the pinned tag**

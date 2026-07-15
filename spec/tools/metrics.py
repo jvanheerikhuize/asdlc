@@ -10,6 +10,7 @@ Usage (from the repo root):
 import datetime
 import json
 import pathlib
+import re
 import statistics
 import subprocess
 import sys
@@ -67,7 +68,17 @@ def collect():
             "tokens": tokens,
         })
     rows.sort(key=lambda r: (r["merged_at"] is None, r["merged_at"] or "", r["change"]))
+    # Merge-order number: makes same-day changes orderable even for legacy
+    # ids without the per-date seq (grandfathered pre-0.5.0, see D14).
+    for i, r in enumerate(rows, 1):
+        r["order"] = i if r["merged_at"] else None
     return rows
+
+
+def short_name(r):
+    """Chart/table label: merge-order number + slug (date prefix stripped)."""
+    slug = re.sub(r"^CR-[0-9]{8}-", "", r["change"])
+    return f"{r['order']} · {slug}" if r["order"] else slug
 
 
 # ---------------------------------------------------------------- dashboard
@@ -131,7 +142,7 @@ def render_html(rows):
     tip_rows = []
     y = top
     for r in merged:
-        name = r["change"].replace("CR-20260714-", "")
+        name = short_name(r)
         lead_m = (r["lead_time_s"] or 0) / 60
         cycle_m = (r["cycle_time_s"] or 0) / 60
         svg.append(f'<text class="label" x="{label_w - 10}" y="{y + grp_h / 2 + 4}" '
@@ -178,7 +189,7 @@ def render_html(rows):
         yy = top
         hits2 = []
         for r in tok_rows:
-            name = r["change"].replace("CR-20260714-", "")
+            name = short_name(r)
             tk = r["tokens"]
             svg2.append(f'<text class="label" x="{label_w - 10}" y="{yy + bar_h / 2 + 4}" '
                         f'text-anchor="end">{name}</text>')
@@ -204,7 +215,8 @@ def render_html(rows):
 """
 
     table = "\n".join(
-        f'<tr><td>{r["change"]}</td><td>{(r["merged_at"] or "in flight")[:16]}</td>'
+        f'<tr><td class="num">{r["order"] or "—"}</td>'
+        f'<td>{r["change"]}</td><td>{(r["merged_at"] or "in flight")[:16]}</td>'
         f'<td class="num">{fmt(datetime.timedelta(seconds=r["lead_time_s"])) if r["lead_time_s"] is not None else "—"}</td>'
         f'<td class="num">{fmt(datetime.timedelta(seconds=r["cycle_time_s"])) if r["cycle_time_s"] is not None else "—"}</td>'
         f'<td class="num">{tfmt_tokens(r["tokens"]["total"]) if r["tokens"] else "—"}</td></tr>'
@@ -291,7 +303,7 @@ hand-authored, future-skewed intent timestamps — the first defect these metric
 caught (see <code>leftover-change-scaffolder</code>).</p>
 {tokens_section}
 <table>
-<thead><tr><th>Change</th><th>Merged</th><th class="num">Lead</th><th class="num">Cycle</th><th class="num">Tokens</th></tr></thead>
+<thead><tr><th class="num">#</th><th>Change</th><th>Merged</th><th class="num">Lead</th><th class="num">Cycle</th><th class="num">Tokens</th></tr></thead>
 <tbody>
 {table}
 </tbody>
@@ -327,14 +339,14 @@ def main():
         print(render_html(rows))
         return
     print("# Change metrics (derived from evidence + git; see metric-* nodes)\n")
-    print("| Change | Merged | Lead time | Cycle time | Agent tokens |")
-    print("|---|---|---|---|---|")
+    print("| # | Change | Merged | Lead time | Cycle time | Agent tokens |")
+    print("|---|---|---|---|---|---|")
     for r in rows:
         lead = fmt(datetime.timedelta(seconds=r["lead_time_s"])) if r["lead_time_s"] else "—"
         cycle = fmt(datetime.timedelta(seconds=r["cycle_time_s"])) if r["cycle_time_s"] else "—"
         state = r["merged_at"][:16] if r["merged_at"] else "in flight"
         toks = tfmt_tokens(r["tokens"]["total"]) if r["tokens"] else "—"
-        print(f"| {r['change']} | {state} | {lead} | {cycle} | {toks} |")
+        print(f"| {r['order'] or '—'} | {r['change']} | {state} | {lead} | {cycle} | {toks} |")
     leads = [r["lead_time_s"] for r in merged if r["lead_time_s"]]
     cycles = [r["cycle_time_s"] for r in merged if r["cycle_time_s"]]
     if leads:

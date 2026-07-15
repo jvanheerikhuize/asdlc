@@ -17,3 +17,5 @@ sections:
   - node: decision-d11-full-lifecycle-span-unevenly
   - node: decision-d12-this-repo-is-asdlc
   - node: decision-d13-knowledge-content-repo-scoped
+  - node: decision-d14-per-date-sequence-in-change
+  - node: decision-d15-agent-context-purged-between

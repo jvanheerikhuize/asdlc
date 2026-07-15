@@ -1,0 +1,33 @@
+id: decision-d14-per-date-sequence-in-change
+type: decision
+title: "D14 — Change Record IDs carry a per-date sequence (2026-07-14)"
+since: "2026-07-14"
+body: |2
+  Raised by the owner after one day produced eight Change Records: the id
+  scheme `CR-<yyyymmdd>-<slug>` gives no way to tell, from the id alone,
+  which record on a given date came first.
+
+  Decision: from spec 0.5.0 the id is **`CR-<yyyymmdd>-<seq>-<slug>`** —
+  a 3-digit, zero-padded, per-date sequence minted at open time
+  (`CR-20260714-009-change-numbering` is the first). The future change
+  scaffolder ([[leftover-change-scaffolder]]) mints the next number by
+  listing `.asdlc/changes/` for the date; until it exists, whoever opens
+  the record does the same by hand.
+
+  The eight pre-0.5.0 records are **grandfathered, never renamed**:
+  their ids are embedded in immutable evidence statements (D4 — renaming
+  would falsify the record), in merge-commit messages, and in PR titles.
+  Their order is still visible: the metrics dashboard numbers every
+  merged change in merge order (derived from git, never stored — same
+  philosophy as the metrics themselves).
+
+  *Trade-off*: two ordering numbers coexist — the minted per-date seq
+  (stable at open time) and the dashboard's merge-order number (derived,
+  can differ when changes merge out of open order). Accepted: the seq
+  answers "which was opened first", the dashboard answers "which landed
+  first", and both questions are real.
+links:
+  - to: decision-d4-evidence-as-in-toto
+    rel: derived-from
+  - to: leftover-change-scaffolder
+    rel: relates-to
