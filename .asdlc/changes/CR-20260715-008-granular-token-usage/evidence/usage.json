@@ -1,0 +1,37 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "2ed00ea8651f9e8fd53b31452ea12e5fdd44c1e8"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-usage/v1",
+  "predicate": {
+    "change_id": "CR-20260715-008-granular-token-usage",
+    "source": "claude-code session transcript",
+    "window": {
+      "from": "2026-07-15T20:14:11Z",
+      "to": "2026-07-15T20:16:12Z"
+    },
+    "tokens": {
+      "input": 21,
+      "output": 13291,
+      "cache_read": 656647,
+      "cache_creation": 13487,
+      "total": 683446
+    },
+    "produced_by": {
+      "role": "implementer",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-15T20:16:12Z"
+  }
+}

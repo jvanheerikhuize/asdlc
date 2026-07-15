@@ -1,0 +1,28 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "2ed00ea8651f9e8fd53b31452ea12e5fdd44c1e8"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260715-008-granular-token-usage",
+    "title": "Granular token-usage measurement and optimization guidance",
+    "problem": "agent-usage/v1 records only four aggregate token counters per change, which cannot answer where tokens go (model, subagent, lifecycle phase, tool mix), cannot separate governance overhead from implementation work, and gives the agent no actionable guidance for reducing consumption",
+    "acceptance_criteria": [
+      "a roadmap-item knowledge node specifies the granular measurement design (per-model, per-thread, per-phase, per-tool, per-turn dimensions) with an exit criterion",
+      "a reference knowledge node gives agents concrete, non-Goodhartable guidance for optimizing work-scoped token usage",
+      "metric-token-usage links to both new nodes"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "human",
+      "identity": "github:jvanheerikhuize"
+    },
+    "produced_at": "2026-07-15T20:14:11Z"
+  }
+}

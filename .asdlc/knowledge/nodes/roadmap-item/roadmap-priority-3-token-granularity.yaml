@@ -1,0 +1,69 @@
+id: roadmap-priority-3-token-granularity
+type: roadmap-item
+title: "Priority 3 — Granular token-usage measurement (agent-usage/v2)"
+since: "2026-07-15"
+status: active
+body: |2
+  [[metric-token-usage]] now has integrity ([[roadmap-priority-2-metrics-integrity]]
+  exit criteria met, CR-20260715-007) but no resolution: `agent-usage/v1`
+  is four aggregate counters per change. It can say a change cost 13k
+  work-scoped tokens; it cannot say *where they went*, so it cannot drive
+  any optimization decision. The Claude Code session transcript already
+  carries every dimension needed — this item is about recording them, not
+  about new instrumentation.
+
+  **Dimensions to record** (all present per assistant record today;
+  verified against a live session transcript 2026-07-15):
+
+  1. **by_model** — `message.model` per request. One session routinely
+     mixes models (`claude-fable-5` main thread, `claude-sonnet-5`
+     subagents/background tasks); a single total conflates spend across
+     models with very different cost and capability.
+  2. **by_thread** — `isSidechain` separates main-thread tokens from
+     subagent sidechains. Subagent exploration is deliberately disposable
+     context; the split shows how much work was successfully offloaded.
+  3. **by_phase** — bucket each request's timestamp against Change Record
+     lifecycle boundaries observable from git: `opened_at` → first
+     implementation commit (exploration + implementation), then → evidence
+     pinning / PR (governance overhead). Yields the headline derived
+     metric this design exists for: **governance-overhead ratio** — the
+     token cost of the ASDLC process itself per change.
+  4. **by_tool** — attribute each turn's `cache_creation` (new context
+     ingested) to the tool results ingested that turn (tool name from
+     `tool_use` blocks; result size from the matching user record). Shows
+     which tools bloat context — the largest single lever an agent has.
+  5. **turn shape** — turn count, peak context size (max `input +
+     cache_read` in any one request), mean marginal work per turn
+     (`input + output + cache_creation`), and the 5m/1h cache-TTL split
+     (`cache_creation.ephemeral_*`) which reveals cache-lifetime churn.
+
+  **Derived metrics** (computed in `spec/tools/metrics.py`, never stored):
+  work tokens per changed line (join with `git diff --stat` between the
+  CR's boundary commits), governance-overhead ratio, context-bloat factor
+  (peak context ÷ work tokens), subagent-offload share.
+
+  **Shape**: a new `agent-usage/v2` predicate — v1's schema is
+  `additionalProperties: false` by design, so granularity is additive as
+  a new predicate type, not a field bolted onto v1. The statement stays
+  aggregate-only (totals plus the four breakdowns and turn-shape summary);
+  no per-turn time series in evidence — that stays derivable from the
+  transcript, consistent with "derived at read time, never stored".
+  All [[metric-token-usage]] caveats carry over unchanged: self-reported,
+  n/a on absence, never backfilled — v1-only changes show n/a in every
+  v2-only column forever.
+
+  *Exit criterion*: `bindings/claude-code/usage.py` emits `agent-usage/v2`
+  with all five dimensions; `spec/tools/metrics.py` surfaces at least the
+  per-model split and the governance-overhead ratio; the dashboard renders
+  pre-v2 changes as n/a in the new columns; and
+  [[reference-agent-token-optimization]] is loaded by agents working in
+  this repo so the metric has a feedback loop, not just a readout.
+links:
+  - to: roadmap-priority-2-metrics-integrity
+    rel: relates-to
+  - to: metric-token-usage
+    rel: relates-to
+  - to: reference-agent-token-optimization
+    rel: relates-to
+  - to: decision-d13-knowledge-content-repo-scoped
+    rel: derived-from
