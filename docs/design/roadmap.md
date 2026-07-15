@@ -6,7 +6,41 @@ Ordering principle: land the **enforcement spine first** (it is what makes
 everything else true), dogfood immediately on these repos themselves, and
 sequence regulation-serving mechanisms DORA-first (in force since Jan 2025)
 while reserving the AI Act's shapes from day one (Annex III obligations apply
-Dec 2027).
+Dec 2027). The first section below always names the single current
+priority — start there.
+
+## What's next — the single current priority (read this first)
+
+**NOW: [[roadmap-priority-3-token-granularity]] — granular token-usage
+measurement (`agent-usage/v2`). Owner directive 2026-07-15, current
+highest priority.** If you are an agent asking "what should I work on?",
+that node is the answer; its exit criterion says when it is finished.
+
+How to read this roadmap — two numbering systems coexist:
+
+- **Priorities** (`roadmap-priority-N-*`) are owner directives, numbered
+  in the order they were given. They preempt slices: always work the
+  lowest-numbered priority with `status: active` before touching any
+  slice.
+- **Slices** (`roadmap-slice-N-*`) are the design-time build plan from
+  the brief (§7.7), worked in order once no priority is open.
+- `status: done` means the item's exit criterion is met; `status: active`
+  means open. Exactly one item is NOW at any time, and it is named here.
+
+Queue as of 2026-07-15:
+
+1. **NOW** — [[roadmap-priority-3-token-granularity]] (active).
+2. **NEXT** — [[roadmap-slice-2-authority-and-fail-safe]]. Slice 1 is
+   done: G4 dogfooding has been live on these repos since the walking
+   skeleton landed.
+3. **LATER** — slices 3–6 in order; deliberately unscheduled work stays
+   in [[roadmap-what-is-deliberately-not-scheduled]].
+
+Maintenance rule: the change that completes the NOW item must update
+this node in the same Change Record — set the finished item's status to
+`done` and promote the next one. If this node names a NOW item whose own
+status is `done`, this node is stale, and fixing it precedes any new
+work.
 
 ## Priority 0 — Knowledge-first documentation (owner directive, 2026-07-14)
 
@@ -107,6 +141,68 @@ merged Change Record after that fix carries usage evidence, the token
 metric is normalized to a work-scoped figure (not cumulative cache reads),
 and the lead/cycle chart either splits or clips outliers so the common
 case stays legible.
+*Delivered* (2026-07-15): all exit criteria met as of CR-20260715-007 —
+transcript auto-location fixed, every merged Change Record since carries
+usage evidence, the token headline is work-scoped, and the lead/cycle
+chart clips outliers. Granularity follow-on:
+[[roadmap-priority-3-token-granularity]].
+
+## Priority 3 — Granular token-usage measurement (agent-usage/v2)
+
+[[metric-token-usage]] now has integrity ([[roadmap-priority-2-metrics-integrity]]
+exit criteria met, CR-20260715-007) but no resolution: `agent-usage/v1`
+is four aggregate counters per change. It can say a change cost 13k
+work-scoped tokens; it cannot say *where they went*, so it cannot drive
+any optimization decision. The Claude Code session transcript already
+carries every dimension needed — this item is about recording them, not
+about new instrumentation.
+
+**Dimensions to record** (all present per assistant record today;
+verified against a live session transcript 2026-07-15):
+
+1. **by_model** — `message.model` per request. One session routinely
+   mixes models (`claude-fable-5` main thread, `claude-sonnet-5`
+   subagents/background tasks); a single total conflates spend across
+   models with very different cost and capability.
+2. **by_thread** — `isSidechain` separates main-thread tokens from
+   subagent sidechains. Subagent exploration is deliberately disposable
+   context; the split shows how much work was successfully offloaded.
+3. **by_phase** — bucket each request's timestamp against Change Record
+   lifecycle boundaries observable from git: `opened_at` → first
+   implementation commit (exploration + implementation), then → evidence
+   pinning / PR (governance overhead). Yields the headline derived
+   metric this design exists for: **governance-overhead ratio** — the
+   token cost of the ASDLC process itself per change.
+4. **by_tool** — attribute each turn's `cache_creation` (new context
+   ingested) to the tool results ingested that turn (tool name from
+   `tool_use` blocks; result size from the matching user record). Shows
+   which tools bloat context — the largest single lever an agent has.
+5. **turn shape** — turn count, peak context size (max `input +
+   cache_read` in any one request), mean marginal work per turn
+   (`input + output + cache_creation`), and the 5m/1h cache-TTL split
+   (`cache_creation.ephemeral_*`) which reveals cache-lifetime churn.
+
+**Derived metrics** (computed in `spec/tools/metrics.py`, never stored):
+work tokens per changed line (join with `git diff --stat` between the
+CR's boundary commits), governance-overhead ratio, context-bloat factor
+(peak context ÷ work tokens), subagent-offload share.
+
+**Shape**: a new `agent-usage/v2` predicate — v1's schema is
+`additionalProperties: false` by design, so granularity is additive as
+a new predicate type, not a field bolted onto v1. The statement stays
+aggregate-only (totals plus the four breakdowns and turn-shape summary);
+no per-turn time series in evidence — that stays derivable from the
+transcript, consistent with "derived at read time, never stored".
+All [[metric-token-usage]] caveats carry over unchanged: self-reported,
+n/a on absence, never backfilled — v1-only changes show n/a in every
+v2-only column forever.
+
+*Exit criterion*: `bindings/claude-code/usage.py` emits `agent-usage/v2`
+with all five dimensions; `spec/tools/metrics.py` surfaces at least the
+per-model split and the governance-overhead ratio; the dashboard renders
+pre-v2 changes as n/a in the new columns; and
+[[reference-agent-token-optimization]] is loaded by agents working in
+this repo so the metric has a feedback loop, not just a readout.
 
 ## Slice 1 — Walking skeleton (the first thing that is real)
 

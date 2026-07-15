@@ -1,6 +1,7 @@
 id: roadmap-slice-3-the-easy-path
 type: roadmap-item
 title: "Slice 3 \u2014 The easy path"
+status: active
 body: |2
   - `asdlc-orchestrator` v0.1 (TypeScript MCP server): `change.*`,
     `controls.required`, `evidence.record`, `gate.check`, `approval.request`,

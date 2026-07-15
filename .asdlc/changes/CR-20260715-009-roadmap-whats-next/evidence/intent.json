@@ -1,0 +1,32 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "0000000000000000000000000000000000000000"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260715-009-roadmap-whats-next",
+    "title": "Roadmap legibility: what's-next entry point and honest statuses",
+    "problem": "The roadmap could not answer 'what's next?': delivered priorities still read status active, slices carried no status at all, two numbering systems (owner-directive priorities vs design-time slices) had no stated relationship, and the current highest priority (granular token usage) was absent from the generated roadmap doc \u2014 a lower-tier model reading the roadmap had no mechanical way to find the single current priority.",
+    "acceptance_criteria": [
+      "A single entry-point node (roadmap-whats-next) names the current NOW item in its first line and states the priority-vs-slice reading rules and a maintenance rule for promotion",
+      "Every roadmap-item node carries an honest status: done for delivered priorities 0-2 and slice 1, active for open items",
+      "docs/design/roadmap.md is regenerated with the what's-next section first and priority 3 included; scaffold --check and check.py pass"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-15T20:30:31Z"
+  }
+}

@@ -2,7 +2,7 @@ id: roadmap-priority-0-knowledge-first
 type: roadmap-item
 title: "Priority 0 — Knowledge-first documentation (owner directive, 2026-07-14)"
 since: "2026-07-14"
-status: active
+status: done
 body: |2
   All prose in this repo is maintained as typed knowledge nodes under
   `.asdlc/knowledge/` (schemas: `spec/knowledge/`); every human-readable

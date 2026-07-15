@@ -2,7 +2,7 @@ id: roadmap-priority-2-metrics-integrity
 type: roadmap-item
 title: "Priority 2 — Metrics integrity (owner directive, 2026-07-15)"
 since: "2026-07-15"
-status: active
+status: done
 body: |2
   Owner audit (2026-07-15) of [[roadmap-priority-1-metrics]]'s delivered
   metrics found the dashboard reads as wrong even though each number is
@@ -51,6 +51,11 @@ body: |2
   metric is normalized to a work-scoped figure (not cumulative cache reads),
   and the lead/cycle chart either splits or clips outliers so the common
   case stays legible.
+  *Delivered* (2026-07-15): all exit criteria met as of CR-20260715-007 —
+  transcript auto-location fixed, every merged Change Record since carries
+  usage evidence, the token headline is work-scoped, and the lead/cycle
+  chart clips outliers. Granularity follow-on:
+  [[roadmap-priority-3-token-granularity]].
 links:
   - to: roadmap-priority-1-metrics
     rel: relates-to

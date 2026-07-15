@@ -1,15 +1,18 @@
 output: docs/design/roadmap.md
-title: "Incremental build plan (brief \u00a77.7)"
+title: "Incremental build plan (brief §7.7)"
 preamble: |
   Ordering principle: land the **enforcement spine first** (it is what makes
   everything else true), dogfood immediately on these repos themselves, and
   sequence regulation-serving mechanisms DORA-first (in force since Jan 2025)
   while reserving the AI Act's shapes from day one (Annex III obligations apply
-  Dec 2027).
+  Dec 2027). The first section below always names the single current
+  priority — start there.
 sections:
+  - node: roadmap-whats-next
   - node: roadmap-priority-0-knowledge-first
   - node: roadmap-priority-1-metrics
   - node: roadmap-priority-2-metrics-integrity
+  - node: roadmap-priority-3-token-granularity
   - node: roadmap-slice-1-walking-skeleton-the-first
   - node: roadmap-slice-2-authority-and-fail-safe
   - node: roadmap-slice-3-the-easy-path
