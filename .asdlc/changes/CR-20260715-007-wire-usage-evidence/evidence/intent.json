@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "0000000000000000000000000000000000000000"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260715-007-wire-usage-evidence",
+    "title": "Wire usage evidence into the standard CR workflow",
+    "problem": "roadmap-priority-2-metrics-integrity's exit criterion for finding 1 requires that every merged Change Record after the usage.py transcript-path fix (CR-20260715-005) carries usage evidence, but usage.py is a manual CLI script never invoked by new-change.py, any git hook, or the local self-check \u2014 13 of 13 changes since the fix still have no evidence/usage.json, and the dashboard shows n/a for all of them",
+    "acceptance_criteria": [
+      "new-change.py's scaffold output prints the exact, copy-pasteable usage.py invocation for the newly-minted change (change-id, opened-at, evidence dir), so recording usage evidence is a one-command nudge rather than something to remember from scratch",
+      "spec/tools/check.py, the standard local pre-PR self-check, prints a non-blocking reminder listing any already-committed change whose evidence/intent.json has a real (non-placeholder) gitCommit but no evidence/usage.json yet",
+      "the reminder is skipped for CI-authored changes (no local transcript to summarize) and for changes still on the placeholder gitCommit (too early to have a real commit to summarize)"
+    ],
+    "out_of_scope": [
+      "hard-blocking merges on missing usage evidence via a new G4 catalogue control -- rejected as contrary to the documented self-reported, gracefully-degrading design in metric-token-usage.yaml, and as disproportionate blast-radius for a metrics-quality nudge"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-sonnet-5"
+      }
+    },
+    "produced_at": "2026-07-15T19:56:35Z"
+  }
+}

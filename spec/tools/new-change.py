@@ -200,6 +200,17 @@ def main():
     print(f"scaffolded {change_dir.relative_to(ROOT)}")
     print("subject.digest.gitCommit is a placeholder (all-zero) — set it to the "
           "actual commit once the change is committed, before evidence is signed.")
+    if kind != "ci":
+        print("\nBefore opening the PR, record usage evidence for this change "
+              "(roadmap-priority-2-metrics-integrity: every merged Change Record "
+              "should carry usage evidence) by running, once the implementation "
+              "is committed:\n"
+              f"  python3 bindings/claude-code/usage.py \\\n"
+              f"      --change-id {change_id} --opened-at {timestamp} \\\n"
+              f"      --head <commit-sha> --out {evidence_dir.relative_to(ROOT)}\n"
+              "If evidence collection is broken or unavailable, that's fine — "
+              "the dashboard shows the metric as n/a rather than a misleading "
+              "value; it's just skippable, not required.")
 
 
 if __name__ == "__main__":
