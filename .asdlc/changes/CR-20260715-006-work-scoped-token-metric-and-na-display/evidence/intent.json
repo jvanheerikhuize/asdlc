@@ -1,0 +1,33 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "0000000000000000000000000000000000000000"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260715-006-work-scoped-token-metric-and-na-display",
+    "title": "Work-scoped token metric and n/a display for missing/inaccurate data",
+    "problem": "cache_read_input_tokens is summed across the whole transcript window, so the token metric scales with turns x accumulated session context rather than actual work done for the change -- not work-scoped (finding 2 of roadmap-priority-2-metrics-integrity). Separately, the dashboard silently showed misleading raw values (e.g. negative durations, gross token totals) instead of flagging missing/inaccurate data.",
+    "acceptance_criteria": [
+      "The headline token figure shown in the tile/table/markdown is work-scoped (input + output + cache_creation), excluding cache_read",
+      "The full token breakdown including cache_read and the gross total remains available in the chart tooltip for transparency",
+      "Dashboard rows with missing or inaccurate data (no usage evidence, negative lead/cycle time from hand-authored timestamps) render as n/a in the table and markdown output instead of a misleading raw value",
+      "Median lead/cycle tiles exclude inaccurate rows so a single bad row cannot skew the summary figure",
+      "The chart continues to plot the raw historical values (including negative bars) as the honest record; only summary figures are affected"
+    ],
+    "out_of_scope": [
+      "Finding 3 (shared lead/cycle chart axis) and finding 1 (already shipped via CR-20260715-005)"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "human",
+      "identity": "github:jvanheerikhuize"
+    },
+    "produced_at": "2026-07-15T19:36:06Z"
+  }
+}

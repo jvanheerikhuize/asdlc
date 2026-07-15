@@ -17,6 +17,17 @@ body: |2
   2026-07-14 records carry hand-authored, future-skewed intent timestamps,
   so their lead times are negative — kept as the honest record that
   motivated [[leftover-change-scaffolder]].
+
+  **Chart vs. summary treatment differ** (per
+  [[roadmap-priority-2-metrics-integrity]]'s n/a-for-inaccurate-data
+  request): a negative lead time is arithmetically impossible for a real
+  intent-to-merge measurement, so it's flagged programmatically
+  (`lead_time_s < 0`). The chart still plots the raw negative bar — it's
+  the honest historical record of the timestamp bug. The table and
+  markdown summary render those rows as "n/a" instead, since a negative
+  duration isn't a meaningful answer to "how long did this take," and the
+  median-lead tile excludes them so one bad row can't drag the summary
+  figure negative.
 links:
   - to: decision-d9-machine-readable-single-source
     rel: derived-from

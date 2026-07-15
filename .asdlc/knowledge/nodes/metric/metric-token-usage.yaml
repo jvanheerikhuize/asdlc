@@ -3,11 +3,23 @@ type: metric
 title: "Agent token usage — resources consumed per change"
 since: "2026-07-14"
 body: |2
-  Total tokens (input, output, cache read, cache creation) the agent
-  consumed while producing a change, recorded as `agent-usage/v1` evidence
-  in the Change Record and surfaced by `spec/tools/metrics.py` and the
-  dashboard. The measurement window runs from the Change Record's
-  `opened_at` to the statement's production.
+  Tokens (input, output, cache read, cache creation) the agent consumed
+  while producing a change, recorded as `agent-usage/v1` evidence in the
+  Change Record and surfaced by `spec/tools/metrics.py` and the dashboard.
+  The measurement window runs from the Change Record's `opened_at` to the
+  statement's production.
+
+  **Headline figure is work-scoped, not the raw total** (finding 2,
+  [[roadmap-priority-2-metrics-integrity]]): `cache_read` is excluded from
+  the number shown in the tile and table, because Claude Code re-reads the
+  full accumulated session context from cache on every turn, so cache-read
+  scales with turns x accumulated context rather than with work actually
+  done for the change. The headline is `input + output + cache_creation`.
+  The full breakdown, including cache_read and the gross total, stays in
+  the stored evidence (schema unchanged — `additionalProperties: false`
+  forbids adding fields to it) and is shown in the chart tooltip for
+  transparency. This is computed at derivation time in
+  `spec/tools/metrics.py`, not by changing what `usage.py` collects.
 
   **Self-reported by design**: the agent reads its own harness records
   (for Claude Code, the session transcript — adapter:
@@ -15,9 +27,12 @@ body: |2
   adapter, the statement shape is the vendor-neutral contract). Caveats:
   unverifiable until evidence signing lands (same honesty boundary as
   `--dev-unsigned`); window attribution is approximate when work
-  interleaves; absent for changes made before the predicate existed —
-  shown as "—", never backfilled (evidence is append-only and the gate
-  allows one Change Record per PR).
+  interleaves; absent for changes made before the predicate existed, or
+  where evidence collection was broken (see
+  [[roadmap-priority-2-metrics-integrity]] finding 1) — shown as "n/a",
+  never backfilled (evidence is append-only and the gate allows one Change
+  Record per PR). The dashboard reports the count of changes lacking
+  usage evidence alongside the chart, rather than omitting them silently.
 links:
   - to: metric-lead-time
     rel: relates-to
