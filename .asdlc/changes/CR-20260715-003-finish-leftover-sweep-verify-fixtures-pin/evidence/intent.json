@@ -1,0 +1,27 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "cdc3d73a10e91219ea5ea100d4e1d195a34b98d9"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260715-003-finish-leftover-sweep-verify-fixtures-pin",
+    "title": "Finish leftover sweep: verify fixtures pin",
+    "problem": "leftover-verify-fixtures-pin was the last active leftover: asdlc-verify's conformance fixtures were a hand-copied, never-updated snapshot instead of a real fetch from a pinned spec tag.",
+    "acceptance_criteria": [
+      "asdlc-verify has spec.pin naming a spec tag and scripts/fetch-fixtures.sh fetching gate policy + golden bundles from jvanheerikhuize/asdlc at that tag (asdlc-verify#3, merged)",
+      "leftover-verify-fixtures-pin marked status: done with a Done note, moved to Resolved in leftovers.yaml, LEFTOVERS.md regenerated"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "human",
+      "identity": "github:jvanheerikhuize"
+    },
+    "produced_at": "2026-07-15T17:44:15Z"
+  }
+}

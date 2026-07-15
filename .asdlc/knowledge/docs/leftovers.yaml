@@ -7,12 +7,10 @@ preamble: |
   governed change that fixes them and marks them done. Design-sized work
   lives on the roadmap instead, never in both places.
 sections:
-  - heading: "Active"
-    items:
-      - leftover-verify-fixtures-pin
   - heading: "Resolved"
     items:
       - leftover-change-scaffolder
       - leftover-readmes-generated
       - leftover-verify-gosum
       - leftover-actions-node20
+      - leftover-verify-fixtures-pin
