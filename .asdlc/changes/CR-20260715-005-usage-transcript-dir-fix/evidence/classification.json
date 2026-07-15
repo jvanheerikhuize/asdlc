@@ -1,0 +1,27 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "430106ae802b4d7f6dd3f0669ed2f630caf240d5"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/classification/v1",
+  "predicate": {
+    "change_id": "CR-20260715-005-usage-transcript-dir-fix",
+    "risk": "low",
+    "data": "none",
+    "ai_usage": "generated",
+    "ai_system_tier": "none",
+    "rationale": "Single-function bug fix in a locally-run evidence-collection script; not CI-invoked, no user data touched, no AI system deployed to end users. Low risk: the fix only changes how a directory path is computed, with an explicit error path if the directory doesn't exist (fails loud instead of silently, an improvement over current behavior).",
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "human",
+      "identity": "github:jvanheerikhuize"
+    },
+    "produced_at": "2026-07-15T19:08:00Z",
+    "refs": []
+  }
+}

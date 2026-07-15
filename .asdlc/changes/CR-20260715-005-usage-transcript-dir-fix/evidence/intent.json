@@ -1,0 +1,28 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "430106ae802b4d7f6dd3f0669ed2f630caf240d5"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260715-005-usage-transcript-dir-fix",
+    "title": "Fix token-usage transcript lookup for worktree-per-change sessions",
+    "problem": "bindings/claude-code/usage.py's newest_transcript() hardcodes the session-transcript directory as ~/.claude/projects/-home-jerry-Repos, a value that predates the worktree-per-change convention. Every change since then lives under a different, worktree-qualified transcript directory, so token-usage evidence collection silently fails (no error, no CI hook) for 10 of 12 prior Change Records. This is finding 1 of roadmap-priority-2-metrics-integrity.",
+    "acceptance_criteria": [
+      "newest_transcript() locates the correct session-transcript directory for the actual cwd the script is invoked from, computed dynamically rather than hardcoded",
+      "The directory-name derivation (cwd path with every / and . replaced by -) is documented inline so the convention is discoverable without re-deriving it",
+      "Missing-directory and missing-transcript failures raise clear, actionable SystemExit messages naming the path that was checked"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "human",
+      "identity": "github:jvanheerikhuize"
+    },
+    "produced_at": "2026-07-15T19:08:00Z"
+  }
+}
