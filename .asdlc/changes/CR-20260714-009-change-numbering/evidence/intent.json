@@ -1,0 +1,33 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "d7b656fcaacc85e984f08a4faf36bc0069b435d5"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260714-009-change-numbering",
+    "title": "Per-date sequence in Change Record ids; record context-purge policy (D14, D15)",
+    "problem": "Owner cannot tell from a Change Record id which same-date record came first (eight CR-20260714-* records, no ordinal). Separately, the first dashboard read showed lead/cycle time climbing with accumulated agent session context; the owner directed a purge-after-every-change policy that was enacted in the agent harness but not yet recorded in the framework's knowledge.",
+    "acceptance_criteria": [
+      "changeId schema accepts CR-<yyyymmdd>-<seq>-<slug> with a 3-digit per-date sequence; legacy ids stay valid (grandfathered, never renamed)",
+      "Dashboard, CLI, and JSON metrics number every merged change in merge order so legacy same-day records are orderable too",
+      "D14 (per-date sequence) and D15 (context purged between changes) exist as decision nodes; decisions.md, PURPOSE.md, LEFTOVERS.md regenerate without drift",
+      "This change is itself the first record opened under the new scheme, with clock timestamps"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-14T21:11:20Z"
+  }
+}

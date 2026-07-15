@@ -34,8 +34,8 @@
   "$defs": {
     "changeId": {
       "type": "string",
-      "pattern": "^CR-[0-9]{8}-[a-z0-9][a-z0-9-]*$",
-      "description": "Change Record ID, e.g. CR-20260714-evidence-spine"
+      "pattern": "^CR-[0-9]{8}-([0-9]{3}-)?[a-z0-9][a-z0-9-]*$",
+      "description": "Change Record ID: CR-<yyyymmdd>-<seq>-<slug>, e.g. CR-20260714-009-change-numbering. The 3-digit seq is minted at open time and orders records opened on the same date (D14). Records opened before spec 0.5.0 lack the seq and are grandfathered — evidence is immutable, so they are never renamed."
     },
     "producedBy": {
       "type": "object",

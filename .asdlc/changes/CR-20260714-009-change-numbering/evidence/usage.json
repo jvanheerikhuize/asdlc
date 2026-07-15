@@ -1,0 +1,37 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "d7b656fcaacc85e984f08a4faf36bc0069b435d5"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-usage/v1",
+  "predicate": {
+    "change_id": "CR-20260714-009-change-numbering",
+    "source": "claude-code session transcript",
+    "window": {
+      "from": "2026-07-14T20:52:44Z",
+      "to": "2026-07-14T21:13:32Z"
+    },
+    "tokens": {
+      "input": 206,
+      "output": 109175,
+      "cache_read": 10625632,
+      "cache_creation": 630981,
+      "total": 11365994
+    },
+    "produced_by": {
+      "role": "implementer",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-14T21:13:32Z"
+  }
+}
