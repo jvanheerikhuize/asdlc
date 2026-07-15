@@ -10,9 +10,9 @@ sections:
   - heading: "Active"
     items:
       - leftover-verify-fixtures-pin
-      - leftover-verify-gosum
-      - leftover-actions-node20
   - heading: "Resolved"
     items:
       - leftover-change-scaffolder
       - leftover-readmes-generated
+      - leftover-verify-gosum
+      - leftover-actions-node20

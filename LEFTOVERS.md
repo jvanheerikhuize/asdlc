@@ -17,24 +17,6 @@ spec's gate policy and golden bundles. Replace it with a CI checkout of
 always tests the spec version the verifier claims to support (both repos
 are public; cross-checkout works with the default token).
 
-**asdlc-verify: commit go.sum (stop tidying in CI)**
-No Go toolchain existed on the dev machine, so CI runs `go mod tidy`
-before build — meaning dependency versions float per run. Generate go.sum
-once (in CI, committed back via PR), drop the tidy step, and turn on
-setup-go caching.
-
-**Bump GitHub Actions pinned to Node 20-deprecated majors**
-Every workflow run warns that actions/checkout@v4, setup-python@v5,
-setup-go@v5, and setup-opa@v2 target the deprecated Node 20 runtime.
-Bump to the current majors across both repos when convenient.
-
-Partly done: this repo's own workflows (`g4-gate.yml`, `spec-check.yml`,
-`metrics.yml`) now use `actions/checkout@v7` and `actions/setup-python@v6`.
-`open-policy-agent/setup-opa@v2` was already current (latest release is
-v2.4.0 — no v3 major exists yet). `setup-go` isn't used in this repo.
-The `asdlc-verify` repo's workflows (including its own `setup-go` pin)
-still need the same bump — outside this change's reach.
-
 ## Resolved
 
 **Scaffold Change Records with clock timestamps, not authored ones**
@@ -61,3 +43,32 @@ leftover-verify-fixtures-pin establishes it.)
 Done: `spec/README.md` and `bindings/github/README.md` are now generated
 from `spec-readme-scope-notes`, `spec-readme.yaml`,
 `github-readme-governed-change-flow`, and `github-readme.yaml`.
+
+**asdlc-verify: commit go.sum (stop tidying in CI)**
+No Go toolchain existed on the dev machine, so CI runs `go mod tidy`
+before build — meaning dependency versions float per run. Generate go.sum
+once (in CI, committed back via PR), drop the tidy step, and turn on
+setup-go caching.
+
+Done: a Go toolchain is now available; `go.sum` is generated and
+committed (asdlc-verify#2), the `go mod tidy` step is dropped from
+`ci.yml` and the composite `action.yml`, both now resolve their Go
+version from `go.mod` via `go-version-file` (tidy bumped the `go`
+directive to 1.25.0 to satisfy `open-policy-agent/opa v1.18.2`), and
+setup-go caching is on.
+
+**Bump GitHub Actions pinned to Node 20-deprecated majors**
+Every workflow run warns that actions/checkout@v4, setup-python@v5,
+setup-go@v5, and setup-opa@v2 target the deprecated Node 20 runtime.
+Bump to the current majors across both repos when convenient.
+
+Partly done: this repo's own workflows (`g4-gate.yml`, `spec-check.yml`,
+`metrics.yml`) now use `actions/checkout@v7` and `actions/setup-python@v6`.
+`open-policy-agent/setup-opa@v2` was already current (latest release is
+v2.4.0 — no v3 major exists yet). `setup-go` isn't used in this repo.
+The `asdlc-verify` repo's workflows (including its own `setup-go` pin)
+still need the same bump — outside this change's reach.
+
+Done: `asdlc-verify`'s `ci.yml` and composite `action.yml` now use
+`actions/checkout@v7` and `actions/setup-go@v6` (asdlc-verify#2),
+closing the gap left by the earlier partial fix.
