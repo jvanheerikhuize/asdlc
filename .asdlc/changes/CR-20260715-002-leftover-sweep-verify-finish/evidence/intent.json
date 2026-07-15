@@ -1,0 +1,28 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "9980e8fce99723d7a96917c00ea2e5412490894a"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260715-002-leftover-sweep-verify-finish",
+    "title": "Finish leftover sweep: verify go.sum and Actions bump",
+    "problem": "Two of the five leftovers registered in CR-20260715-001 were left for a human playbook: asdlc-verify had no Go toolchain available, so go.sum couldn't be generated, and the Actions-majors bump couldn't reach the asdlc-verify repo from this working directory.",
+    "acceptance_criteria": [
+      "asdlc-verify's go.sum is generated and committed, and CI/action.yml stop running go mod tidy (asdlc-verify#2)",
+      "asdlc-verify's ci.yml and action.yml use actions/checkout@v7 and actions/setup-go@v6 (asdlc-verify#2)",
+      "leftover-verify-gosum and leftover-actions-node20 are marked status: done with Done: notes, and LEFTOVERS.md regenerates with no drift"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "human",
+      "identity": "github:jvanheerikhuize"
+    },
+    "produced_at": "2026-07-15T16:33:02Z"
+  }
+}

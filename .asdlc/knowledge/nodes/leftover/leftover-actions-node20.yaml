@@ -2,7 +2,7 @@ id: leftover-actions-node20
 type: leftover
 title: "Bump GitHub Actions pinned to Node 20-deprecated majors"
 since: "2026-07-14"
-status: active
+status: done
 body: |2
   Every workflow run warns that actions/checkout@v4, setup-python@v5,
   setup-go@v5, and setup-opa@v2 target the deprecated Node 20 runtime.
@@ -14,3 +14,7 @@ body: |2
   v2.4.0 — no v3 major exists yet). `setup-go` isn't used in this repo.
   The `asdlc-verify` repo's workflows (including its own `setup-go` pin)
   still need the same bump — outside this change's reach.
+
+  Done: `asdlc-verify`'s `ci.yml` and composite `action.yml` now use
+  `actions/checkout@v7` and `actions/setup-go@v6` (asdlc-verify#2),
+  closing the gap left by the earlier partial fix.

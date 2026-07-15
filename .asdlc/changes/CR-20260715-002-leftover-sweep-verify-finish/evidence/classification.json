@@ -1,0 +1,27 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "9980e8fce99723d7a96917c00ea2e5412490894a"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/classification/v1",
+  "predicate": {
+    "change_id": "CR-20260715-002-leftover-sweep-verify-finish",
+    "risk": "low",
+    "data": "none",
+    "ai_usage": "generated",
+    "ai_system_tier": "none",
+    "rationale": "Completes two already-scoped, well-understood leftovers by acquiring a local disposable Go toolchain and opening a companion PR in asdlc-verify; no design decisions beyond what CR-20260715-001 already scoped.",
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "human",
+      "identity": "github:jvanheerikhuize"
+    },
+    "produced_at": "2026-07-15T16:33:02Z",
+    "refs": []
+  }
+}

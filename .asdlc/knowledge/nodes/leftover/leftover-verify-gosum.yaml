@@ -2,9 +2,16 @@ id: leftover-verify-gosum
 type: leftover
 title: "asdlc-verify: commit go.sum (stop tidying in CI)"
 since: "2026-07-14"
-status: active
+status: done
 body: |2
   No Go toolchain existed on the dev machine, so CI runs `go mod tidy`
   before build — meaning dependency versions float per run. Generate go.sum
   once (in CI, committed back via PR), drop the tidy step, and turn on
   setup-go caching.
+
+  Done: a Go toolchain is now available; `go.sum` is generated and
+  committed (asdlc-verify#2), the `go mod tidy` step is dropped from
+  `ci.yml` and the composite `action.yml`, both now resolve their Go
+  version from `go.mod` via `go-version-file` (tidy bumped the `go`
+  directive to 1.25.0 to satisfy `open-policy-agent/opa v1.18.2`), and
+  setup-go caching is on.
