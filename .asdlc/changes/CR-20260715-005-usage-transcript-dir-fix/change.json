@@ -1,0 +1,7 @@
+{
+  "id": "CR-20260715-005-usage-transcript-dir-fix",
+  "title": "Fix token-usage transcript lookup for worktree-per-change sessions",
+  "opened_at": "2026-07-15T19:08:00Z",
+  "opened_by": "github:jvanheerikhuize",
+  "spec_version": "0.5.0"
+}

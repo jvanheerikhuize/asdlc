@@ -17,11 +17,24 @@ import json
 import pathlib
 
 
+def transcript_dir():
+    """Claude Code stores each session's transcripts under a directory named
+    after the absolute cwd it was launched from, with every '/' and '.'
+    replaced by '-' (so a worktree checkout gets its own directory, distinct
+    from the main checkout's)."""
+    cwd = pathlib.Path.cwd().resolve()
+    name = str(cwd).replace("/", "-").replace(".", "-")
+    proj = pathlib.Path.home() / ".claude" / "projects" / name
+    if not proj.is_dir():
+        raise SystemExit(f"no session transcript directory for cwd {cwd} (looked in {proj})")
+    return proj
+
+
 def newest_transcript():
-    proj = pathlib.Path.home() / ".claude" / "projects" / "-home-jerry-Repos"
+    proj = transcript_dir()
     files = sorted(proj.glob("*.jsonl"), key=lambda p: p.stat().st_mtime)
     if not files:
-        raise SystemExit("no session transcript found")
+        raise SystemExit(f"no session transcript found in {proj}")
     return files[-1]
 
 
