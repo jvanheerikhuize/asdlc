@@ -1,0 +1,17 @@
+output: spec/README.md
+title: "asdlc spec v0.1 (slice 1 — walking skeleton)"
+preamble: |
+  The machine-readable single source of truth. Human documents are views over
+  these files; when they disagree, these files win.
+
+  | Path | What it defines |
+  |---|---|
+  | `manifest.schema.json` | `asdlc.yaml` — the one file a consuming repo carries |
+  | `change-record.schema.json` | the Change Record, the unit of governance |
+  | `predicates/statement.base.schema.json` | the in-toto statement envelope all evidence shares |
+  | `predicates/*.v1.schema.json` | the four slice-1 evidence predicate types |
+  | `controls/catalogue.yaml` | the typed control catalogue (slice 1: QC-01, SC-01) |
+  | `gates/g4-merge.rego` | the G4 (merge) gate policy |
+  | `examples/golden/` | evidence bundles that MUST pass / MUST fail G4 — the policy's conformance fixtures |
+sections:
+  - node: spec-readme-scope-notes

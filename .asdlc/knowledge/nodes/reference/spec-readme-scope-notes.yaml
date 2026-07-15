@@ -1,0 +1,16 @@
+id: spec-readme-scope-notes
+type: reference
+title: "Slice-1 scope notes"
+body: |2
+  - **Predicate type URIs** are versioned identifiers under
+    `https://github.com/jvanheerikhuize/asdlc/spec/predicates/…` — identifiers,
+    not resolvable endpoints (in-toto convention).
+  - **Signatures**: evidence travels as in-toto statements; DSSE/Sigstore
+    signature verification is the verifier's job (`asdlc-verify`). The gate
+    policy receives statements the verifier has already
+    signature-checked, annotated under `_meta` (digest, signer identity, role,
+    verified flag). Golden bundles model that post-verification shape.
+  - **Only G4 (merge) exists.** Other gates, the waiver/halt predicates, and the
+    full authority matrix are slice 2+ (see `../docs/design/roadmap.md`).
+  - Evidence for a change lives at `.asdlc/changes/<change-id>/` in the
+    consuming repo: `change.json` plus `evidence/*.json`.

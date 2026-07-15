@@ -1,0 +1,31 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "0000000000000000000000000000000000000000"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260715-001-leftover-sweep-d14",
+    "title": "Leftover sweep: change scaffolder, generated READMEs, Actions bump",
+    "problem": "Five leftover nodes were registered awaiting a dedicated sweep: no clock-timestamped change scaffolder existed, spec/README.md and bindings/github/README.md were still hand-maintained prose, and several GitHub Actions were pinned to deprecated-Node20 majors.",
+    "acceptance_criteria": [
+      "spec/tools/new-change.py scaffolds change.json + evidence/intent.json + evidence/classification.json with real produced_at values and mints the per-date sequence",
+      "spec/README.md and bindings/github/README.md are generated from knowledge nodes + doc manifests with no content drift",
+      "This repo's workflows use current-major actions/checkout and actions/setup-python"
+    ],
+    "out_of_scope": [
+      "asdlc-verify repo changes (fixtures pin, go.sum, Actions bump) \u2014 outside this repo's working directory"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "human",
+      "identity": "github:jvanheerikhuize"
+    },
+    "produced_at": "2026-07-15T14:54:14Z"
+  }
+}

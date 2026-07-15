@@ -2,7 +2,7 @@ id: leftover-change-scaffolder
 type: leftover
 title: "Scaffold Change Records with clock timestamps, not authored ones"
 since: "2026-07-14"
-status: active
+status: done
 body: |2
   The first metrics run exposed negative lead times: early Change Records
   carried hand-authored, future-guessed timestamps, so the merge landed
@@ -13,6 +13,10 @@ body: |2
   sequence (D14, spec 0.5.0) by listing `.asdlc/changes/` for the date.
   Past evidence stays as-is — immutable, and the
   negative numbers are the honest record of the defect.
+
+  Done: `spec/tools/new-change.py` scaffolds all three files with clock
+  `produced_at` values, mints the per-date sequence, and prompts for
+  human-authored fields.
 links:
   - to: metric-lead-time
     rel: derived-from
