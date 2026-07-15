@@ -1,0 +1,28 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "1f738cd84a4d6bf42bd506695cd66bbe840826b3"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260715-004-metrics-integrity-audit",
+    "title": "Metrics integrity audit: token usage, lead time, cycle time",
+    "problem": "Owner audit of the delivered metrics/dashboard slice (roadmap-priority-1-metrics) found lead time, cycle time, and token usage all read as wrong on the dashboard even though the underlying per-row arithmetic is individually correct. Three distinct defects: (1) bindings/claude-code/usage.py's newest_transcript() hardcodes a stale session-transcript directory, so token-usage evidence collection silently fails for every worktree-per-change session -- 10 of 12 Change Records have no usage.json; (2) where token evidence does exist, cache_read_input_tokens is summed across the whole window and scales with turns x accumulated context rather than work actually done, so it is not a work-scoped figure; (3) the lead/cycle time SVG chart in render_html() derives one shared linear axis from every merged row's raw value, so acknowledged bootstrap negative-time rows and one genuine overnight-gap outlier stretch the axis until the other 9 of 12 normal-magnitude rows render as near-invisible slivers.",
+    "acceptance_criteria": [
+      "A new roadmap-item (roadmap-priority-2-metrics-integrity) documents all three findings and is wired into the roadmap doc-manifest ahead of every not-yet-started slice",
+      "docs/design/roadmap.md is regenerated via scaffold.py with no validation errors",
+      "The roadmap-item links back to roadmap-priority-1-metrics and to the metric-token-usage, metric-lead-time, and metric-cycle-time nodes it corrects"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "human",
+      "identity": "github:jvanheerikhuize"
+    },
+    "produced_at": "2026-07-15T18:38:54Z"
+  }
+}
