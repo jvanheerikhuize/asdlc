@@ -1,0 +1,27 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "0000000000000000000000000000000000000000"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/classification/v1",
+  "predicate": {
+    "change_id": "CR-20260715-004-metrics-integrity-audit",
+    "risk": "low",
+    "data": "none",
+    "ai_usage": "generated",
+    "ai_system_tier": "none",
+    "rationale": "Documentation-only change: adds a knowledge-base roadmap-item and re-links the doc manifest. No code, no user data touched, no AI system deployed to end users -- this just records an audit finding as a prioritized backlog slice.",
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "human",
+      "identity": "github:jvanheerikhuize"
+    },
+    "produced_at": "2026-07-15T18:38:54Z",
+    "refs": []
+  }
+}

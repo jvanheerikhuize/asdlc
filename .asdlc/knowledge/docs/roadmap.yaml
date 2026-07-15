@@ -9,6 +9,7 @@ preamble: |
 sections:
   - node: roadmap-priority-0-knowledge-first
   - node: roadmap-priority-1-metrics
+  - node: roadmap-priority-2-metrics-integrity
   - node: roadmap-slice-1-walking-skeleton-the-first
   - node: roadmap-slice-2-authority-and-fail-safe
   - node: roadmap-slice-3-the-easy-path

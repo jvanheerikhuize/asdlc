@@ -58,6 +58,56 @@ feeding R2) and **waiver rate** (feeding R8) once waivers exist
 (slice 2); per-gate durations; lead time extended to the deploy boundary
 at G5; publication into the retention store / dashboards (slice 4).
 
+## Priority 2 — Metrics integrity (owner directive, 2026-07-15)
+
+Owner audit (2026-07-15) of [[roadmap-priority-1-metrics]]'s delivered
+metrics found the dashboard reads as wrong even though each number is
+individually computed as designed — three distinct defects, all ahead of
+everything else on the roadmap:
+
+1. **Token-usage evidence collection is broken for the current workflow.**
+   `bindings/claude-code/usage.py`'s `newest_transcript()` hardcodes the
+   session-transcript directory as `~/.claude/projects/-home-jerry-Repos`,
+   but every change since the worktree-per-change convention took hold
+   lives under a different, worktree-qualified directory name. Result: 10
+   of 12 Change Records — including the entire 2026-07-15 leftover
+   sweep — have no `usage.json` at all, leaving the dashboard's token
+   totals built from a 2-row, non-random, earliest-day-only sample. The
+   absence is silent (no CI hook calls `usage.py`; nothing fails), and
+   [[metric-token-usage]]'s own caveat misattributes the gap to "predates
+   the predicate" rather than a live collection bug.
+2. **Where token evidence does exist, it isn't scoped to the change.**
+   `cache_read_input_tokens` is summed across every transcript line inside
+   the window, and Claude Code re-reads the full accumulated session
+   context from cache on every turn — so the total scales with turns ×
+   accumulated context, not with work actually done for that change. The
+   two recorded rows show this directly: cache-read tokens more than
+   double between them purely from context growth, not effort.
+3. **Lead/cycle time charts share one linear axis across all rows.**
+   `render_html()` derives `vmin_m`/`vmax_m` from every merged row's raw
+   lead and cycle time, so the acknowledged bootstrap negative-time rows
+   (~-42 min, see [[metric-lead-time]]'s v1 caveat) and a genuine
+   overnight-gap row (~+1020 min, `CR-20260714-009-change-numbering`)
+   stretch the axis to a ~1060-minute span. The other 9 of 12 rows, all
+   within roughly ±6 minutes, render as slivers near-indistinguishable
+   from zero — the chart looks broken even though each bar's underlying
+   value is arithmetically correct. Separately, cycle time as defined
+   doesn't distinguish active work from idle/overnight pauses, so a
+   change merged the next afternoon scores ~170x "slower" than one merged
+   promptly regardless of actual effort.
+
+None of these are errors in `collect()`'s date arithmetic or in the
+`window.from == opened_at` token-window definition — both verified
+correct against the evidence on disk. The defects are in what feeds the
+computation (broken evidence collection) and in how correct numbers are
+presented (a shared axis and a token total with no per-change
+normalization). *Exit criterion*: `usage.py` locates the right transcript
+for any worktree session without a manual `--transcript` flag, every
+merged Change Record after that fix carries usage evidence, the token
+metric is normalized to a work-scoped figure (not cumulative cache reads),
+and the lead/cycle chart either splits or clips outliers so the common
+case stays legible.
+
 ## Slice 1 — Walking skeleton (the first thing that is real)
 
 - `asdlc-spec` v0.1: Change Record format, `change-intent/v1`,

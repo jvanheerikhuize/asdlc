@@ -1,0 +1,7 @@
+{
+  "id": "CR-20260715-004-metrics-integrity-audit",
+  "title": "Metrics integrity audit: token usage, lead time, cycle time",
+  "opened_at": "2026-07-15T18:38:54Z",
+  "opened_by": "github:jvanheerikhuize",
+  "spec_version": "0.5.0"
+}
