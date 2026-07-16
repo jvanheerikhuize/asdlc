@@ -1,0 +1,37 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "a9c616167d1c36851c904481c73a11d565c5fbfd"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-usage/v1",
+  "predicate": {
+    "change_id": "CR-20260716-002-agent-cycle-time-roadmap",
+    "source": "claude-code session transcript",
+    "window": {
+      "from": "2026-07-16T16:25:51Z",
+      "to": "2026-07-16T16:26:55Z"
+    },
+    "tokens": {
+      "input": 18,
+      "output": 6011,
+      "cache_read": 557595,
+      "cache_creation": 7054,
+      "total": 570678
+    },
+    "produced_by": {
+      "role": "implementer",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-sonnet-5"
+      }
+    },
+    "produced_at": "2026-07-16T16:26:55Z"
+  }
+}

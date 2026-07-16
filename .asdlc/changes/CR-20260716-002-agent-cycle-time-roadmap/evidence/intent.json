@@ -1,0 +1,32 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "a9c616167d1c36851c904481c73a11d565c5fbfd"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260716-002-agent-cycle-time-roadmap",
+    "title": "Roadmap priority 4: redefine lead time and agent cycle time",
+    "problem": "The dashboard's lead and cycle time bars are near-identical and mostly invisible: both metrics end at the merge commit with starts minutes apart, so overnight and manual-work gaps dominate both equally, and no outlier clipping exists in render_html despite roadmap-priority-2 claiming it was delivered; the owner directs lead time = change opened to merged and cycle time = agent active working time",
+    "acceptance_criteria": [
+      "roadmap-priority-4-agent-cycle-time exists with status active, recording both new definitions, the sessionization rule and 300s idle threshold, the agent-activity/v1 evidence shape, the two-chart dashboard plan, the correction to priority-2's clipping claim, and the no-backfill rule",
+      "roadmap-whats-next names roadmap-priority-4-agent-cycle-time as NOW, with slice-2 demoted to NEXT",
+      "docs/design/roadmap.md is regenerated from the knowledge nodes"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-sonnet-5"
+      }
+    },
+    "produced_at": "2026-07-16T16:25:51Z"
+  }
+}

@@ -11,11 +11,12 @@ priority — start there.
 
 ## What's next — the single current priority (read this first)
 
-**NOW: [[roadmap-slice-2-authority-and-fail-safe]] — the next design-time
-slice, promoted 2026-07-16 now that
-[[roadmap-priority-3-token-granularity]] is done.** If you are an agent
-asking "what should I work on?", that node is the answer; its exit
-criterion says when it is finished.
+**NOW: [[roadmap-priority-4-agent-cycle-time]] — owner directive
+2026-07-16: redefine lead time (change opened → merged) and cycle time
+(agent active working time from activity evidence), and fix the
+lead/cycle chart.** If you are an agent asking "what should I work
+on?", that node is the answer; its exit criterion says when it is
+finished.
 
 How to read this roadmap — two numbering systems coexist:
 
@@ -30,11 +31,12 @@ How to read this roadmap — two numbering systems coexist:
 
 Queue as of 2026-07-16:
 
-1. **NOW** — [[roadmap-slice-2-authority-and-fail-safe]]. Slice 1 is
-   done: G4 dogfooding has been live on these repos since the walking
-   skeleton landed. [[roadmap-priority-3-token-granularity]] is done
-   (agent-usage/v2 landed).
-2. **LATER** — slices 3–6 in order; deliberately unscheduled work stays
+1. **NOW** — [[roadmap-priority-4-agent-cycle-time]], which preempts
+   the slice queue per the priority rule above.
+2. **NEXT** — [[roadmap-slice-2-authority-and-fail-safe]], the next
+   design-time slice (slice 1 is done: G4 dogfooding has been live on
+   these repos since the walking skeleton landed).
+3. **LATER** — slices 3–6 in order; deliberately unscheduled work stays
    in [[roadmap-what-is-deliberately-not-scheduled]].
 
 Maintenance rule: the change that completes the NOW item must update

@@ -1,0 +1,92 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "a9c616167d1c36851c904481c73a11d565c5fbfd"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-usage/v2",
+  "predicate": {
+    "change_id": "CR-20260716-002-agent-cycle-time-roadmap",
+    "source": "claude-code session transcript",
+    "window": {
+      "from": "2026-07-16T16:25:51Z",
+      "to": "2026-07-16T16:26:55Z"
+    },
+    "tokens": {
+      "input": 18,
+      "output": 6011,
+      "cache_read": 557595,
+      "cache_creation": 7054,
+      "total": 570678
+    },
+    "by_model": {
+      "claude-fable-5": {
+        "input": 18,
+        "output": 6011,
+        "cache_read": 557595,
+        "cache_creation": 7054,
+        "total": 570678
+      }
+    },
+    "by_thread": {
+      "main": {
+        "input": 18,
+        "output": 6011,
+        "cache_read": 557595,
+        "cache_creation": 7054,
+        "total": 570678
+      },
+      "subagent": {
+        "input": 0,
+        "output": 0,
+        "cache_read": 0,
+        "cache_creation": 0,
+        "total": 0
+      }
+    },
+    "by_phase": {
+      "exploration_and_implementation": {
+        "input": 18,
+        "output": 6011,
+        "cache_read": 557595,
+        "cache_creation": 7054,
+        "total": 570678
+      },
+      "governance_overhead": {
+        "input": 0,
+        "output": 0,
+        "cache_read": 0,
+        "cache_creation": 0,
+        "total": 0
+      },
+      "boundary_commit": "a9c616167d1c36851c904481c73a11d565c5fbfd",
+      "boundary_at": "2026-07-16T18:26:40Z"
+    },
+    "by_tool": {
+      "other": 3852,
+      "Bash": 918,
+      "Write": 2284
+    },
+    "turn_shape": {
+      "turn_count": 9,
+      "peak_context_tokens": 63355,
+      "mean_marginal_work_tokens": 1453.6666666666667,
+      "cache_creation_ephemeral_5m": 0,
+      "cache_creation_ephemeral_1h": 7054
+    },
+    "produced_by": {
+      "role": "implementer",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-sonnet-5"
+      }
+    },
+    "produced_at": "2026-07-16T16:26:55Z"
+  }
+}
