@@ -1,0 +1,37 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "3f604a3ae7b7a4b020e9f84f028bfbbdeaec7170"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-usage/v1",
+  "predicate": {
+    "change_id": "CR-20260716-001-wire-usage-v2",
+    "source": "claude-code session transcript",
+    "window": {
+      "from": "2026-07-16T07:18:18Z",
+      "to": "2026-07-16T07:21:45Z"
+    },
+    "tokens": {
+      "input": 40,
+      "output": 5445,
+      "cache_read": 1158300,
+      "cache_creation": 47796,
+      "total": 1211581
+    },
+    "produced_by": {
+      "role": "implementer",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-16T07:21:45Z"
+  }
+}
