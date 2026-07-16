@@ -1,0 +1,43 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "86d23f2c66ebb6b74e0ae84debf4f1bf7405cd3a"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-activity/v1",
+  "predicate": {
+    "change_id": "CR-20260716-003-agent-activity-evidence",
+    "source": "claude-code session transcript",
+    "window": {
+      "from": "2026-07-16T16:31:34+00:00",
+      "to": "2026-07-16T16:33:05Z"
+    },
+    "idle_threshold_seconds": 300.0,
+    "active_seconds": 78.7,
+    "event_count": 28,
+    "session_count": 1,
+    "first_event_at": "2026-07-16T16:31:34Z",
+    "last_event_at": "2026-07-16T16:32:53Z",
+    "sessions": [
+      {
+        "from": "2026-07-16T16:31:34Z",
+        "to": "2026-07-16T16:32:53Z",
+        "active_seconds": 78.7
+      }
+    ],
+    "produced_by": {
+      "role": "implementer",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-sonnet-5"
+      }
+    },
+    "produced_at": "2026-07-16T16:33:05Z"
+  }
+}
