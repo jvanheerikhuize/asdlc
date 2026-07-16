@@ -1,0 +1,92 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "8a3d15fca3a846825729de5d0c4fd793538b5041"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-usage/v2",
+  "predicate": {
+    "change_id": "CR-20260716-005-exclude-negative-lead-bars",
+    "source": "claude-code session transcript",
+    "window": {
+      "from": "2026-07-16T17:47:17Z",
+      "to": "2026-07-16T17:50:19Z"
+    },
+    "tokens": {
+      "input": 24,
+      "output": 4567,
+      "cache_read": 757719,
+      "cache_creation": 14420,
+      "total": 776730
+    },
+    "by_model": {
+      "claude-fable-5": {
+        "input": 24,
+        "output": 4567,
+        "cache_read": 757719,
+        "cache_creation": 14420,
+        "total": 776730
+      }
+    },
+    "by_thread": {
+      "main": {
+        "input": 24,
+        "output": 4567,
+        "cache_read": 757719,
+        "cache_creation": 14420,
+        "total": 776730
+      },
+      "subagent": {
+        "input": 0,
+        "output": 0,
+        "cache_read": 0,
+        "cache_creation": 0,
+        "total": 0
+      }
+    },
+    "by_phase": {
+      "exploration_and_implementation": {
+        "input": 12,
+        "output": 2272,
+        "cache_read": 370539,
+        "cache_creation": 9884,
+        "total": 382707
+      },
+      "governance_overhead": {
+        "input": 12,
+        "output": 2295,
+        "cache_read": 387180,
+        "cache_creation": 4536,
+        "total": 394023
+      },
+      "boundary_commit": "8a3d15fca3a846825729de5d0c4fd793538b5041",
+      "boundary_at": "2026-07-16T19:49:14Z"
+    },
+    "by_tool": {
+      "other": 11931,
+      "Bash": 1923,
+      "Edit": 566
+    },
+    "turn_shape": {
+      "turn_count": 12,
+      "peak_context_tokens": 64981,
+      "mean_marginal_work_tokens": 1584.25,
+      "cache_creation_ephemeral_5m": 14420,
+      "cache_creation_ephemeral_1h": 0
+    },
+    "produced_by": {
+      "role": "implementer",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-16T17:50:19Z"
+  }
+}

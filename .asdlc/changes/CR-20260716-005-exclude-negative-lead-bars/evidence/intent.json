@@ -1,0 +1,32 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "8a3d15fca3a846825729de5d0c4fd793538b5041"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260716-005-exclude-negative-lead-bars",
+    "title": "Exclude negative bootstrap bars from the lead-time chart",
+    "problem": "the four 2026-07-14 bootstrap rows carry hand-authored, future-skewed opened_at timestamps; their negative lead-time bars stretch the lead chart's axis ~45 minutes into impossible territory and squash the real sub-hour bars into a narrow band \u2014 the owner reviewed the dashboard on 2026-07-16 and asked for the negative bars to be removed from the view, replaced by a note",
+    "acceptance_criteria": [
+      "the lead chart plots only rows without the lead_time_inaccurate flag, and an explanatory note under the chart records how many rows are excluded and why, so the defect stays visible",
+      "the table and markdown summary keep n/a for excluded rows and --json keeps the raw negative values as the machine-readable record",
+      "metric-lead-time documents the exclusion and its History records the owner's 2026-07-16 dashboard review; spec/tools/check.py passes and all three metrics.py output modes render"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-16T17:47:17Z"
+  }
+}

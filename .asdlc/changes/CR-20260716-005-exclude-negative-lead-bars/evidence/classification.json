@@ -1,0 +1,31 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "8a3d15fca3a846825729de5d0c4fd793538b5041"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/classification/v1",
+  "predicate": {
+    "change_id": "CR-20260716-005-exclude-negative-lead-bars",
+    "risk": "low",
+    "data": "none",
+    "ai_usage": "generated",
+    "ai_system_tier": "minimal",
+    "rationale": "Presentation-only change to the generated dashboard plus a metric-node doc update; metrics stay derived-never-stored and no gate or control behavior changes",
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-16T17:47:17Z",
+    "refs": []
+  }
+}

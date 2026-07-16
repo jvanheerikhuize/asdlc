@@ -1,0 +1,43 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "8a3d15fca3a846825729de5d0c4fd793538b5041"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-activity/v1",
+  "predicate": {
+    "change_id": "CR-20260716-005-exclude-negative-lead-bars",
+    "source": "claude-code session transcript",
+    "window": {
+      "from": "2026-07-16T17:47:17Z",
+      "to": "2026-07-16T17:50:19Z"
+    },
+    "idle_threshold_seconds": 300.0,
+    "active_seconds": 136.3,
+    "event_count": 20,
+    "session_count": 1,
+    "first_event_at": "2026-07-16T17:47:17Z",
+    "last_event_at": "2026-07-16T17:49:33Z",
+    "sessions": [
+      {
+        "from": "2026-07-16T17:47:17Z",
+        "to": "2026-07-16T17:49:33Z",
+        "active_seconds": 136.3
+      }
+    ],
+    "produced_by": {
+      "role": "implementer",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-fable-5"
+      }
+    },
+    "produced_at": "2026-07-16T17:50:19Z"
+  }
+}

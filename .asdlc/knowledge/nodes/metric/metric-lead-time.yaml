@@ -21,19 +21,22 @@ body: |2
   timestamps, so their lead times are negative — kept as the honest
   record that motivated [[leftover-change-scaffolder]].
 
-  **Chart vs. summary treatment differ** (per
+  **Inaccurate-data treatment** (per
   [[roadmap-priority-2-metrics-integrity]]'s n/a-for-inaccurate-data
   request): a negative lead time is arithmetically impossible for a real
   opened-to-merge measurement, so it's flagged programmatically
-  (`lead_time_s < 0`). The chart still plots the raw negative bar — it's
-  the honest historical record of the timestamp bug. The table and
-  markdown summary render those rows as "n/a" instead, since a negative
-  duration isn't a meaningful answer to "how long did this take," and the
+  (`lead_time_s < 0`). Flagged rows are excluded from the chart (owner
+  request 2026-07-16: plotting them stretched the axis ~45 minutes into
+  impossible territory and squashed the real bars) — a note under the
+  chart records the exclusion and why, so the defect stays visible. The
+  table and markdown summary render those rows as "n/a", since a negative
+  duration isn't a meaningful answer to "how long did this take," the
   median-lead tile excludes them so one bad row can't drag the summary
-  figure negative. The chart's axis is capped at the p90 so a single
-  overnight outlier can't squash the sub-hour majority; capped bars run
-  to the plot edge behind an axis-break chevron with the exact value
-  labeled on the bar.
+  figure negative, and `--json` keeps the raw negative values as the
+  machine-readable record. The chart's axis is capped at the p90 so a
+  single overnight outlier can't squash the sub-hour majority; capped
+  bars run to the plot edge behind an axis-break chevron with the exact
+  value labeled on the bar.
 
   **History**: v1 (2026-07-14, [[roadmap-slice-1b-first-merge]]) measured
   from the recorded intent (`change-intent/v1` `produced_at`) instead of
@@ -41,7 +44,10 @@ body: |2
   made lead and the old cycle time near-identical and the dashboard
   unreadable; [[roadmap-priority-4-agent-cycle-time]] moved the start to
   `opened_at` ("starting a new change", the owner's definition) and gave
-  cycle time to the agent-effort dimension.
+  cycle time to the agent-effort dimension. That CR kept the negative
+  bootstrap bars plotted; the owner reviewed the dashboard on 2026-07-16
+  and asked for them to be removed from the view — a follow-up CR
+  (CR-20260716-005) replaced them with the explanatory note.
 links:
   - to: decision-d9-machine-readable-single-source
     rel: derived-from
