@@ -1,0 +1,77 @@
+id: roadmap-priority-4-agent-cycle-time
+type: roadmap-item
+title: "Priority 4 — Lead time to merge, agent cycle time from activity (agent-activity/v1)"
+since: "2026-07-16"
+status: active
+body: |2
+  Owner directive (2026-07-16): the dashboard's lead and cycle bars are
+  near-identical and mostly invisible. Both defects are confirmed in
+  `spec/tools/metrics.py`, not just perception:
+
+  1. **The two metrics measure almost the same thing.** Both end at the
+     merge commit; their starts (`change-intent/v1` `produced_at` vs
+     `change.json` `opened_at`) are minutes apart, so wall-clock gaps —
+     the owner sleeping, manual work on the repo — dominate both
+     equally. CR-20260714-009: lead 1001 min vs cycle 1019.6 min,
+     differing only by the 18.6-min intent→opened gap.
+  2. **No outlier handling exists in the chart.** Correction to the
+     record: [[roadmap-priority-2-metrics-integrity]] lists "the
+     lead/cycle chart clips outliers" among its delivered items, but no
+     clipping logic exists anywhere in `render_html()` — one shared
+     linear axis is autoscaled off the global min/max, so the 1020-min
+     outlier plus the negative bootstrap bars squash the ±6-min
+     majority into invisible slivers.
+
+  **New definitions** (owner-directed):
+
+  - **[[metric-lead-time]]** = `merged_at − opened_at`: starting a new
+    change (its Change Record opening) to its PR merging into `main`.
+    This is today's cycle-time formula renamed; the intent-based start
+    is dropped. The negative-timestamp inaccuracy flag survives
+    unchanged (hand-authored 2026-07-14 rows).
+  - **[[metric-cycle-time]]** becomes **agent cycle time** = how long
+    the agent actively works on the change (industry: *agent wall
+    time / active agent time*), not calendar elapsed time. Computed by
+    sessionizing per-message transcript timestamps: sort all
+    timestamped events in the change window (including sidechains), a
+    gap over the **300 s idle threshold** closes a span,
+    `active_seconds` = the sum of span durations. 300 s is generous
+    for agent event cadence; a single tool run longer than the
+    threshold counts as idle — documented caveat, acceptable error.
+    The threshold is recorded in evidence and overridable via
+    `--idle-threshold` for auditability.
+
+  **Evidence shape**: transcripts are not committed, so active time
+  must be captured at collection time as evidence — the same argument
+  that produced [[metric-token-usage]]. A new `agent-activity/v1`
+  predicate (time and tokens are orthogonal; schemas are
+  `additionalProperties: false`, so a new dimension is a new predicate,
+  not a field bolted onto agent-usage): `change_id`, `source`,
+  `window{from,to}`, `idle_threshold_seconds`, `active_seconds`,
+  `event_count`, `session_count`, `first_event_at`, `last_event_at`,
+  `sessions[{from,to,active_seconds}]` — emitted by
+  `bindings/claude-code/usage.py` to `evidence/activity.json`.
+
+  **Dashboard**: two separate charts with independent axes, replacing
+  the shared-axis grouped chart. Lead chart capped at p90 with an
+  overflow chevron plus exact value label (negative bars kept as the
+  honest record); agent-cycle chart in active minutes, cloned from the
+  tokens-chart pattern, with an "N of M recorded" note.
+
+  **No backfill**: rows predating `agent-activity/v1` evidence render
+  "n/a" forever, matching the token-metric precedent.
+
+  *Exit criterion*: `bindings/claude-code/usage.py` emits
+  `agent-activity/v1`; `spec/tools/metrics.py` computes lead time as
+  merged−opened and agent cycle time from activity evidence; the
+  dashboard shows the two charts with a capped lead axis; and
+  pre-evidence rows show n/a in the agent-cycle column.
+links:
+  - to: metric-lead-time
+    rel: relates-to
+  - to: metric-cycle-time
+    rel: relates-to
+  - to: roadmap-priority-2-metrics-integrity
+    rel: relates-to
+  - to: decision-d9-machine-readable-single-source
+    rel: derived-from
