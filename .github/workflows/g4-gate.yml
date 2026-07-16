@@ -38,8 +38,7 @@ jobs:
             p2=$(git rev-parse "$m^2" 2>/dev/null) || continue
             mb=$(git merge-base "$m^1" "$p2")
             d=$(git diff --name-only "$mb" "$p2" -- .asdlc/changes | grep -oE '^\.asdlc/changes/[^/]+' || true)
-            merged_in_dirs="$merged_in_dirs
-$d"
+            merged_in_dirs="$merged_in_dirs"$'\n'"$d"
           done
           merged_in_dirs=$(printf '%s\n' "$merged_in_dirs" | sort -u | grep -v '^$' || true)
 
