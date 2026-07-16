@@ -41,6 +41,18 @@ def tfmt_tokens(n):
     return str(n)
 
 
+def fmt_by_model(by_model):
+    if not by_model:
+        return "n/a"
+    return " · ".join(f"{m} {tfmt_tokens(n)}" for m, n in sorted(by_model.items(), key=lambda kv: -kv[1]))
+
+
+def fmt_governance_ratio(r):
+    if r is None:
+        return "n/a"
+    return f"{r * 100:.0f}%"
+
+
 def collect():
     rows = []
     for d in sorted(CHANGES.iterdir()):
@@ -66,6 +78,21 @@ def collect():
             # (including cache_read) stays in the evidence for transparency.
             tokens["work_tokens"] = (
                 tokens.get("input", 0) + tokens.get("output", 0) + tokens.get("cache_creation", 0))
+        usage_v2 = None
+        usage_v2_path = d / "evidence" / "usage.v2.json"
+        if usage_v2_path.exists():
+            v2p = json.loads(usage_v2_path.read_text())["predicate"]
+            by_model = {m_name: v["total"] for m_name, v in v2p["by_model"].items()}
+            gov_total = v2p["by_phase"]["governance_overhead"]["total"]
+            v2_total = v2p["tokens"]["total"]
+            usage_v2 = {
+                "by_model": by_model,
+                # roadmap-priority-3-token-granularity exit criterion: fraction
+                # of a change's tokens spent after the first implementation
+                # commit (evidence pinning, PR description, etc.) rather than
+                # on exploration/implementation itself.
+                "governance_ratio": (gov_total / v2_total) if v2_total else None,
+            }
         lead_time_s = (m - intent_at).total_seconds() if m and intent_at else None
         rows.append({
             "change": change["id"],
@@ -84,6 +111,7 @@ def collect():
             # is hand-authored for the same 2026-07-14 rows.
             "cycle_time_inaccurate": m is not None and (m - opened).total_seconds() < 0,
             "tokens": tokens,
+            "usage_v2": usage_v2,
         })
     rows.sort(key=lambda r: (r["merged_at"] is None, r["merged_at"] or "", r["change"]))
     # Merge-order number: makes same-day changes orderable even for legacy
@@ -230,7 +258,14 @@ def render_html(rows):
 (<code>agent-usage/v1</code> evidence); recorded from
 <code>CR-20260714-token-metric</code> onward. Work-scoped: excludes
 cache-read tokens, which scale with turns &times; accumulated session
-context rather than work done for the change.{na_note}</div>
+context rather than work done for the change.{na_note} The table's
+<b>By model</b> and <b>Governance overhead</b> columns come from
+<code>agent-usage/v2</code> evidence (recorded from
+<code>roadmap-priority-3-token-granularity</code> onward); changes with
+only v1 evidence show <b>n/a</b> there. Governance overhead is the
+share of a change's tokens spent after its first implementation commit
+(evidence pinning, PR description, etc.) rather than on exploration and
+implementation itself.</div>
 <figure>
 <svg viewBox="0 0 {width} {h2}" width="{width}" height="{h2}" role="img"
      aria-label="Bar chart of agent tokens per recorded change">
@@ -258,7 +293,9 @@ context rather than work done for the change.{na_note}</div>
         f'<td>{r["change"]}</td><td>{(r["merged_at"] or "in flight")[:16]}</td>'
         f'<td class="num">{lead_cell(r)}</td>'
         f'<td class="num">{cycle_cell(r)}</td>'
-        f'<td class="num">{tfmt_tokens(r["tokens"]["work_tokens"]) if r["tokens"] else "n/a"}</td></tr>'
+        f'<td class="num">{tfmt_tokens(r["tokens"]["work_tokens"]) if r["tokens"] else "n/a"}</td>'
+        f'<td>{fmt_by_model(r["usage_v2"]["by_model"]) if r["usage_v2"] else "n/a"}</td>'
+        f'<td class="num">{fmt_governance_ratio(r["usage_v2"]["governance_ratio"]) if r["usage_v2"] else "n/a"}</td></tr>'
         for r in rows)
 
     return HTML_TMPL.format(
@@ -344,7 +381,7 @@ honest historical record. The table below shows <b>n/a</b> for those same rows'
 lead and cycle time, since a negative duration isn't a meaningful summary answer.</p>
 {tokens_section}
 <table>
-<thead><tr><th class="num">#</th><th>Change</th><th>Merged</th><th class="num">Lead</th><th class="num">Cycle</th><th class="num">Tokens</th></tr></thead>
+<thead><tr><th class="num">#</th><th>Change</th><th>Merged</th><th class="num">Lead</th><th class="num">Cycle</th><th class="num">Tokens</th><th>By model</th><th class="num">Governance overhead</th></tr></thead>
 <tbody>
 {table}
 </tbody>
@@ -380,8 +417,8 @@ def main():
         print(render_html(rows))
         return
     print("# Change metrics (derived from evidence + git; see metric-* nodes)\n")
-    print("| # | Change | Merged | Lead time | Cycle time | Agent tokens |")
-    print("|---|---|---|---|---|---|")
+    print("| # | Change | Merged | Lead time | Cycle time | Agent tokens | By model | Governance overhead |")
+    print("|---|---|---|---|---|---|---|---|")
     for r in rows:
         if r["lead_time_s"] is None:
             lead = "n/a"
@@ -397,7 +434,10 @@ def main():
             cycle = fmt(datetime.timedelta(seconds=r["cycle_time_s"]))
         state = r["merged_at"][:16] if r["merged_at"] else "in flight"
         toks = tfmt_tokens(r["tokens"]["work_tokens"]) if r["tokens"] else "n/a"
-        print(f"| {r['order'] or 'n/a'} | {r['change']} | {state} | {lead} | {cycle} | {toks} |")
+        v2 = r["usage_v2"]
+        by_model = fmt_by_model(v2["by_model"]) if v2 else "n/a"
+        gov = fmt_governance_ratio(v2["governance_ratio"]) if v2 else "n/a"
+        print(f"| {r['order'] or 'n/a'} | {r['change']} | {state} | {lead} | {cycle} | {toks} | {by_model} | {gov} |")
     leads = [r["lead_time_s"] for r in merged if not r["lead_time_inaccurate"] and r["lead_time_s"]]
     cycles = [r["cycle_time_s"] for r in merged if not r["cycle_time_inaccurate"] and r["cycle_time_s"]]
     if leads:
