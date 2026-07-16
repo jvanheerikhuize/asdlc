@@ -2,7 +2,7 @@ id: roadmap-priority-4-agent-cycle-time
 type: roadmap-item
 title: "Priority 4 — Lead time to merge, agent cycle time from activity (agent-activity/v1)"
 since: "2026-07-16"
-status: active
+status: done
 body: |2
   Owner directive (2026-07-16): the dashboard's lead and cycle bars are
   near-identical and mostly invisible. Both defects are confirmed in

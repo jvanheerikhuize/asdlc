@@ -11,10 +11,9 @@ priority — start there.
 
 ## What's next — the single current priority (read this first)
 
-**NOW: [[roadmap-priority-4-agent-cycle-time]] — owner directive
-2026-07-16: redefine lead time (change opened → merged) and cycle time
-(agent active working time from activity evidence), and fix the
-lead/cycle chart.** If you are an agent asking "what should I work
+**NOW: [[roadmap-slice-2-authority-and-fail-safe]] — the next
+design-time slice; no owner priority is open (priorities 1–4 are all
+`status: done`).** If you are an agent asking "what should I work
 on?", that node is the answer; its exit criterion says when it is
 finished.
 
@@ -31,12 +30,12 @@ How to read this roadmap — two numbering systems coexist:
 
 Queue as of 2026-07-16:
 
-1. **NOW** — [[roadmap-priority-4-agent-cycle-time]], which preempts
-   the slice queue per the priority rule above.
-2. **NEXT** — [[roadmap-slice-2-authority-and-fail-safe]], the next
+1. **NOW** — [[roadmap-slice-2-authority-and-fail-safe]], the next
    design-time slice (slice 1 is done: G4 dogfooding has been live on
-   these repos since the walking skeleton landed).
-3. **LATER** — slices 3–6 in order; deliberately unscheduled work stays
+   these repos since the walking skeleton landed; priority 4 —
+   [[roadmap-priority-4-agent-cycle-time]] — closed with the
+   lead/agent-cycle metrics CR).
+2. **LATER** — slices 3–6 in order; deliberately unscheduled work stays
    in [[roadmap-what-is-deliberately-not-scheduled]].
 
 Maintenance rule: the change that completes the NOW item must update

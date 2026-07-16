@@ -1,21 +1,41 @@
 id: metric-cycle-time
 type: metric
-title: "Cycle time — work started to merged"
+title: "Agent cycle time — active agent working time"
 since: "2026-07-14"
 body: |2
-  Time from the Change Record being opened (`change.json` `opened_at`, the
-  declared start of work) to the change landing on `main`. Measures how
-  long a governed change is actually in flight; the gap between lead time
-  and cycle time is how long intent waited before work began.
+  How long the agent actively worked on a change, sessionized from the
+  harness transcript's per-message timestamps: events are sorted, a gap
+  longer than the idle threshold (default 300 s, recorded in the
+  evidence) closes an active span, and active time is the sum of span
+  durations. Nights, waiting for the owner, and manual repo work fall
+  into idle gaps and don't count — that's the point: the difference
+  between [[metric-lead-time]] (calendar time) and agent cycle time is
+  exactly the human-side latency the owner asked to see.
 
-  Computed alongside [[metric-lead-time]] by `spec/tools/metrics.py`, with
-  the same derived-never-stored principle and v1 caveats: `opened_at` is
-  hand-authored for the same 2026-07-14 rows as lead time, so cycle time
-  goes negative for the same reason. The chart plots the raw negative bar
-  as the honest record; the table and markdown summary show "n/a" for
-  those rows and the median-cycle tile excludes them — see
-  [[metric-lead-time]]'s chart-vs-summary note, which applies identically
-  here.
+  Transcripts are not committed, so active time is unrecoverable after
+  the fact — it's captured at evidence-collection time by
+  `bindings/claude-code/usage.py` as an `agent-activity/v1` statement
+  (`evidence/activity.json`), the same argument that produced the token
+  metric. `spec/tools/metrics.py` then derives the figure from evidence
+  on demand (derived, never stored).
+
+  Caveats: self-reported by the agent from its own transcript; a single
+  tool run longer than the idle threshold counts as idle even though the
+  agent was arguably "working"; the threshold is a judgment call —
+  recorded per-evidence (`idle_threshold_seconds`) so a future change of
+  default can't silently redefine history. **No backfill**: rows
+  predating the predicate stay n/a forever, matching the token-metric
+  precedent.
+
+  **History**: v1 (2026-07-14, [[roadmap-slice-1b-first-merge]]) defined
+  cycle time as `merged_at − opened_at` — calendar time, which made it
+  near-identical to lead time and useless as an effort measure.
+  [[roadmap-priority-4-agent-cycle-time]] redefined it as active agent
+  time; the old formula became [[metric-lead-time]]'s definition.
 links:
   - to: metric-lead-time
     rel: relates-to
+  - to: decision-d9-machine-readable-single-source
+    rel: derived-from
+  - to: roadmap-priority-4-agent-cycle-time
+    rel: derived-from

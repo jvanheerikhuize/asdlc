@@ -33,6 +33,12 @@ def fmt(delta):
     return f"{m // 60}h {m % 60:02d}m" if m >= 60 else f"{m}m"
 
 
+def afmt(seconds):
+    """Agent-cycle durations are often sub-hour; keep sub-minute precision."""
+    m = seconds / 60
+    return f"{int(m) // 60}h {int(m) % 60:02d}m" if m >= 60 else f"{m:.1f}m"
+
+
 def tfmt_tokens(n):
     if n >= 1_000_000:
         return f"{n / 1_000_000:.1f}M"
@@ -61,12 +67,21 @@ def collect():
             continue
         change = json.loads(cj.read_text())
         opened = datetime.datetime.fromisoformat(change["opened_at"])
-        intent_at = None
-        intent = d / "evidence" / "intent.json"
-        if intent.exists():
-            intent_at = datetime.datetime.fromisoformat(
-                json.loads(intent.read_text())["predicate"]["produced_at"])
         m = merged_at(cj)
+        lead_time_s = (m - opened).total_seconds() if m else None
+        # Agent cycle time comes from agent-activity/v1 evidence: transcripts
+        # are not committed, so active time only exists if it was captured at
+        # collection time. No backfill — rows predating the predicate stay
+        # n/a forever, matching the token-metric precedent.
+        activity = None
+        activity_path = d / "evidence" / "activity.json"
+        if activity_path.exists():
+            ap = json.loads(activity_path.read_text())["predicate"]
+            activity = {
+                "active_s": ap["active_seconds"],
+                "sessions": ap["session_count"],
+                "idle_threshold_s": ap["idle_threshold_seconds"],
+            }
         tokens = None
         usage = d / "evidence" / "usage.json"
         if usage.exists():
@@ -93,23 +108,21 @@ def collect():
                 # on exploration/implementation itself.
                 "governance_ratio": (gov_total / v2_total) if v2_total else None,
             }
-        lead_time_s = (m - intent_at).total_seconds() if m and intent_at else None
         rows.append({
             "change": change["id"],
             "opened_at": change["opened_at"],
             "merged_at": m.isoformat() if m else None,
             "lead_time_s": lead_time_s,
             # A negative lead time is arithmetically impossible for a real
-            # merge-after-intent measurement; the 2026-07-14 rows hit this
-            # from hand-authored, future-skewed intent timestamps (see
+            # opened-to-merged measurement; the 2026-07-14 rows hit this from
+            # hand-authored, future-skewed opened_at timestamps (see
             # metric-lead-time.yaml). Flag rather than hide: the chart still
             # plots the raw value as the honest record of that bug, but
             # summary figures (table, markdown) render it as n/a.
             "lead_time_inaccurate": lead_time_s is not None and lead_time_s < 0,
-            "cycle_time_s": (m - opened).total_seconds() if m else None,
-            # Same future-skewed-timestamp bug as lead time, since opened_at
-            # is hand-authored for the same 2026-07-14 rows.
-            "cycle_time_inaccurate": m is not None and (m - opened).total_seconds() < 0,
+            "agent_active_s": activity["active_s"] if activity else None,
+            "agent_sessions": activity["sessions"] if activity else None,
+            "idle_threshold_s": activity["idle_threshold_s"] if activity else None,
             "tokens": tokens,
             "usage_v2": usage_v2,
         })
@@ -152,19 +165,30 @@ def render_html(rows):
                          capture_output=True, text=True, cwd=ROOT).stdout.strip()
     gen = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
-    vals = [v for r in merged for v in (r["lead_time_s"], r["cycle_time_s"]) if v is not None]
-    vmin_m = min(0.0, min(vals) / 60) if vals else 0.0
-    vmax_m = max(0.0, max(vals) / 60) if vals else 1.0
+    # geometry shared by all charts
+    label_w, pad_r, bar_h, top = 250, 24, 12, 8
+    plot_w = 640
+    width = label_w + plot_w + pad_r
+
+    def tfmt(m):
+        return f"{int(m) // 60}h" if abs(m) >= 60 and m % 60 == 0 else f"{int(m)}m"
+
+    # ---- lead time: axis capped at the p90 so one calendar-time outlier
+    # (an overnight gap) can't squash the ±6-minute majority into slivers ----
+    lead_vals = [r["lead_time_s"] / 60 for r in merged]
+    if len(lead_vals) >= 2:
+        cap = statistics.quantiles(lead_vals, n=10, method="inclusive")[8]
+    else:
+        cap = lead_vals[0] if lead_vals else 1.0
+    cap = max(cap, 1.0)
+    vmin_m = min(0.0, min(lead_vals)) if lead_vals else 0.0
+    vmax_m = cap
     span = (vmax_m - vmin_m) or 1.0
     vmin_m -= span * 0.06
     vmax_m += span * 0.06
 
-    # geometry
-    label_w, pad_r, bar_h, gap_in, gap_grp, top = 250, 24, 12, 2, 16, 8
-    plot_w = 640
-    width = label_w + plot_w + pad_r
-    grp_h = 2 * bar_h + gap_in
-    height = top + len(merged) * (grp_h + gap_grp) + 34
+    height = top + len(merged) * (bar_h + 10) + 34
+    axis_y = height - 26
 
     def X(minutes):
         return label_w + (minutes - vmin_m) / (vmax_m - vmin_m) * plot_w
@@ -174,38 +198,103 @@ def render_html(rows):
     t0 = int(vmin_m // step) * step
     ticks = [t for t in range(t0, int(vmax_m) + step, step) if vmin_m <= t <= vmax_m]
 
-    def tfmt(m):
-        return f"{int(m) // 60}h" if abs(m) >= 60 and m % 60 == 0 else f"{int(m)}m"
-
     svg = []
-    axis_y = height - 26
     for t in ticks:
         x = X(t)
         cls = "zero" if t == 0 else "grid"
         svg.append(f'<line class="{cls}" x1="{x:.1f}" y1="{top}" x2="{x:.1f}" y2="{axis_y}"/>')
         svg.append(f'<text class="tick" x="{x:.1f}" y="{axis_y + 16}" text-anchor="middle">{tfmt(t)}</text>')
 
-    tip_rows = []
+    hits = []
     y = top
     for r in merged:
         name = short_name(r)
-        lead_m = (r["lead_time_s"] or 0) / 60
-        cycle_m = (r["cycle_time_s"] or 0) / 60
-        svg.append(f'<text class="label" x="{label_w - 10}" y="{y + grp_h / 2 + 4}" '
+        lead_m = r["lead_time_s"] / 60
+        lead_txt = fmt(datetime.timedelta(seconds=r["lead_time_s"]))
+        svg.append(f'<text class="label" x="{label_w - 10}" y="{y + bar_h / 2 + 4}" '
                    f'text-anchor="end">{name}</text>')
-        svg.append(f'<path class="s1" d="{bar_path(X(0), X(lead_m), y, bar_h)}"/>')
-        svg.append(f'<path class="s2" d="{bar_path(X(0), X(cycle_m), y + bar_h + gap_in, bar_h)}"/>')
-        tip_rows.append(
-            f'<rect class="hit" x="0" y="{y - gap_grp / 2}" width="{width}" height="{grp_h + gap_grp}" '
-            f'data-name="{name}" data-lead="{fmt(datetime.timedelta(seconds=r["lead_time_s"]))}" '
-            f'data-cycle="{fmt(datetime.timedelta(seconds=r["cycle_time_s"]))}" '
+        if lead_m > vmax_m:
+            # Past the p90 cap: bar runs to the plot edge, an axis-break
+            # chevron marks the cut, and the exact value is labeled on the
+            # bar so the cap never hides information.
+            x_end = label_w + plot_w
+            svg.append(f'<path class="s1" d="{bar_path(X(0), x_end, y, bar_h)}"/>')
+            cx = x_end - 14
+            svg.append(f'<path class="cut" d="M{cx:.1f},{y - 2} l-5,{bar_h + 4} '
+                       f'm9,-{bar_h + 4} l-5,{bar_h + 4}"/>')
+            svg.append(f'<text class="barlabel" x="{cx - 10:.1f}" y="{y + bar_h / 2 + 4}" '
+                       f'text-anchor="end">{lead_txt}</text>')
+        else:
+            svg.append(f'<path class="s1" d="{bar_path(X(0), X(lead_m), y, bar_h)}"/>')
+        hits.append(
+            f'<rect class="hit" x="0" y="{y - 5}" width="{width}" height="{bar_h + 10}" '
+            f'data-name="{name}" data-lead="{lead_txt}" '
             f'data-merged="{r["merged_at"][:16]}"/>')
-        y += grp_h + gap_grp
-    svg += tip_rows  # hit targets on top
+        y += bar_h + 10
+    svg += hits  # hit targets on top
 
-    leads = sorted(r["lead_time_s"] for r in merged if not r["lead_time_inaccurate"] and r["lead_time_s"] is not None)
-    cycles = sorted(r["cycle_time_s"] for r in merged if not r["cycle_time_inaccurate"] and r["cycle_time_s"] is not None)
-    med = lambda xs: fmt(datetime.timedelta(seconds=statistics.median(xs))) if xs else "n/a"
+    leads = [r["lead_time_s"] for r in merged if not r["lead_time_inaccurate"]]
+    med_lead = fmt(datetime.timedelta(seconds=statistics.median(leads))) if leads else "n/a"
+
+    # ---- agent cycle time: active minutes from agent-activity/v1 ----
+    act_rows = [r for r in rows if r["agent_active_s"] is not None]
+    activity_section = ""
+    act_tile = ""
+    if act_rows:
+        med_act = statistics.median([r["agent_active_s"] for r in act_rows])
+        act_tile = (f'<div class="tile"><b>{afmt(med_act)}</b>'
+                    f'<span>median agent cycle time ({len(act_rows)} recorded)</span></div>')
+        amax = max(r["agent_active_s"] for r in act_rows) / 60 * 1.06 or 1.0
+        h3 = top + len(act_rows) * (bar_h + 10) + 34
+        ax3 = h3 - 26
+
+        def X3(minutes):
+            return label_w + minutes / amax * plot_w
+
+        step3 = next((s for s in (1, 2, 5, 10, 15, 30, 60, 120, 240)
+                      if amax / s <= 7), 480)
+        svg3 = []
+        t = step3
+        while t <= amax:
+            svg3.append(f'<line class="grid" x1="{X3(t):.1f}" y1="{top}" x2="{X3(t):.1f}" y2="{ax3}"/>')
+            svg3.append(f'<text class="tick" x="{X3(t):.1f}" y="{ax3 + 16}" '
+                        f'text-anchor="middle">{tfmt(t)}</text>')
+            t += step3
+        svg3.append(f'<line class="zero" x1="{X3(0)}" y1="{top}" x2="{X3(0)}" y2="{ax3}"/>')
+        yy = top
+        hits3 = []
+        for r in act_rows:
+            name = short_name(r)
+            active_m = r["agent_active_s"] / 60
+            svg3.append(f'<text class="label" x="{label_w - 10}" y="{yy + bar_h / 2 + 4}" '
+                        f'text-anchor="end">{name}</text>')
+            svg3.append(f'<path class="s2" d="{bar_path(X3(0), X3(active_m), yy, bar_h)}"/>')
+            hits3.append(
+                f'<rect class="hit" x="0" y="{yy - 5}" width="{width}" height="{bar_h + 10}" '
+                f'data-name="{name}" data-active="{afmt(r["agent_active_s"])} active" '
+                f'data-detail="{r["agent_sessions"]} session(s) · '
+                f'idle threshold {r["idle_threshold_s"]:g}s"/>')
+            yy += bar_h + 10
+        svg3 += hits3
+        act_na = len(rows) - len(act_rows)
+        na_note = (f' {act_na} of {len(rows)} changes predate this evidence and stay '
+                   f'<b>n/a</b> — no backfill, matching the token-metric '
+                   f'precedent.') if act_na else ""
+        activity_section = f"""
+<h2>Agent cycle time per change</h2>
+<div class="sub">How long the agent actively worked, sessionized from the
+harness transcript's per-message timestamps (<code>agent-activity/v1</code>
+evidence): a gap longer than the recorded idle threshold closes an active
+span, and active time sums the spans — nights and manual repo work don't
+count. Recorded from <code>CR-20260716-003-agent-activity-evidence</code>
+onward.{na_note}</div>
+<figure>
+<svg viewBox="0 0 {width} {h3}" width="{width}" height="{h3}" role="img"
+     aria-label="Bar chart of agent active working time per recorded change">
+{chr(10).join(svg3)}
+</svg>
+</figure>
+"""
 
     # ---- agent tokens: different unit, its own plot and axis ----
     tok_rows = [r for r in rows if r["tokens"]]
@@ -278,29 +367,28 @@ implementation itself.</div>
         if r["lead_time_s"] is None:
             return "n/a"
         if r["lead_time_inaccurate"]:
-            return '<span title="hand-authored, future-skewed intent timestamp — see the note below">n/a</span>'
+            return '<span title="hand-authored, future-skewed opened_at timestamp — see the note below">n/a</span>'
         return fmt(datetime.timedelta(seconds=r["lead_time_s"]))
 
-    def cycle_cell(r):
-        if r["cycle_time_s"] is None:
-            return "n/a"
-        if r["cycle_time_inaccurate"]:
-            return '<span title="hand-authored, future-skewed opened_at timestamp — see the note below">n/a</span>'
-        return fmt(datetime.timedelta(seconds=r["cycle_time_s"]))
+    def act_cell(r):
+        if r["agent_active_s"] is None:
+            return '<span title="predates agent-activity/v1 evidence — no backfill">n/a</span>'
+        return afmt(r["agent_active_s"])
 
     table = "\n".join(
         f'<tr><td class="num">{r["order"] or "n/a"}</td>'
         f'<td>{r["change"]}</td><td>{(r["merged_at"] or "in flight")[:16]}</td>'
         f'<td class="num">{lead_cell(r)}</td>'
-        f'<td class="num">{cycle_cell(r)}</td>'
+        f'<td class="num">{act_cell(r)}</td>'
         f'<td class="num">{tfmt_tokens(r["tokens"]["work_tokens"]) if r["tokens"] else "n/a"}</td>'
         f'<td>{fmt_by_model(r["usage_v2"]["by_model"]) if r["usage_v2"] else "n/a"}</td>'
         f'<td class="num">{fmt_governance_ratio(r["usage_v2"]["governance_ratio"]) if r["usage_v2"] else "n/a"}</td></tr>'
         for r in rows)
 
     return HTML_TMPL.format(
-        gen=gen, sha=sha, n=len(merged), med_lead=med(leads), med_cycle=med(cycles),
+        gen=gen, sha=sha, n=len(merged), med_lead=med_lead,
         width=width, height=height, svg="\n".join(svg), table=table,
+        act_tile=act_tile, activity_section=activity_section,
         tok_tile=tok_tile, tokens_section=tokens_section)
 
 
@@ -330,8 +418,6 @@ HTML_TMPL = """<!doctype html>
   .tile {{ border: 1px solid var(--border); border-radius: 8px; padding: 12px 18px; min-width: 130px; }}
   .tile b {{ display: block; font-size: 26px; font-weight: 650; }}
   .tile span {{ color: var(--text-2); font-size: 12.5px; }}
-  .legend {{ display: flex; gap: 18px; font-size: 13px; color: var(--text-2); margin-bottom: 8px; }}
-  .sw {{ display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }}
   figure {{ margin: 0; position: relative; overflow-x: auto; }}
   svg {{ display: block; }}
   .grid {{ stroke: var(--border); stroke-width: 1; }}
@@ -339,6 +425,8 @@ HTML_TMPL = """<!doctype html>
   .tick {{ fill: var(--text-2); font-size: 11.5px; }}
   .label {{ fill: var(--text-1); font-size: 12.5px; }}
   .s1 {{ fill: var(--series-1); }} .s2 {{ fill: var(--series-2); }}
+  .cut {{ stroke: var(--surface); stroke-width: 3; fill: none; }}
+  .barlabel {{ fill: #ffffff; font-size: 11px; }}
   .hit {{ fill: transparent; }}
   .hit:hover {{ fill: color-mix(in srgb, var(--text-2) 7%, transparent); }}
   #tip {{ position: fixed; display: none; pointer-events: none; z-index: 2;
@@ -360,28 +448,31 @@ HTML_TMPL = """<!doctype html>
 <div class="tiles">
   <div class="tile"><b>{n}</b><span>merged changes</span></div>
   <div class="tile"><b>{med_lead}</b><span>median lead time</span></div>
-  <div class="tile"><b>{med_cycle}</b><span>median cycle time</span></div>
+  {act_tile}
   {tok_tile}
 </div>
-<div class="legend">
-  <span><i class="sw" style="background:var(--series-1)"></i>Lead time (intent → merged)</span>
-  <span><i class="sw" style="background:var(--series-2)"></i>Cycle time (opened → merged)</span>
-</div>
+<h2>Lead time per merged change</h2>
+<div class="sub">Change opened (<code>change.json</code> <code>opened_at</code>)
+to merged into <code>main</code> — calendar time, nights and manual work
+included. The axis is capped at the p90 so one outlier can't squash the
+rest: bars past the cap run to the plot edge, an axis-break chevron marks
+the cut, and the exact value is labeled on the bar.</div>
 <figure>
 <svg viewBox="0 0 {width} {height}" width="{width}" height="{height}" role="img"
-     aria-label="Grouped bar chart of lead and cycle time per merged change">
+     aria-label="Bar chart of lead time per merged change, axis capped at the 90th percentile">
 {svg}
 </svg>
 <div id="tip"></div>
 </figure>
 <p class="note">The chart keeps negative bars deliberately: the 2026-07-14 records carry
-hand-authored, future-skewed intent/opened timestamps — the first defect these
+hand-authored, future-skewed <code>opened_at</code> timestamps — the first defect these
 metrics caught (see <code>leftover-change-scaffolder</code>) — and the chart is the
 honest historical record. The table below shows <b>n/a</b> for those same rows'
-lead and cycle time, since a negative duration isn't a meaningful summary answer.</p>
+lead time, since a negative duration isn't a meaningful summary answer.</p>
+{activity_section}
 {tokens_section}
 <table>
-<thead><tr><th class="num">#</th><th>Change</th><th>Merged</th><th class="num">Lead</th><th class="num">Cycle</th><th class="num">Tokens</th><th>By model</th><th class="num">Governance overhead</th></tr></thead>
+<thead><tr><th class="num">#</th><th>Change</th><th>Merged</th><th class="num">Lead</th><th class="num">Agent cycle</th><th class="num">Tokens</th><th>By model</th><th class="num">Governance overhead</th></tr></thead>
 <tbody>
 {table}
 </tbody>
@@ -393,9 +484,12 @@ for (const el of document.querySelectorAll('.hit')) {{
     tip.innerHTML = el.dataset.tokens
       ? '<b>' + el.dataset.name + '</b>' + el.dataset.tokens +
         '<br><span class="r">' + el.dataset.detail + '</span>'
+      : el.dataset.active
+      ? '<b>' + el.dataset.name + '</b>' + el.dataset.active +
+        '<br><span class="r">' + el.dataset.detail + '</span>'
       : '<b>' + el.dataset.name + '</b>' +
         '<span class="r">merged ' + el.dataset.merged + '</span><br>' +
-        'lead ' + el.dataset.lead + ' · cycle ' + el.dataset.cycle;
+        'lead ' + el.dataset.lead;
     tip.style.display = 'block';
     tip.style.left = Math.min(e.clientX + 14, innerWidth - 240) + 'px';
     tip.style.top = (e.clientY + 14) + 'px';
@@ -417,7 +511,7 @@ def main():
         print(render_html(rows))
         return
     print("# Change metrics (derived from evidence + git; see metric-* nodes)\n")
-    print("| # | Change | Merged | Lead time | Cycle time | Agent tokens | By model | Governance overhead |")
+    print("| # | Change | Merged | Lead time | Agent cycle | Agent tokens | By model | Governance overhead |")
     print("|---|---|---|---|---|---|---|---|")
     for r in rows:
         if r["lead_time_s"] is None:
@@ -426,12 +520,7 @@ def main():
             lead = "n/a (negative — see metric-lead-time caveat)"
         else:
             lead = fmt(datetime.timedelta(seconds=r["lead_time_s"]))
-        if r["cycle_time_s"] is None:
-            cycle = "n/a"
-        elif r["cycle_time_inaccurate"]:
-            cycle = "n/a (negative — see metric-lead-time caveat)"
-        else:
-            cycle = fmt(datetime.timedelta(seconds=r["cycle_time_s"]))
+        cycle = afmt(r["agent_active_s"]) if r["agent_active_s"] is not None else "n/a"
         state = r["merged_at"][:16] if r["merged_at"] else "in flight"
         toks = tfmt_tokens(r["tokens"]["work_tokens"]) if r["tokens"] else "n/a"
         v2 = r["usage_v2"]
@@ -439,11 +528,13 @@ def main():
         gov = fmt_governance_ratio(v2["governance_ratio"]) if v2 else "n/a"
         print(f"| {r['order'] or 'n/a'} | {r['change']} | {state} | {lead} | {cycle} | {toks} | {by_model} | {gov} |")
     leads = [r["lead_time_s"] for r in merged if not r["lead_time_inaccurate"] and r["lead_time_s"]]
-    cycles = [r["cycle_time_s"] for r in merged if not r["cycle_time_inaccurate"] and r["cycle_time_s"]]
+    acts = [r["agent_active_s"] for r in rows if r["agent_active_s"] is not None]
     if leads:
-        print(f"\n**{len(merged)} merged** · median lead "
-              f"{fmt(datetime.timedelta(seconds=statistics.median(leads)))} · "
-              f"median cycle {fmt(datetime.timedelta(seconds=statistics.median(cycles)))}")
+        line = (f"\n**{len(merged)} merged** · median lead "
+                f"{fmt(datetime.timedelta(seconds=statistics.median(leads)))}")
+        if acts:
+            line += f" · median agent cycle {afmt(statistics.median(acts))} ({len(acts)} recorded)"
+        print(line)
 
 
 if __name__ == "__main__":

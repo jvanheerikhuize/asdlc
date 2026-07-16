@@ -1,0 +1,43 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "bfd945abf2901fd9c6c1082096efe1ae99e6e096"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-activity/v1",
+  "predicate": {
+    "change_id": "CR-20260716-004-lead-and-agent-cycle-metrics",
+    "source": "claude-code session transcript",
+    "window": {
+      "from": "2026-07-16T16:46:15Z",
+      "to": "2026-07-16T16:47:01Z"
+    },
+    "idle_threshold_seconds": 300.0,
+    "active_seconds": 34.4,
+    "event_count": 16,
+    "session_count": 1,
+    "first_event_at": "2026-07-16T16:46:15Z",
+    "last_event_at": "2026-07-16T16:46:49Z",
+    "sessions": [
+      {
+        "from": "2026-07-16T16:46:15Z",
+        "to": "2026-07-16T16:46:49Z",
+        "active_seconds": 34.4
+      }
+    ],
+    "produced_by": {
+      "role": "implementer",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-sonnet-5"
+      }
+    },
+    "produced_at": "2026-07-16T16:47:01Z"
+  }
+}
