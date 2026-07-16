@@ -25,7 +25,25 @@ jobs:
         run: |
           base="${{ github.event.pull_request.base.sha }}"
           head="${{ github.event.pull_request.head.sha }}"
-          dirs=$(git diff --name-only "$base" "$head" | grep -oE '^\.asdlc/changes/[^/]+' | sort -u || true)
+
+          # Change dirs touched anywhere between base and head.
+          all_dirs=$(git diff --name-only "$base" "$head" -- .asdlc/changes | grep -oE '^\.asdlc/changes/[^/]+' | sort -u || true)
+
+          # Change dirs that arrived solely via an already-merged stacked PR: for each
+          # merge commit on this PR's first-parent line, the side branch it merged in
+          # (second parent) represents a CR that already passed its own gate before
+          # landing here. Those dirs don't count against *this* PR's one-CR budget.
+          merged_in_dirs=""
+          for m in $(git log --merges --first-parent --format=%H "$base..$head" 2>/dev/null || true); do
+            p2=$(git rev-parse "$m^2" 2>/dev/null) || continue
+            mb=$(git merge-base "$m^1" "$p2")
+            d=$(git diff --name-only "$mb" "$p2" -- .asdlc/changes | grep -oE '^\.asdlc/changes/[^/]+' || true)
+            merged_in_dirs="$merged_in_dirs
+$d"
+          done
+          merged_in_dirs=$(printf '%s\n' "$merged_in_dirs" | sort -u | grep -v '^$' || true)
+
+          dirs=$(comm -23 <(printf '%s\n' "$all_dirs") <(printf '%s\n' "$merged_in_dirs") | grep -v '^$' || true)
           count=$(printf '%s' "$dirs" | grep -c . || true)
           if [ "$count" -eq 0 ]; then
             echo "mode=ungoverned" >> "$GITHUB_OUTPUT"
