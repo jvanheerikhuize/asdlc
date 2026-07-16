@@ -174,8 +174,13 @@ def render_html(rows):
         return f"{int(m) // 60}h" if abs(m) >= 60 and m % 60 == 0 else f"{int(m)}m"
 
     # ---- lead time: axis capped at the p90 so one calendar-time outlier
-    # (an overnight gap) can't squash the ±6-minute majority into slivers ----
-    lead_vals = [r["lead_time_s"] / 60 for r in merged]
+    # (an overnight gap) can't squash the ±6-minute majority into slivers.
+    # Rows flagged inaccurate (negative lead, hand-authored 2026-07-14
+    # timestamps) are excluded from the chart per owner request 2026-07-16 —
+    # they'd stretch the axis ~45 minutes into impossible territory; the
+    # note under the chart and the table's n/a rows keep the record. ----
+    plotted = [r for r in merged if not r["lead_time_inaccurate"]]
+    lead_vals = [r["lead_time_s"] / 60 for r in plotted]
     if len(lead_vals) >= 2:
         cap = statistics.quantiles(lead_vals, n=10, method="inclusive")[8]
     else:
@@ -187,7 +192,7 @@ def render_html(rows):
     vmin_m -= span * 0.06
     vmax_m += span * 0.06
 
-    height = top + len(merged) * (bar_h + 10) + 34
+    height = top + len(plotted) * (bar_h + 10) + 34
     axis_y = height - 26
 
     def X(minutes):
@@ -207,7 +212,7 @@ def render_html(rows):
 
     hits = []
     y = top
-    for r in merged:
+    for r in plotted:
         name = short_name(r)
         lead_m = r["lead_time_s"] / 60
         lead_txt = fmt(datetime.timedelta(seconds=r["lead_time_s"]))
@@ -235,6 +240,20 @@ def render_html(rows):
 
     leads = [r["lead_time_s"] for r in merged if not r["lead_time_inaccurate"]]
     med_lead = fmt(datetime.timedelta(seconds=statistics.median(leads))) if leads else "n/a"
+
+    n_neg = len(merged) - len(plotted)
+    if n_neg:
+        neg_note = (
+            f"{n_neg} bootstrap changes are not plotted: their 2026-07-14 records carry "
+            f"hand-authored, future-skewed <code>opened_at</code> timestamps, making their "
+            f"lead times negative — the first defect these metrics caught (see "
+            f"<code>leftover-change-scaffolder</code>). Plotting them would stretch the axis "
+            f"into impossible territory and squash the real bars, so the record lives here "
+            f"and in the table below, which shows <b>n/a</b> for those rows' lead time; "
+            f"<code>--json</code> keeps the raw negative values.")
+    else:
+        neg_note = ("All merged changes are plotted; rows flagged with inaccurate "
+                    "timestamps would be excluded and noted here.")
 
     # ---- agent cycle time: active minutes from agent-activity/v1 ----
     act_rows = [r for r in rows if r["agent_active_s"] is not None]
@@ -388,7 +407,7 @@ implementation itself.</div>
     return HTML_TMPL.format(
         gen=gen, sha=sha, n=len(merged), med_lead=med_lead,
         width=width, height=height, svg="\n".join(svg), table=table,
-        act_tile=act_tile, activity_section=activity_section,
+        neg_note=neg_note, act_tile=act_tile, activity_section=activity_section,
         tok_tile=tok_tile, tokens_section=tokens_section)
 
 
@@ -459,16 +478,12 @@ rest: bars past the cap run to the plot edge, an axis-break chevron marks
 the cut, and the exact value is labeled on the bar.</div>
 <figure>
 <svg viewBox="0 0 {width} {height}" width="{width}" height="{height}" role="img"
-     aria-label="Bar chart of lead time per merged change, axis capped at the 90th percentile">
+     aria-label="Bar chart of lead time per merged change, axis capped at the 90th percentile; rows with inaccurate negative timestamps are excluded">
 {svg}
 </svg>
 <div id="tip"></div>
 </figure>
-<p class="note">The chart keeps negative bars deliberately: the 2026-07-14 records carry
-hand-authored, future-skewed <code>opened_at</code> timestamps — the first defect these
-metrics caught (see <code>leftover-change-scaffolder</code>) — and the chart is the
-honest historical record. The table below shows <b>n/a</b> for those same rows'
-lead time, since a negative duration isn't a meaningful summary answer.</p>
+<p class="note">{neg_note}</p>
 {activity_section}
 {tokens_section}
 <table>
