@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-usage.v2.schema.json",
+  "title": "agent-usage/v2 — granular breakdown of resources an agent consumed producing a change",
+  "description": "Additive to agent-usage/v1 (a separate predicate type, not a superset field bolted onto v1's closed schema). Same self-reported, unverifiable-until-signing caveats as v1. Adds five breakdown dimensions — by_model, by_thread, by_phase, by_tool, turn_shape — derived from the same harness session transcript v1 reads, for the same window.",
+  "allOf": [{ "$ref": "statement.base.schema.json" }],
+  "$defs": {
+    "tokens": {
+      "type": "object",
+      "required": ["input", "output", "cache_read", "cache_creation", "total"],
+      "properties": {
+        "input": { "type": "integer", "minimum": 0 },
+        "output": { "type": "integer", "minimum": 0 },
+        "cache_read": { "type": "integer", "minimum": 0 },
+        "cache_creation": { "type": "integer", "minimum": 0 },
+        "total": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "predicateType": {
+      "const": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-usage/v2"
+    },
+    "predicate": {
+      "type": "object",
+      "required": [
+        "change_id", "source", "window", "tokens",
+        "by_model", "by_thread", "by_phase", "by_tool", "turn_shape",
+        "produced_by", "produced_at"
+      ],
+      "properties": {
+        "change_id": { "$ref": "statement.base.schema.json#/$defs/changeId" },
+        "source": {
+          "type": "string",
+          "description": "Where the numbers come from, e.g. 'claude-code session transcript'."
+        },
+        "window": {
+          "type": "object",
+          "required": ["from", "to"],
+          "properties": {
+            "from": { "$ref": "statement.base.schema.json#/$defs/producedAt" },
+            "to": { "$ref": "statement.base.schema.json#/$defs/producedAt" }
+          },
+          "additionalProperties": false
+        },
+        "tokens": { "$ref": "#/$defs/tokens" },
+        "by_model": {
+          "type": "object",
+          "description": "Tokens keyed by message.model — distinguishes main-thread and subagent models (e.g. claude-sonnet-5 vs claude-fable-5).",
+          "additionalProperties": { "$ref": "#/$defs/tokens" }
+        },
+        "by_thread": {
+          "type": "object",
+          "description": "Tokens split by the transcript's isSidechain flag: main thread vs offloaded subagent work.",
+          "required": ["main", "subagent"],
+          "properties": {
+            "main": { "$ref": "#/$defs/tokens" },
+            "subagent": { "$ref": "#/$defs/tokens" }
+          },
+          "additionalProperties": false
+        },
+        "by_phase": {
+          "type": "object",
+          "description": "Tokens split at the first implementation commit observable in git after the change opened: exploration_and_implementation precedes it, governance_overhead (evidence pinning, PR description, etc.) follows it.",
+          "required": ["exploration_and_implementation", "governance_overhead", "boundary_commit", "boundary_at"],
+          "properties": {
+            "exploration_and_implementation": { "$ref": "#/$defs/tokens" },
+            "governance_overhead": { "$ref": "#/$defs/tokens" },
+            "boundary_commit": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$",
+              "description": "Git commit SHA of the first implementation commit; the phase boundary."
+            },
+            "boundary_at": { "$ref": "statement.base.schema.json#/$defs/producedAt" }
+          },
+          "additionalProperties": false
+        },
+        "by_tool": {
+          "type": "object",
+          "description": "cache_creation tokens attributed to each tool name, by whose tool_result content was ingested into context that turn. Approximate: when a turn batches multiple tool calls, their combined cache_creation is split proportionally by each tool's result size.",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "turn_shape": {
+          "type": "object",
+          "description": "Shape of the conversation: how many turns, how large context grew, and cache-lifetime split.",
+          "required": [
+            "turn_count", "peak_context_tokens", "mean_marginal_work_tokens",
+            "cache_creation_ephemeral_5m", "cache_creation_ephemeral_1h"
+          ],
+          "properties": {
+            "turn_count": { "type": "integer", "minimum": 0 },
+            "peak_context_tokens": {
+              "type": "integer", "minimum": 0,
+              "description": "Max of (input + cache_read) across any single request in the window."
+            },
+            "mean_marginal_work_tokens": {
+              "type": "number", "minimum": 0,
+              "description": "Mean of (input + output + cache_creation) per turn."
+            },
+            "cache_creation_ephemeral_5m": { "type": "integer", "minimum": 0 },
+            "cache_creation_ephemeral_1h": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        "produced_by": { "$ref": "statement.base.schema.json#/$defs/producedBy" },
+        "produced_at": { "$ref": "statement.base.schema.json#/$defs/producedAt" },
+        "refs": { "$ref": "statement.base.schema.json#/$defs/refs" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

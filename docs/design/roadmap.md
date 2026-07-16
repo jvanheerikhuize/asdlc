@@ -11,10 +11,11 @@ priority — start there.
 
 ## What's next — the single current priority (read this first)
 
-**NOW: [[roadmap-priority-3-token-granularity]] — granular token-usage
-measurement (`agent-usage/v2`). Owner directive 2026-07-15, current
-highest priority.** If you are an agent asking "what should I work on?",
-that node is the answer; its exit criterion says when it is finished.
+**NOW: [[roadmap-slice-2-authority-and-fail-safe]] — the next design-time
+slice, promoted 2026-07-16 now that
+[[roadmap-priority-3-token-granularity]] is done.** If you are an agent
+asking "what should I work on?", that node is the answer; its exit
+criterion says when it is finished.
 
 How to read this roadmap — two numbering systems coexist:
 
@@ -27,13 +28,13 @@ How to read this roadmap — two numbering systems coexist:
 - `status: done` means the item's exit criterion is met; `status: active`
   means open. Exactly one item is NOW at any time, and it is named here.
 
-Queue as of 2026-07-15:
+Queue as of 2026-07-16:
 
-1. **NOW** — [[roadmap-priority-3-token-granularity]] (active).
-2. **NEXT** — [[roadmap-slice-2-authority-and-fail-safe]]. Slice 1 is
+1. **NOW** — [[roadmap-slice-2-authority-and-fail-safe]]. Slice 1 is
    done: G4 dogfooding has been live on these repos since the walking
-   skeleton landed.
-3. **LATER** — slices 3–6 in order; deliberately unscheduled work stays
+   skeleton landed. [[roadmap-priority-3-token-granularity]] is done
+   (agent-usage/v2 landed).
+2. **LATER** — slices 3–6 in order; deliberately unscheduled work stays
    in [[roadmap-what-is-deliberately-not-scheduled]].
 
 Maintenance rule: the change that completes the NOW item must update
