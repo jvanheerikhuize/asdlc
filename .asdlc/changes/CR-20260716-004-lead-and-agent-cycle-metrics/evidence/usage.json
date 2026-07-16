@@ -8,16 +8,23 @@
       }
     }
   ],
-  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/classification/v1",
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-usage/v1",
   "predicate": {
     "change_id": "CR-20260716-004-lead-and-agent-cycle-metrics",
-    "risk": "low",
-    "data": "none",
-    "ai_usage": "generated",
-    "ai_system_tier": "minimal",
-    "rationale": "Reporting and knowledge-node changes only: metrics.py derives figures on demand and the dashboard is a generated artifact; no gate or control behavior changes",
+    "source": "claude-code session transcript",
+    "window": {
+      "from": "2026-07-16T16:46:15Z",
+      "to": "2026-07-16T16:47:01Z"
+    },
+    "tokens": {
+      "input": 12,
+      "output": 7423,
+      "cache_read": 347260,
+      "cache_creation": 10355,
+      "total": 365050
+    },
     "produced_by": {
-      "role": "intent-owner",
+      "role": "implementer",
       "kind": "agent",
       "identity": "github:jvanheerikhuize",
       "agent": {
@@ -25,7 +32,6 @@
         "model": "claude-sonnet-5"
       }
     },
-    "produced_at": "2026-07-16T16:46:15Z",
-    "refs": []
+    "produced_at": "2026-07-16T16:47:01Z"
   }
 }
