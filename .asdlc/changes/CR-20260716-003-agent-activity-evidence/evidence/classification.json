@@ -1,0 +1,31 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "0000000000000000000000000000000000000000"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/classification/v1",
+  "predicate": {
+    "change_id": "CR-20260716-003-agent-activity-evidence",
+    "risk": "low",
+    "data": "none",
+    "ai_usage": "generated",
+    "ai_system_tier": "minimal",
+    "rationale": "Adds a new evidence predicate schema and extends the vendor binding to emit it; no gate or control behavior changes — nothing consumes activity.json until the follow-up metrics CR",
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-sonnet-5"
+      }
+    },
+    "produced_at": "2026-07-16T16:31:34Z",
+    "refs": []
+  }
+}

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Claude Code agent binding: emit agent-usage/v1 and agent-usage/v2
-statements by summing token usage from the local session transcript for a
-time window.
+"""Claude Code agent binding: emit agent-usage/v1, agent-usage/v2, and
+agent-activity/v1 statements from the local session transcript for a time
+window — token sums for the usage statements, sessionized active working
+time for the activity statement.
 
 This is a vendor-specific adapter (D13: adapters are bindings) — another
 agent harness supplies its own equivalent; the statement shape is the
@@ -10,7 +11,8 @@ vendor-neutral contract.
   python3 bindings/claude-code/usage.py \
       --change-id CR-... --opened-at 2026-07-14T20:40:20Z \
       --head <sha> --out .asdlc/changes/CR-.../evidence \
-      [--transcript <path.jsonl>] [--model claude-fable-5]
+      [--transcript <path.jsonl>] [--model claude-fable-5] \
+      [--idle-threshold 300]
 
 v2 adds five breakdown dimensions (by_model, by_thread, by_phase, by_tool,
 turn_shape), all derived from fields already present in the transcript —
@@ -87,6 +89,20 @@ def result_size(content):
     return len(json.dumps(content)) if content is not None else 0
 
 
+def sessionize(events, threshold):
+    """Group sorted event timestamps into active spans: a gap longer than
+    `threshold` seconds closes the current span. A lone event contributes a
+    zero-length span; a single tool run longer than the threshold counts as
+    idle — documented, accepted error."""
+    spans = []
+    for t in sorted(events):
+        if spans and (t - spans[-1][1]).total_seconds() <= threshold:
+            spans[-1][1] = t
+        else:
+            spans.append([t, t])
+    return spans
+
+
 def collect(path, since, now):
     tokens = empty_tokens()
     by_model = {}
@@ -99,6 +115,7 @@ def collect(path, since, now):
     eph_5m = 0
     eph_1h = 0
     turns = []  # (timestamp, is_subagent, cache_creation) for phase split
+    events = []  # every timestamped line in the window, for sessionization
 
     tool_names = {}       # tool_use_id -> tool name
     pending_results = []  # [(tool name, result size)] since last turn
@@ -114,6 +131,7 @@ def collect(path, since, now):
         t = datetime.datetime.fromisoformat(ts.replace("Z", "+00:00"))
         if not (since <= t <= now):
             continue
+        events.append(t)
 
         message = d.get("message") or {}
         content = message.get("content")
@@ -172,6 +190,7 @@ def collect(path, since, now):
         "eph_5m": eph_5m,
         "eph_1h": eph_1h,
         "turns": turns,
+        "events": events,
     }
 
 
@@ -185,6 +204,8 @@ def main():
     ap.add_argument("--identity", default="github:jvanheerikhuize")
     ap.add_argument("--vendor", default="Anthropic")
     ap.add_argument("--model", default="claude-fable-5")
+    ap.add_argument("--idle-threshold", type=float, default=300.0,
+                    help="gap in seconds that closes an active span (default 300)")
     a = ap.parse_args()
 
     since = datetime.datetime.fromisoformat(a.opened_at)
@@ -260,6 +281,42 @@ def main():
           f"peak context {data['peak_context']:,}, "
           f"{len(data['by_model'])} model(s), "
           f"governance/{'total' if tokens['total'] else 'n/a'} split at {boundary_sha[:8]}")
+
+    events = data["events"]
+    if not events:
+        print("no timestamped events in window; skipping activity.json")
+        return
+    fmt = lambda dt: dt.astimezone(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    spans = sessionize(events, a.idle_threshold)
+    active = sum((e - s).total_seconds() for s, e in spans)
+    activity = {
+        "_type": "https://in-toto.io/Statement/v1",
+        "subject": [{"name": "change", "digest": {"gitCommit": a.head}}],
+        "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-activity/v1",
+        "predicate": {
+            "change_id": a.change_id,
+            "source": "claude-code session transcript",
+            "window": {"from": a.opened_at, "to": stamp},
+            "idle_threshold_seconds": a.idle_threshold,
+            "active_seconds": round(active, 1),
+            "event_count": len(events),
+            "session_count": len(spans),
+            "first_event_at": fmt(min(events)),
+            "last_event_at": fmt(max(events)),
+            "sessions": [
+                {"from": fmt(s), "to": fmt(e),
+                 "active_seconds": round((e - s).total_seconds(), 1)}
+                for s, e in spans
+            ],
+            "produced_by": produced_by,
+            "produced_at": stamp,
+        },
+    }
+    (out_dir / "activity.json").write_text(json.dumps(activity, indent=2) + "\n")
+    wall = (max(events) - min(events)).total_seconds()
+    print(f"wrote {out_dir / 'activity.json'}: {active / 60:.1f} active min "
+          f"across {len(spans)} session(s), {len(events):,} events, "
+          f"wall clock {wall / 60:.1f} min, idle threshold {a.idle_threshold:g}s")
 
 
 if __name__ == "__main__":

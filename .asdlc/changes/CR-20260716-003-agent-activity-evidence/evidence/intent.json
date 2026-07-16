@@ -1,0 +1,32 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "0000000000000000000000000000000000000000"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260716-003-agent-activity-evidence",
+    "title": "agent-activity/v1: capture agent active working time as evidence",
+    "problem": "roadmap-priority-4-agent-cycle-time redefines cycle time as the agent's active working time, but transcripts are not committed, so active time is unrecoverable after the fact; usage.py already parses per-message transcript timestamps and discards them — they must be sessionized and captured as evidence at collection time, the same argument that produced the token metric",
+    "acceptance_criteria": [
+      "spec/predicates/agent-activity.v1.schema.json exists, extends statement.base.schema.json, and is auto-discovered by check.py",
+      "bindings/claude-code/usage.py sessionizes all timestamped transcript events in the change window (gap > idle threshold closes a span, --idle-threshold default 300) and emits evidence/activity.json alongside the usage statements",
+      "this CR's own evidence carries the first activity.json, valid against the new schema, with active_seconds below the wall-clock window"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-sonnet-5"
+      }
+    },
+    "produced_at": "2026-07-16T16:31:34Z"
+  }
+}
