@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-activity.v1.schema.json",
+  "title": "agent-activity/v1 — how long an agent actively worked on a change",
+  "description": "Active working time sessionized from the harness session transcript's per-message timestamps: events are sorted, a gap longer than idle_threshold_seconds closes a span, and active_seconds sums the span durations. Time and tokens are orthogonal dimensions, so this is a separate predicate from agent-usage (closed schemas: a new dimension is a new predicate). Same self-reported, unverifiable-until-signing caveats as agent-usage; a single tool run longer than the threshold counts as idle — a documented, accepted error.",
+  "allOf": [{ "$ref": "statement.base.schema.json" }],
+  "$defs": {
+    "session": {
+      "type": "object",
+      "required": ["from", "to", "active_seconds"],
+      "properties": {
+        "from": { "$ref": "statement.base.schema.json#/$defs/producedAt" },
+        "to": { "$ref": "statement.base.schema.json#/$defs/producedAt" },
+        "active_seconds": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "predicateType": {
+      "const": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/agent-activity/v1"
+    },
+    "predicate": {
+      "type": "object",
+      "required": [
+        "change_id", "source", "window", "idle_threshold_seconds",
+        "active_seconds", "event_count", "session_count",
+        "first_event_at", "last_event_at", "sessions",
+        "produced_by", "produced_at"
+      ],
+      "properties": {
+        "change_id": { "$ref": "statement.base.schema.json#/$defs/changeId" },
+        "source": {
+          "type": "string",
+          "description": "Where the timestamps come from, e.g. 'claude-code session transcript'."
+        },
+        "window": {
+          "type": "object",
+          "required": ["from", "to"],
+          "properties": {
+            "from": { "$ref": "statement.base.schema.json#/$defs/producedAt" },
+            "to": { "$ref": "statement.base.schema.json#/$defs/producedAt" }
+          },
+          "additionalProperties": false
+        },
+        "idle_threshold_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Gap length that closes an active span. Recorded so the sessionization is auditable and reproducible from the same transcript."
+        },
+        "active_seconds": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Sum of span durations — the agent cycle time. Always ≤ the wall-clock window."
+        },
+        "event_count": { "type": "integer", "minimum": 0 },
+        "session_count": { "type": "integer", "minimum": 0 },
+        "first_event_at": { "$ref": "statement.base.schema.json#/$defs/producedAt" },
+        "last_event_at": { "$ref": "statement.base.schema.json#/$defs/producedAt" },
+        "sessions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/session" }
+        },
+        "produced_by": { "$ref": "statement.base.schema.json#/$defs/producedBy" },
+        "produced_at": { "$ref": "statement.base.schema.json#/$defs/producedAt" },
+        "refs": { "$ref": "statement.base.schema.json#/$defs/refs" }
+      },
+      "additionalProperties": false
+    }
+  }
+}
