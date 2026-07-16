@@ -1,6 +1,7 @@
 id: roadmap-slice-5-onboarding-and-memory
 type: roadmap-item
 title: "Slice 5 \u2014 Onboarding and memory"
+status: active
 body: |2
   - P0 onboarding: classification baseline, third-party/model inventory
     (SBOM-linked), role bindings; G0 checks.

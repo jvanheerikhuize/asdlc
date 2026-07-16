@@ -1,6 +1,7 @@
 id: roadmap-slice-2-authority-and-fail-safe
 type: roadmap-item
 title: "Slice 2 \u2014 Authority and fail-safe semantics"
+status: active
 body: |2
   - Authority matrix + role bindings in `asdlc.yaml`; signer-identity checks.
   - `waiver/v1`, `halt/v1`; monotonic-verdict enforcement (no downgrade).

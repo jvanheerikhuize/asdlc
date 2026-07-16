@@ -2,7 +2,7 @@ id: roadmap-priority-1-metrics
 type: roadmap-item
 title: "Priority 1 — Metrics over the evidence DAG (owner directive, 2026-07-14)"
 since: "2026-07-14"
-status: active
+status: done
 body: |2
   The framework produces a timestamped evidence DAG for every change —
   metrics are **views over that DAG, computed on demand, never separately

@@ -1,6 +1,7 @@
 id: roadmap-slice-4-release-operate-and-the
 type: roadmap-item
 title: "Slice 4 \u2014 Release, operate, and the DORA spine"
+status: active
 body: |2
   - G5 (environment protection + rollback evidence + `deployment/v1`) and G6
     (`incident/v1` with the 4h/72h/30d clock fields, `learning/v1`).

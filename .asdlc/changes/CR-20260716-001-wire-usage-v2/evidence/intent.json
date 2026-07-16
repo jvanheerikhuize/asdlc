@@ -1,0 +1,33 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "change",
+      "digest": {
+        "gitCommit": "3f604a3ae7b7a4b020e9f84f028bfbbdeaec7170"
+      }
+    }
+  ],
+  "predicateType": "https://github.com/jvanheerikhuize/asdlc/spec/predicates/change-intent/v1",
+  "predicate": {
+    "change_id": "CR-20260716-001-wire-usage-v2",
+    "title": "Wire agent-usage/v2 into metrics and load token-optimization guidance",
+    "problem": "agent-usage/v1's four aggregate counters cannot say where tokens went; roadmap-priority-3-token-granularity specifies a v2 predicate with five breakdown dimensions plus a feedback-loop requirement, neither yet implemented",
+    "acceptance_criteria": [
+      "bindings/claude-code/usage.py emits agent-usage/v2 with by_model, by_thread, by_phase, by_tool, and turn_shape",
+      "spec/tools/metrics.py surfaces the per-model split and governance-overhead ratio, rendering n/a for pre-v2 changes in the new columns",
+      "reference-agent-token-optimization is loaded by agents working in this repo via a generated CLAUDE.md",
+      "roadmap-priority-3-token-granularity is marked done and roadmap-whats-next promotes the next NOW item"
+    ],
+    "produced_by": {
+      "role": "intent-owner",
+      "kind": "agent",
+      "identity": "github:jvanheerikhuize",
+      "agent": {
+        "vendor": "Anthropic",
+        "model": "claude-sonnet-5"
+      }
+    },
+    "produced_at": "2026-07-16T07:18:18Z"
+  }
+}

@@ -1,6 +1,7 @@
 id: roadmap-slice-6-hardening-and-portability-proof
 type: roadmap-item
 title: "Slice 6 \u2014 Hardening and portability proof"
+status: active
 body: |2
   - Conformance test suite: golden evidence bundles per gate (doubles as the
     policy-bug defense, R3).

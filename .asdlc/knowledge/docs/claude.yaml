@@ -1,0 +1,8 @@
+output: CLAUDE.md
+title: "Instructions for agents working in this repo"
+preamble: |
+  Auto-loaded by Claude Code at the start of every session rooted here.
+  Generated from the knowledge base like every other document in this repo —
+  edit the node, then run `python3 spec/tools/scaffold.py`.
+sections:
+  - node: reference-agent-token-optimization

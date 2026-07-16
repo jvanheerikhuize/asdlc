@@ -1,6 +1,7 @@
 id: roadmap-slice-1-walking-skeleton-the-first
 type: roadmap-item
 title: "Slice 1 \u2014 Walking skeleton (the first thing that is real)"
+status: done
 body: |2
   - `asdlc-spec` v0.1: Change Record format, `change-intent/v1`,
     `classification/v1`, `control-verdict/v1`, `approval/v1` predicates; a

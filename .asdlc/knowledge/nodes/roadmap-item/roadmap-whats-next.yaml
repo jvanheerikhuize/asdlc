@@ -1,0 +1,44 @@
+id: roadmap-whats-next
+type: roadmap-item
+title: "What's next — the single current priority (read this first)"
+since: "2026-07-16"
+status: active
+body: |2
+  **NOW: [[roadmap-slice-2-authority-and-fail-safe]] — the next design-time
+  slice, promoted 2026-07-16 now that
+  [[roadmap-priority-3-token-granularity]] is done.** If you are an agent
+  asking "what should I work on?", that node is the answer; its exit
+  criterion says when it is finished.
+
+  How to read this roadmap — two numbering systems coexist:
+
+  - **Priorities** (`roadmap-priority-N-*`) are owner directives, numbered
+    in the order they were given. They preempt slices: always work the
+    lowest-numbered priority with `status: active` before touching any
+    slice.
+  - **Slices** (`roadmap-slice-N-*`) are the design-time build plan from
+    the brief (§7.7), worked in order once no priority is open.
+  - `status: done` means the item's exit criterion is met; `status: active`
+    means open. Exactly one item is NOW at any time, and it is named here.
+
+  Queue as of 2026-07-16:
+
+  1. **NOW** — [[roadmap-slice-2-authority-and-fail-safe]]. Slice 1 is
+     done: G4 dogfooding has been live on these repos since the walking
+     skeleton landed. [[roadmap-priority-3-token-granularity]] is done
+     (agent-usage/v2 landed).
+  2. **LATER** — slices 3–6 in order; deliberately unscheduled work stays
+     in [[roadmap-what-is-deliberately-not-scheduled]].
+
+  Maintenance rule: the change that completes the NOW item must update
+  this node in the same Change Record — set the finished item's status to
+  `done` and promote the next one. If this node names a NOW item whose own
+  status is `done`, this node is stale, and fixing it precedes any new
+  work.
+links:
+  - to: roadmap-priority-3-token-granularity
+    rel: relates-to
+  - to: roadmap-slice-2-authority-and-fail-safe
+    rel: relates-to
+  - to: roadmap-what-is-deliberately-not-scheduled
+    rel: relates-to
